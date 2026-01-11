@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "资产中心",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "bottom-nav": "../../components/BottomNav"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/store/store",
+    "pages/booking/booking",
+    "pages/my/my"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "城市森林氧舱",
+    "navigationBarBackgroundColor": "#F9F9F9",
+    "backgroundColor": "#F9F9F9"
+  },
+  "usingComponents": {}
+}
