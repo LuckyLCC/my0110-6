@@ -25,26 +25,26 @@
 			</view>
 		</view>
 
-		<!-- Main Content -->
-		<view class="main-content">
-			<!-- VIP Member Card -->
-			<view class="vip-card">
-				<view class="vip-card-left">
-					<view class="vip-header">
-						<text class="vip-icon">✦</text>
-						<text class="vip-title">成为尊享会员</text>
-					</view>
-					<view class="vip-price">
-						<text class="vip-price-label">单次体验低至</text>
-						<text class="vip-price-value">¥58</text>
-						<text class="vip-price-unit">/ 次</text>
-					</view>
+		<!-- VIP Member Card -->
+		<view class="vip-card">
+			<view class="vip-card-left">
+				<view class="vip-header">
+					<text class="vip-icon">✦</text>
+					<text class="vip-title">成为尊享会员</text>
 				</view>
-				<view class="vip-card-right">
-					<image class="arrow-icon" :src="images.icon" mode="aspectFit"></image>
+				<view class="vip-price">
+					<text class="vip-price-label">单次体验低至</text>
+					<text class="vip-price-value">¥58</text>
+					<text class="vip-price-unit">/ 次</text>
 				</view>
 			</view>
+			<view class="vip-card-right">
+				<image class="arrow-icon" :src="images.icon" mode="aspectFit"></image>
+			</view>
+		</view>
 
+		<!-- Main Content -->
+		<view class="main-content">
 			<!-- Single Experience Card -->
 			<view class="experience-card">
 				<view class="experience-header">
@@ -200,7 +200,7 @@ export default {
 .hero-content {
 	position: absolute;
 	width: 100%;
-	padding: 80rpx 64rpx 0;
+	padding: 200rpx 64rpx 0;
 	display: flex;
 	flex-direction: column;
 	gap: 48rpx;
@@ -271,25 +271,28 @@ export default {
 	display: block;
 }
 
+/* VIP Card */
+.vip-card {
+	position: relative;
+	margin: -106rpx 48rpx 0;
+	background: linear-gradient(to bottom, #2c2a26 0%, #1a1917 100%);
+	border: 2rpx solid rgba(255, 255, 255, 0.05);
+	border-radius: 48rpx;
+	padding: 60rpx 50rpx 40rpx 50rpx;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	box-shadow: 0 50rpx 100rpx -24rpx rgba(0, 0, 0, 0.1);
+	z-index: 10;
+}
+
 /* Main Content */
 .main-content {
 	padding: 64rpx 48rpx 0;
 	display: flex;
 	flex-direction: column;
 	gap: 64rpx;
-	margin-top: -100rpx;
-}
-
-/* VIP Card */
-.vip-card {
-	background: linear-gradient(to bottom, #2c2a26 0%, #1a1917 100%);
-	border: 2rpx solid rgba(255, 255, 255, 0.05);
-	border-radius: 48rpx;
-	padding: 50rpx;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	box-shadow: 0 50rpx 100rpx -24rpx rgba(0, 0, 0, 0.1);
+	margin-top: 0;
 }
 
 .vip-card-left {
@@ -373,7 +376,7 @@ export default {
 	background-color: #ffffff;
 	border: 2rpx solid rgba(249, 250, 251, 0.5);
 	border-radius: 48rpx;
-	padding: 58rpx 58rpx 2rpx;
+	padding: 58rpx 58rpx 58rpx;
 	box-shadow: 0 20rpx 80rpx -20rpx rgba(0, 0, 0, 0.05);
 }
 

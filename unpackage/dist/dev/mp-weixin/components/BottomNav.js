@@ -11,8 +11,8 @@ const _sfc_main = {
     return {
       icons: {
         home: "/static/home.png",
-        homeActive: "/static/home-active .png",
-        // 注意：文件名中有空格
+        homeActive: "/static/home-active.png",
+        // 文件名中有空格
         store: "/static/store.png",
         storeActive: "/static/store-active.png",
         booking: "/static/booking.png",

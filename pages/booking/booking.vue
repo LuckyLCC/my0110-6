@@ -101,15 +101,7 @@ export default {
 			selectedDate: 0,
 			selectedTime: -1,
 			selectedSeat: '',
-			dates: [
-				{ number: '01.07', weekday: '周三GMT+8' },
-				{ number: '01.08', weekday: '周四GMT+8' },
-				{ number: '01.09', weekday: '周五GMT+8' },
-				{ number: '01.10', weekday: '周六GMT+8' },
-				{ number: '01.11', weekday: '周日GMT+8' },
-				{ number: '01.12', weekday: '周一GMT+8' },
-				{ number: '01.13', weekday: '周二GMT+8' }
-			],
+			dates: this.generateDates(),
 			timeSlots: [
 				'10:00–11:00', '11:15–12:15', '12:30–13:30',
 				'13:45–14:45', '15:00–16:00', '16:15–17:15',
@@ -153,6 +145,27 @@ export default {
 		}
 	},
 	methods: {
+		generateDates() {
+			const dates = []
+			const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+			const today = new Date()
+			
+			for (let i = 0; i < 15; i++) {
+				const date = new Date(today)
+				date.setDate(today.getDate() + i)
+				
+				const month = String(date.getMonth() + 1).padStart(2, '0')
+				const day = String(date.getDate()).padStart(2, '0')
+				const weekday = weekdays[date.getDay()]
+				
+				dates.push({
+					number: `${month}.${day}`,
+					weekday: weekday
+				})
+			}
+			
+			return dates
+		},
 		selectDate(index) {
 			this.selectedDate = index
 		},
