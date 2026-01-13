@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
     remaining_visits INT DEFAULT 0 COMMENT '剩余访问次数',
     points INT DEFAULT 0 COMMENT '积分',
     created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL
+    updated_at DATETIME NOT NULL,
+    last_login_time DATETIME COMMENT '最后登录时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
 
 -- 会员套餐表

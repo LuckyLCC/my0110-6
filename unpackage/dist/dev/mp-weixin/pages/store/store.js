@@ -91,6 +91,14 @@ const _sfc_main = {
       common_vendor.index.__f__("log", "at pages/store/store.vue:183", "切换到标签:", index);
       this.activeTab = index;
     },
+    navigateToPayment(item) {
+      const price = item.price || 0;
+      const originalPrice = item.originalPrice || 0;
+      const validDays = item.validDays || 0;
+      common_vendor.index.navigateTo({
+        url: `/pages/payment/payment?packageId=${item.id || ""}&packageName=${encodeURIComponent(item.name || "")}&price=${price}&originalPrice=${originalPrice}&validDays=${validDays}`
+      });
+    },
     formatDescription(item) {
       if (item.validDays > 0) {
         return `有效期${item.validDays}天，不限次数（每人每天仅限一次）`;
@@ -161,7 +169,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
             b: fIndex
           };
         }),
-        i: item.id || index
+        i: common_vendor.o(($event) => $options.navigateToPayment(item), item.id || index),
+        j: item.id || index
       });
     }),
     o: $data.icons.check,

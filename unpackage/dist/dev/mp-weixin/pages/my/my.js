@@ -59,17 +59,22 @@ const _sfc_main = {
     }
   },
   methods: {
+    navigateToLogin() {
+      common_vendor.index.navigateTo({
+        url: "/pages/login/login"
+      });
+    },
     async loadUserData() {
       try {
         const response = await api_request.api.user.getInfo();
         if (response.code === 200) {
           this.userInfo = response.data;
         } else {
-          common_vendor.index.__f__("error", "at pages/my/my.vue:163", "获取用户信息失败:", response.message);
+          common_vendor.index.__f__("error", "at pages/my/my.vue:168", "获取用户信息失败:", response.message);
         }
         this.loadOrders();
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:169", "加载用户数据失败:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:174", "加载用户数据失败:", error);
       }
     },
     async loadOrders() {
@@ -89,11 +94,11 @@ const _sfc_main = {
         if (response.code === 200) {
           this.orders = response.data || [];
         } else {
-          common_vendor.index.__f__("error", "at pages/my/my.vue:192", "获取订单数据失败:", response.message);
+          common_vendor.index.__f__("error", "at pages/my/my.vue:197", "获取订单数据失败:", response.message);
           this.orders = [];
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:196", "加载订单数据失败:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:201", "加载订单数据失败:", error);
         this.orders = [];
       }
     },
@@ -112,24 +117,25 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     b: $data.userInfo.avatarUrl || $data.images.avatar,
     c: common_vendor.t($data.userInfo.nickname || "微信用户"),
     d: common_vendor.t($options.formattedPhone || "未绑定手机"),
-    e: $data.icons.crown,
-    f: common_vendor.t($options.membershipLevel),
-    g: common_vendor.t($options.membershipDesc),
-    h: common_vendor.t($data.userInfo.remainingVisits || "-"),
-    i: common_vendor.t($data.userInfo.totalVisits || 0),
-    j: common_vendor.t($data.userInfo.points || 0),
-    k: $data.activeTab === 0 ? 1 : "",
-    l: $data.activeTab === 0
+    e: common_vendor.o((...args) => $options.navigateToLogin && $options.navigateToLogin(...args)),
+    f: $data.icons.crown,
+    g: common_vendor.t($options.membershipLevel),
+    h: common_vendor.t($options.membershipDesc),
+    i: common_vendor.t($data.userInfo.remainingVisits || "-"),
+    j: common_vendor.t($data.userInfo.totalVisits || 0),
+    k: common_vendor.t($data.userInfo.points || 0),
+    l: $data.activeTab === 0 ? 1 : "",
+    m: $data.activeTab === 0
   }, $data.activeTab === 0 ? {} : {}, {
-    m: $data.activeTab === 0 ? 1 : "",
-    n: common_vendor.o(($event) => $options.switchTab(0)),
-    o: $data.activeTab === 1 ? 1 : "",
+    n: $data.activeTab === 0 ? 1 : "",
+    o: common_vendor.o(($event) => $options.switchTab(0)),
     p: $data.activeTab === 1 ? 1 : "",
-    q: common_vendor.o(($event) => $options.switchTab(1)),
-    r: $data.activeTab === 2 ? 1 : "",
+    q: $data.activeTab === 1 ? 1 : "",
+    r: common_vendor.o(($event) => $options.switchTab(1)),
     s: $data.activeTab === 2 ? 1 : "",
-    t: common_vendor.o(($event) => $options.switchTab(2)),
-    v: common_vendor.f($data.orders, (order, index, i0) => {
+    t: $data.activeTab === 2 ? 1 : "",
+    v: common_vendor.o(($event) => $options.switchTab(2)),
+    w: common_vendor.f($data.orders, (order, index, i0) => {
       return {
         a: common_vendor.t(order.cabinName),
         b: common_vendor.t(order.date),
@@ -139,9 +145,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         f: order.id || index
       };
     }),
-    w: $data.icons.clock,
-    x: $data.icons.seat,
-    y: common_vendor.p({
+    x: $data.icons.clock,
+    y: $data.icons.seat,
+    z: common_vendor.p({
       current: 3
     })
   });

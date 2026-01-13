@@ -84,5 +84,21 @@ export const api = {
     
     // 获取订单详情
     getOrderDetail: (orderId) => request({ url: `/booking/order/${orderId}`, method: 'GET' })
+  },
+
+  // 支付相关API
+  payment: {
+    // 创建会员套餐支付订单
+    createPackageOrder: (packageId, price) => request({ 
+      url: '/payment/create-package-order', 
+      method: 'POST', 
+      data: { packageId, price } 
+    }),
+    
+    // 获取微信支付参数
+    getWechatPayParams: (orderId) => request({ 
+      url: `/payment/wechat-pay/${orderId}`, 
+      method: 'POST' 
+    })
   }
 };

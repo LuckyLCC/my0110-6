@@ -27,6 +27,20 @@
 				"navigationBarTitleText": "资产中心",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/payment/payment",
+			"style": {
+				"navigationBarTitleText": "确认订单",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {

@@ -3,7 +3,9 @@
     "pages/index/index",
     "pages/store/store",
     "pages/booking/booking",
-    "pages/my/my"
+    "pages/my/my",
+    "pages/login/login",
+    "pages/payment/payment"
   ],
   "window": {
     "navigationBarTextStyle": "black",

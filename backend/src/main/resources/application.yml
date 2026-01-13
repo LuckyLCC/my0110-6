@@ -47,8 +47,13 @@ logging:
     org.springframework.web: debug
 
 jwt:
-  secret: oxygenCapsuleSecretKey
+  secret: 8a9b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d
   expiration: 86400000 # 24小时
+
+wechat:
+  miniapp:
+    appid: wx1a44cbe925471245
+    secret: 019d069035074ed1c45d1c35d69ed8c2
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml

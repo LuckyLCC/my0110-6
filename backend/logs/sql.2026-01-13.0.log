@@ -1,0 +1,3364 @@
+2026-01-13 00:00:57.363 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 00:07:18.284 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 00:17:59.129 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:14:39.969 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:15:08.485 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:16:16.922 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:16:22.068 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:16:22.083 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:16:30.201 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:16:48.853 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:08.724 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:21.366 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:23.547 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:23.557 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:24.617 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:25.329 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:29.961 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:30.452 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:30.851 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:31.890 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 15:28:32.332 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:31:31.009 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:31:39.601 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:31:39.614 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:31:41.444 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:31:42.449 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:31:42.457 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:31:53.664 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:31:56.497 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:31:56.509 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:31:58.898 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:36:38.166 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:36:41.310 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:36:41.348 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:38:02.719 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:38:13.721 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:38:13.741 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:39:10.542 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:40:53.549 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:40:53.569 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 20:58:55.878 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:00:00.359 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:05:02.936 - 
+    alter table daily_visit_records 
+       drop index UKdmov09b836njfvt32l4pt2qgh
+2026-01-13 21:05:02.942 - 
+    alter table daily_visit_records 
+       add constraint UKdmov09b836njfvt32l4pt2qgh unique (user_id, visit_date)
+2026-01-13 21:05:03.414 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:05:41.318 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:05:41.356 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:05:52.324 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:05:53.958 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:05:54.596 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:10:37.329 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.total_times,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:33:36.369 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:33:54.810 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:33:58.042 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:33:58.058 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:48:12.128 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:48:13.270 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:48:13.284 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:48:20.288 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:48:27.861 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:48:32.261 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 21:49:35.739 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:09:00.658 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:09:10.018 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:10:09.675 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:10:20.455 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:10:40.883 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:10:40.899 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:10:48.214 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:10:49.491 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:11:15.609 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:11:16.001 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:11:16.538 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:11:16.916 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:11:17.284 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:11:17.664 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:11:18.073 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:11:21.257 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:11:37.125 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:11:37.153 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:12:22.925 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:13:23.931 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:13:23.952 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:13:29.966 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:13:34.675 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:13:34.681 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:13:42.410 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:13:42.875 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:32:23.464 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:38:33.993 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:41:43.084 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:41:57.744 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:43:16.534 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:44:14.069 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:44:18.320 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:44:18.337 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:44:22.375 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:45:10.272 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:45:19.040 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:45:33.322 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:45:58.206 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:46:01.734 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:46:58.839 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:46:58.853 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:47:09.309 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 22:49:27.202 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:15:41.664 - 
+    alter table users 
+       add column last_login_time datetime(6)
+2026-01-13 23:15:42.195 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:16:01.012 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:16:08.599 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.openid=?
+2026-01-13 23:16:08.614 - 
+    insert 
+    into
+        users
+        (avatar_url, created_at, last_login_time, member_expire_time, member_level, nickname, openid, phone, points, remaining_visits, total_visits, updated_at) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-01-13 23:16:08.632 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-13 23:16:12.562 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.openid=?
+2026-01-13 23:16:12.571 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-13 23:16:16.255 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.openid=?
+2026-01-13 23:16:16.261 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-13 23:16:32.698 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.openid=?
+2026-01-13 23:16:32.706 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-13 23:16:40.274 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.openid=?
+2026-01-13 23:16:40.278 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-13 23:22:11.095 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:22:18.939 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:22:22.564 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:22:22.573 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:22:32.121 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.openid=?
+2026-01-13 23:22:32.145 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-13 23:30:02.466 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:30:17.921 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:30:21.207 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:30:21.221 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:30:31.032 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.openid=?
+2026-01-13 23:30:31.066 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-13 23:31:03.448 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.openid=?
+2026-01-13 23:31:03.454 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-13 23:41:10.476 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:41:54.873 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:42:03.185 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.openid=?
+2026-01-13 23:42:03.210 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-13 23:42:04.974 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:42:06.886 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-13 23:42:06.886 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-13 23:42:06.891 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-13 23:42:06.907 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-13 23:42:06.911 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-13 23:42:12.206 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:42:23.329 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-13 23:42:23.334 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-13 23:42:23.337 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-13 23:42:23.366 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-13 23:42:23.370 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-13 23:42:48.299 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:43:10.993 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:43:11.010 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-13 23:58:06.376 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.valid_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order

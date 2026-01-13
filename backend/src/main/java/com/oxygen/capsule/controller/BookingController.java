@@ -41,8 +41,8 @@ public class BookingController {
             return Result.error("未提供有效的认证令牌");
         }
 
-        String openid = jwtUtil.getOpenidFromToken(token.substring(7));
-        User user = userService.findByOpenid(openid);
+        Long userId = jwtUtil.getUserIdFromToken(token.substring(7));
+        User user = userService.findById(userId).orElse(null);
 
         if (user == null) {
             return Result.error("用户不存在");
@@ -76,8 +76,8 @@ public class BookingController {
             return Result.error("未提供有效的认证令牌");
         }
 
-        String openid = jwtUtil.getOpenidFromToken(token.substring(7));
-        User user = userService.findByOpenid(openid);
+        Long userId = jwtUtil.getUserIdFromToken(token.substring(7));
+        User user = userService.findById(userId).orElse(null);
 
         if (user == null) {
             return Result.error("用户不存在");
@@ -107,8 +107,8 @@ public class BookingController {
             return Result.error("未提供有效的认证令牌");
         }
 
-        String openid = jwtUtil.getOpenidFromToken(token.substring(7));
-        User user = userService.findByOpenid(openid);
+        Long userId = jwtUtil.getUserIdFromToken(token.substring(7));
+        User user = userService.findById(userId).orElse(null);
 
         if (user == null) {
             return Result.error("用户不存在");
@@ -126,8 +126,8 @@ public class BookingController {
             return Result.error("未提供有效的认证令牌");
         }
 
-        String openid = jwtUtil.getOpenidFromToken(token.substring(7));
-        User user = userService.findByOpenid(openid);
+        Long userId = jwtUtil.getUserIdFromToken(token.substring(7));
+        User user = userService.findById(userId).orElse(null);
 
         if (user == null) {
             return Result.error("用户不存在");
@@ -146,8 +146,8 @@ public class BookingController {
             return Result.error("未提供有效的认证令牌");
         }
 
-        String openid = jwtUtil.getOpenidFromToken(token.substring(7));
-        User user = userService.findByOpenid(openid);
+        Long userId = jwtUtil.getUserIdFromToken(token.substring(7));
+        User user = userService.findById(userId).orElse(null);
 
         if (user == null) {
             return Result.error("用户不存在");
@@ -176,8 +176,8 @@ public class BookingController {
             return Result.error("未提供有效的认证令牌");
         }
 
-        String openid = jwtUtil.getOpenidFromToken(token.substring(7));
-        User user = userService.findByOpenid(openid);
+        Long userId = jwtUtil.getUserIdFromToken(token.substring(7));
+        User user = userService.findById(userId).orElse(null);
 
         if (user == null) {
             return Result.error("用户不存在");
@@ -195,8 +195,8 @@ public class BookingController {
             return Result.error("未提供有效的认证令牌");
         }
 
-        String openid = jwtUtil.getOpenidFromToken(token.substring(7));
-        User user = userService.findByOpenid(openid);
+        Long userId = jwtUtil.getUserIdFromToken(token.substring(7));
+        User user = userService.findById(userId).orElse(null);
 
         if (user == null) {
             return Result.error("用户不存在");

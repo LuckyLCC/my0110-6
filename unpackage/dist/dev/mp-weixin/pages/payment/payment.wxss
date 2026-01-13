@@ -1,0 +1,423 @@
+
+.payment-page.data-v-eade9ab2 {
+	width: 100%;
+	min-height: 100vh;
+	background-color: #f7f8fa;
+	display: flex;
+	flex-direction: column;
+    padding-top: 27px; /* 添加这行，根据实际情况调整数值，单位可以是 px 或 rpx */
+}
+.header.data-v-eade9ab2 {
+	width: 100%;
+	min-height: 144rpx;
+	padding-top: 0;
+	padding-bottom: 32rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	background-color: #f9f9f7;
+	box-sizing: border-box;
+}
+.back-btn.data-v-eade9ab2 {
+	position: absolute;
+	left: 32rpx;
+	width: 80rpx;
+	height: 80rpx;
+	background-color: rgba(0, 0, 0, 0.05);
+	border-radius: 9999rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.back-icon.data-v-eade9ab2 {
+	width: 48rpx;
+	height: 48rpx;
+}
+.header-title.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: 500;
+	font-size: 36rpx;
+	line-height: 56rpx;
+	color: #1a1c1a;
+	letter-spacing: -0.88rpx;
+}
+.content-scroll.data-v-eade9ab2 {
+	flex: 1;
+	width: 100%;
+}
+.content.data-v-eade9ab2 {
+	padding: 32rpx 48rpx 200rpx;
+	display: flex;
+	flex-direction: column;
+	gap: 48rpx;
+}
+
+/* Product Card */
+.product-card.data-v-eade9ab2 {
+	background-color: #1a1c1a;
+	border-radius: 64rpx;
+	padding: 32rpx 48rpx;
+	box-shadow: 0 25rpx 50rpx -12rpx rgba(26, 28, 26, 0.2);
+}
+.card-header.data-v-eade9ab2 {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16rpx;
+}
+.premium-tag.data-v-eade9ab2 {
+	display: flex;
+	align-items: center;
+	gap: 16rpx;
+}
+.star-icon.data-v-eade9ab2 {
+	width: 40rpx;
+	height: 40rpx;
+}
+.premium-text.data-v-eade9ab2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 500;
+	font-size: 24rpx;
+	line-height: 32rpx;
+	color: #c4a373;
+	letter-spacing: 2.4rpx;
+	text-transform: uppercase;
+}
+.crown-icon-wrapper.data-v-eade9ab2 {
+	width: 80rpx;
+	height: 80rpx;
+	border: 2rpx solid rgba(196, 163, 115, 0.3);
+	border-radius: 9999rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.crown-icon.data-v-eade9ab2 {
+	width: 40rpx;
+	height: 40rpx;
+}
+.card-content.data-v-eade9ab2 {
+	display: flex;
+	flex-direction: column;
+	gap: 16rpx;
+	margin-bottom: 32rpx;
+}
+.product-name.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans JP', sans-serif;
+	font-weight: 300;
+	font-size: 60rpx;
+	line-height: 72rpx;
+	color: #ffffff;
+	letter-spacing: 2.29rpx;
+}
+.product-tagline.data-v-eade9ab2 {
+	display: flex;
+	align-items: center;
+	gap: 32rpx;
+}
+.divider.data-v-eade9ab2 {
+	width: 64rpx;
+	height: 2rpx;
+	background-color: rgba(196, 163, 115, 0.3);
+}
+.tagline-text.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: 300;
+	font-size: 24rpx;
+	line-height: 32rpx;
+	color: rgba(196, 163, 115, 0.6);
+	letter-spacing: 1.2rpx;
+}
+.card-footer.data-v-eade9ab2 {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+}
+.price-section.data-v-eade9ab2 {
+	display: flex;
+	flex-direction: column;
+	gap: 8rpx;
+}
+.price-label.data-v-eade9ab2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: normal;
+	font-size: 20rpx;
+	line-height: 30rpx;
+	color: rgba(196, 163, 115, 0.4);
+	letter-spacing: 1.23rpx;
+	text-transform: uppercase;
+}
+.price-value.data-v-eade9ab2 {
+	display: flex;
+	align-items: baseline;
+}
+.currency.data-v-eade9ab2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 300;
+	font-size: 36rpx;
+	line-height: 56rpx;
+	color: #c4a373;
+	letter-spacing: -0.88rpx;
+	margin-right: 4rpx;
+}
+.amount.data-v-eade9ab2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 300;
+	font-size: 72rpx;
+	line-height: 80rpx;
+	color: #c4a373;
+	letter-spacing: -1.06rpx;
+}
+.decimal.data-v-eade9ab2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 300;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	color: #c4a373;
+	opacity: 0.6;
+	letter-spacing: -0.3rpx;
+}
+.validity-badge.data-v-eade9ab2 {
+	background-color: rgba(196, 163, 115, 0.05);
+	border: 2rpx solid rgba(196, 163, 115, 0.2);
+	border-radius: 9999rpx;
+	padding: 27rpx 34rpx;
+	height: 76rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.validity-text.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans JP', sans-serif;
+	font-weight: 300;
+	font-size: 24rpx;
+	line-height: 32rpx;
+	color: #c4a373;
+	letter-spacing: 0.6rpx;
+}
+
+/* Tags */
+.tags-row.data-v-eade9ab2 {
+	display: flex;
+	justify-content: center;
+	gap: 64rpx;
+}
+.tag.data-v-eade9ab2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 500;
+	font-size: 20rpx;
+	line-height: 30rpx;
+	color: rgba(74, 93, 80, 0.4);
+	letter-spacing: 4.23rpx;
+}
+
+/* Details Section */
+.details-section.data-v-eade9ab2 {
+	display: flex;
+	flex-direction: column;
+	gap: 32rpx;
+}
+.section-title.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: 500;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	color: #1a1c1a;
+	letter-spacing: -0.3rpx;
+	padding-left: 8rpx;
+}
+.details-card.data-v-eade9ab2 {
+	background-color: #ffffff;
+	border-radius: 48rpx;
+	padding: 48rpx;
+	box-shadow: 0 2rpx 6rpx 0 rgba(0, 0, 0, 0.1), 0 2rpx 4rpx -2rpx rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	gap: 24rpx;
+}
+.detail-row.data-v-eade9ab2 {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 40rpx;
+}
+.detail-label.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	color: rgba(74, 93, 80, 0.6);
+	letter-spacing: -0.3rpx;
+}
+.detail-value.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: 500;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	color: #1a1c1a;
+	letter-spacing: -0.3rpx;
+}
+.detail-divider.data-v-eade9ab2 {
+	height: 2rpx;
+	background-color: #f3f4f6;
+}
+
+/* Payment Section */
+.payment-section.data-v-eade9ab2 {
+	display: flex;
+	flex-direction: column;
+	gap: 32rpx;
+}
+.payment-card.data-v-eade9ab2 {
+	background-color: #ffffff;
+	border-radius: 48rpx;
+	padding: 32rpx;
+	box-shadow: 0 2rpx 6rpx 0 rgba(0, 0, 0, 0.1), 0 2rpx 4rpx -2rpx rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.payment-option.data-v-eade9ab2 {
+	display: flex;
+	align-items: center;
+	gap: 24rpx;
+	flex: 1;
+}
+.payment-icon-wrapper.data-v-eade9ab2 {
+	width: 80rpx;
+	height: 80rpx;
+	background-color: #f2faf4;
+	border-radius: 9999rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.payment-icon.data-v-eade9ab2 {
+	width: 48rpx;
+	height: 48rpx;
+}
+.payment-info.data-v-eade9ab2 {
+	display: flex;
+	flex-direction: column;
+	gap: 4rpx;
+	flex: 1;
+}
+.payment-name.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans JP', sans-serif;
+	font-weight: 500;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	color: #1a1c1a;
+	letter-spacing: -0.3rpx;
+}
+.payment-desc.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 24rpx;
+	line-height: 32rpx;
+	color: rgba(74, 93, 80, 0.4);
+}
+.payment-check.data-v-eade9ab2 {
+	width: 48rpx;
+	height: 48rpx;
+	background-color: #4a5d50;
+	border-radius: 9999rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.check-icon.data-v-eade9ab2 {
+	width: 28rpx;
+	height: 28rpx;
+}
+.security-info.data-v-eade9ab2 {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8rpx;
+}
+.lock-icon.data-v-eade9ab2 {
+	width: 24rpx;
+	height: 24rpx;
+}
+.security-text.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 20rpx;
+	line-height: 30rpx;
+	color: rgba(74, 93, 80, 0.3);
+	letter-spacing: 0.23rpx;
+}
+
+/* Bottom Bar */
+.bottom-bar.data-v-eade9ab2 {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: #ffffff;
+	border-top: 2rpx solid #f0f0f0;
+	padding: 2rpx 48rpx 2rpx 66rpx;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 126rpx;
+	box-shadow: 0 -20rpx 25rpx -5rpx rgba(74, 93, 80, 0.1), 0 -8rpx 10rpx -6rpx rgba(74, 93, 80, 0.1);
+	z-index: 100;
+}
+.total-section.data-v-eade9ab2 {
+	display: flex;
+	flex-direction: column;
+	gap: 4rpx;
+}
+.total-label.data-v-eade9ab2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 500;
+	font-size: 20rpx;
+	line-height: 30rpx;
+	color: rgba(74, 93, 80, 0.4);
+	letter-spacing: 1.23rpx;
+	text-transform: uppercase;
+}
+.total-price.data-v-eade9ab2 {
+	display: flex;
+	align-items: baseline;
+}
+.total-currency.data-v-eade9ab2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: normal;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	color: #1a1c1a;
+	letter-spacing: -0.3rpx;
+	margin-right: 4rpx;
+}
+.total-amount.data-v-eade9ab2 {
+	font-family: 'Inter', sans-serif;
+	font-weight: 500;
+	font-size: 40rpx;
+	line-height: 56rpx;
+	color: #1a1c1a;
+	letter-spacing: -1.9rpx;
+}
+.pay-btn.data-v-eade9ab2 {
+	background-color: #4a5d50;
+	border-radius: 9999rpx;
+	width: 240rpx;
+	height: 88rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 10rpx 15rpx -3rpx rgba(74, 93, 80, 0.2), 0 4rpx 6rpx -4rpx rgba(74, 93, 80, 0.2);
+}
+.pay-btn-text.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: 500;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	color: #ffffff;
+	letter-spacing: -0.3rpx;
+}

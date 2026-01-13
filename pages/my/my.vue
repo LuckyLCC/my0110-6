@@ -7,7 +7,7 @@
 		</view>
 
 		<!-- User Info -->
-		<view class="user-section">
+		<view class="user-section" @tap="navigateToLogin">
 			<image class="user-avatar" :src="userInfo.avatarUrl || images.avatar" mode="aspectFill"></image>
 			<view class="user-info">
 				<text class="user-name">{{ userInfo.nickname || '微信用户' }}</text>
@@ -153,6 +153,11 @@ export default {
 		}
 	},
 	methods: {
+		navigateToLogin() {
+			uni.navigateTo({
+				url: '/pages/login/login'
+			})
+		},
 		async loadUserData() {
 			try {
 				// 获取用户信息
@@ -242,6 +247,12 @@ export default {
 	display: flex;
 	align-items: center;
 	gap: 32rpx;
+	cursor: pointer;
+	transition: opacity 0.2s;
+}
+
+.user-section:active {
+	opacity: 0.7;
 }
 
 .user-avatar {

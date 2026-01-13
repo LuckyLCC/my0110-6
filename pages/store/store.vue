@@ -72,7 +72,7 @@
 								</view>
 							</view>
 						</view>
-						<view class="card-btn">
+						<view class="card-btn" @tap="navigateToPayment(item)">
 							<text class="card-btn-text">立即开通</text>
 							<image class="card-btn-icon" :src="icons.arrow" mode="aspectFit"></image>
 						</view>
@@ -182,6 +182,16 @@ export default {
 		switchTab(index) {
 			console.log('切换到标签:', index) // 添加调试日志
 			this.activeTab = index
+		},
+		navigateToPayment(item) {
+			// 跳转到支付页面，传递套餐信息
+			// 直接使用后端返回的原始价格数据
+			const price = item.price || 0
+			const originalPrice = item.originalPrice || 0
+			const validDays = item.validDays || 0
+			uni.navigateTo({
+				url: `/pages/payment/payment?packageId=${item.id || ''}&packageName=${encodeURIComponent(item.name || '')}&price=${price}&originalPrice=${originalPrice}&validDays=${validDays}`
+			})
 		},
 		formatDescription(item) {
 			// 所有卡种都不限次数，但每人每天只能消费一次
