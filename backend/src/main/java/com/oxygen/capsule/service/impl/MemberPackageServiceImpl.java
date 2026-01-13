@@ -38,4 +38,9 @@ public class MemberPackageServiceImpl implements MemberPackageService {
     public List<MemberPackage> findByCategory(String category) {
         return memberPackageRepository.findAllByCategoryAndIsActiveTrueOrderBySortOrderAsc(category);
     }
+
+    @Override
+    public MemberPackage findByCode(String code) {
+        return memberPackageRepository.findByCode(code);
+    }
 }

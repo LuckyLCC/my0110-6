@@ -11,34 +11,34 @@ public class MemberPackage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "code", unique = true, nullable = false) // 对应JSON中的code字段
+    private String code;
+
+    @Column(name = "name", nullable = false) // 对应JSON中的name字段
     private String name;
 
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "price", nullable = false)
+    @Column(name = "price", nullable = false) // 对应JSON中的price字段
     private Double price;
 
-    @Column(name = "original_price")
-    private Double originalPrice;
+    @Column(name = "people", nullable = false) // 对应JSON中的people字段
+    private Integer people;
 
-    @Column(name = "validity_days", nullable = false)
-    private Integer validityDays;
+    @Column(name = "valid_days", nullable = false) // 对应JSON中的valid_days字段
+    private Integer validDays;
 
-    @Column(name = "visit_count") // -1表示无限次
-    private Integer visitCount;
+    @Column(name = "avg_price_per_time") // 对应JSON中的avg_price_per_time字段
+    private Double avgPricePerTime;
 
-    @Column(name = "bind_limit")
-    private Integer bindLimit = 1;
+    @Column(name = "times_per_person") // 对应JSON中的times_per_person字段（可选）
+    private Integer timesPerPerson;
 
-    @Column(name = "badge")
-    private String badge; // 新人推荐、超值等标签
+    @Column(name = "description") // 描述字段
+    private String description;
 
-    @Column(name = "per_time_price")
-    private String perTimePrice; // 约 ¥xx/次
+    @Column(name = "badge") // 标签字段
+    private String badge;
 
-    @Column(name = "category", nullable = false) // 个人畅享、多人尊享、家庭/次卡
+    @Column(name = "category") // 分类字段
     private String category;
 
     @Column(name = "sort_order")
@@ -47,6 +47,6 @@ public class MemberPackage {
     @Column(name = "is_active")
     private Boolean isActive = true;
 
-    @Column(name = "features") // 以逗号分隔的功能特性
+    @Column(name = "features") // 功能特性
     private String features;
 }

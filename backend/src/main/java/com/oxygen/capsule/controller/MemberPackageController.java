@@ -29,6 +29,13 @@ public class MemberPackageController {
         return Result.success(packages);
     }
 
+    // 替代方案：根据分类获取会员套餐（处理包含斜杠的分类名）
+    @GetMapping(value = "/category")
+    public Result<List<MemberPackage>> getPackagesByCategoryParam(@RequestParam String category) {
+        List<MemberPackage> packages = memberPackageService.findByCategory(category);
+        return Result.success(packages);
+    }
+
     // 获取单个会员套餐详情
     @GetMapping("/{id}")
     public Result<MemberPackage> getPackageById(@PathVariable Long id) {

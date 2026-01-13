@@ -9,5 +9,6 @@ public interface BookingOrderService {
     List<BookingOrder> findByUserIdAndStatus(Long userId, String status);
     BookingOrder findById(Long id);
     BookingOrder updateStatus(Long orderId, String status);
+    boolean canUserBookToday(Long userId, String date);
     List<BookingOrder> findAll();
 }

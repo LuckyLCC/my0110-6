@@ -34,11 +34,11 @@
 				</view>
 				<view class="vip-price">
 					<text class="vip-price-label">单次体验低至</text>
-					<text class="vip-price-value">¥58</text>
+					<text class="vip-price-value">¥{{ vipPrice }}</text>
 					<text class="vip-price-unit">/ 次</text>
 				</view>
 			</view>
-			<view class="vip-card-right">
+			<view class="vip-card-right" @tap="navigateToStore">
 				<image class="arrow-icon" :src="images.icon" mode="aspectFit"></image>
 			</view>
 		</view>
@@ -53,8 +53,8 @@
 						<text class="experience-desc">60分钟纯净富氧环境，包含茶歇</text>
 					</view>
 					<view class="experience-price">
-						<text class="price-current">¥398</text>
-						<text class="price-original">原价 ¥598</text>
+						<text class="price-current">¥{{ singleExperiencePrice.current }}</text>
+						<text class="price-original">原价 ¥{{ singleExperiencePrice.original }}</text>
 					</view>
 				</view>
 				<view class="experience-divider"></view>
@@ -103,6 +103,7 @@
 
 <script>
 import BottomNav from '@/components/BottomNav.vue'
+import { api } from '@/api/request'
 
 export default {
 	components: {
@@ -110,6 +111,11 @@ export default {
 	},
 	data() {
 		return {
+			vipPrice: '99', // 默认价格，将从后端获取
+			singleExperiencePrice: {
+				current: 398,
+				original: 598
+			},
 			images: {
 				luxuryCabin: 'https://www.figma.com/api/mcp/asset/60bff265-fe2f-4c41-ba59-ee52e68d299e',
 				icon: 'https://www.figma.com/api/mcp/asset/9be8f457-e93d-4188-bac0-bbed59aab937',
@@ -137,7 +143,39 @@ export default {
 			]
 		}
 	},
+	async onLoad() {
+		// 页面加载时获取最新的套餐信息
+		await this.loadPackageData()
+	},
 	methods: {
+		async loadPackageData() {
+			try {
+				// 获取所有套餐信息
+				const response = await api.packages.getAll()
+				if (response.code === 200 && response.data && response.data.length > 0) {
+					// 查找价格最低的套餐用于VIP卡片展示
+					const cheapestPackage = response.data.reduce((prev, curr) => {
+						const prevPrice = prev.avgPricePerTime || Number.MAX_VALUE
+						const currPrice = curr.avgPricePerTime || Number.MAX_VALUE
+						return prevPrice < currPrice ? prev : curr
+					})
+					
+					// 设置VIP卡片价格
+					if (cheapestPackage.avgPricePerTime) {
+						this.vipPrice = cheapestPackage.avgPricePerTime
+					}
+					
+					// 单次体验价格固定为398和598，不从后端获取
+					this.singleExperiencePrice.current = 398
+					this.singleExperiencePrice.original = 598
+				}
+			} catch (error) {
+				console.error('获取套餐数据失败:', error)
+				// 即使获取失败，也保持默认价格
+				this.singleExperiencePrice.current = 398
+				this.singleExperiencePrice.original = 598
+			}
+		},
 		navigateToBooking() {
 			uni.navigateTo({
 				url: '/pages/booking/booking'

@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const api_request = require("../../api/request.js");
 const BottomNav = () => "../../components/BottomNav.js";
 const _sfc_main = {
   components: {
@@ -7,6 +8,12 @@ const _sfc_main = {
   },
   data() {
     return {
+      vipPrice: "99",
+      // 默认价格，将从后端获取
+      singleExperiencePrice: {
+        current: 398,
+        original: 598
+      },
       images: {
         luxuryCabin: "https://www.figma.com/api/mcp/asset/60bff265-fe2f-4c41-ba59-ee52e68d299e",
         icon: "https://www.figma.com/api/mcp/asset/9be8f457-e93d-4188-bac0-bbed59aab937",
@@ -34,7 +41,31 @@ const _sfc_main = {
       ]
     };
   },
+  async onLoad() {
+    await this.loadPackageData();
+  },
   methods: {
+    async loadPackageData() {
+      try {
+        const response = await api_request.api.packages.getAll();
+        if (response.code === 200 && response.data && response.data.length > 0) {
+          const cheapestPackage = response.data.reduce((prev, curr) => {
+            const prevPrice = prev.avgPricePerTime || Number.MAX_VALUE;
+            const currPrice = curr.avgPricePerTime || Number.MAX_VALUE;
+            return prevPrice < currPrice ? prev : curr;
+          });
+          if (cheapestPackage.avgPricePerTime) {
+            this.vipPrice = cheapestPackage.avgPricePerTime;
+          }
+          this.singleExperiencePrice.current = 398;
+          this.singleExperiencePrice.original = 598;
+        }
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/index/index.vue:173", "获取套餐数据失败:", error);
+        this.singleExperiencePrice.current = 398;
+        this.singleExperiencePrice.original = 598;
+      }
+    },
     navigateToBooking() {
       common_vendor.index.navigateTo({
         url: "/pages/booking/booking"
@@ -54,11 +85,15 @@ if (!Array) {
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
     a: $data.images.luxuryCabin,
-    b: $data.images.icon,
-    c: $data.images.icon1,
-    d: $data.images.icon2,
-    e: common_vendor.o((...args) => $options.navigateToBooking && $options.navigateToBooking(...args)),
-    f: common_vendor.f($data.galleryItems, (item, index, i0) => {
+    b: common_vendor.t($data.vipPrice),
+    c: $data.images.icon,
+    d: common_vendor.o((...args) => $options.navigateToStore && $options.navigateToStore(...args)),
+    e: common_vendor.t($data.singleExperiencePrice.current),
+    f: common_vendor.t($data.singleExperiencePrice.original),
+    g: $data.images.icon1,
+    h: $data.images.icon2,
+    i: common_vendor.o((...args) => $options.navigateToBooking && $options.navigateToBooking(...args)),
+    j: common_vendor.f($data.galleryItems, (item, index, i0) => {
       return {
         a: item.image,
         b: common_vendor.t(item.name),
@@ -66,7 +101,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: index
       };
     }),
-    g: common_vendor.p({
+    k: common_vendor.p({
       current: 0
     })
   };

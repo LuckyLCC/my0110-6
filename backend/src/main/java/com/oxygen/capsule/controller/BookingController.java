@@ -25,6 +25,9 @@ public class BookingController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private com.oxygen.capsule.service.DailyVisitRecordService dailyVisitRecordService;
+
     // 创建预约订单
     @PostMapping("/create")
     public Result<BookingOrder> createBooking(@RequestHeader("Authorization") String token,
@@ -45,8 +48,10 @@ public class BookingController {
             return Result.error("用户不存在");
         }
 
-        // 检查该时间段该座位是否已被预订
-        // 这里可以添加检查逻辑，防止重复预订同一座位
+        // 检查用户今天是否已经消费过（每人每天只能消费一次）
+        if (dailyVisitRecordService.hasVisitedToday(user.getId(), java.time.LocalDate.parse(date))) {
+            return Result.error("您今天已经消费过了，每人每天只能消费一次");
+        }
         
         BookingOrder order = new BookingOrder();
         order.setUserId(user.getId());
@@ -61,6 +66,38 @@ public class BookingController {
 
         BookingOrder savedOrder = bookingOrderService.save(order);
         return Result.success("预约成功", savedOrder);
+    }
+
+    // 支付预约订单
+    @PostMapping("/pay/{orderId}")
+    public Result<String> payBooking(@RequestHeader("Authorization") String token,
+                                     @PathVariable Long orderId) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            return Result.error("未提供有效的认证令牌");
+        }
+
+        String openid = jwtUtil.getOpenidFromToken(token.substring(7));
+        User user = userService.findByOpenid(openid);
+
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+
+        BookingOrder order = bookingOrderService.findById(orderId);
+        if (order == null || !order.getUserId().equals(user.getId())) {
+            return Result.error("订单不存在或无权限访问");
+        }
+
+        if ("paid".equals(order.getPaymentStatus())) {
+            return Result.error("订单已支付");
+        }
+
+        // 更新订单支付状态
+        order.setPaymentStatus("paid");
+        order.setPaymentTime(LocalDateTime.now());
+        order = bookingOrderService.save(order);
+
+        return Result.success("支付成功");
     }
 
     // 获取用户的所有预约订单
@@ -122,9 +159,34 @@ public class BookingController {
         }
 
         order = bookingOrderService.updateStatus(orderId, status);
+        
+        // 如果状态变为已完成，增加用户当日访问次数
+        if ("completed".equals(status)) {
+            dailyVisitRecordService.incrementVisitCount(user.getId(), java.time.LocalDate.parse(order.getDate()));
+        }
+        
         return Result.success("状态更新成功", order);
     }
 
+    // 检查用户是否可以预订当天
+    @GetMapping("/can-book-today")
+    public Result<Boolean> canBookToday(@RequestHeader("Authorization") String token,
+                                       @RequestParam String date) {
+        if (token == null || !token.startsWith("Bearer ")) {
+            return Result.error("未提供有效的认证令牌");
+        }
+
+        String openid = jwtUtil.getOpenidFromToken(token.substring(7));
+        User user = userService.findByOpenid(openid);
+
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+        
+        boolean canBook = bookingOrderService.canUserBookToday(user.getId(), date);
+        return Result.success(canBook);
+    }
+    
     // 获取订单详情
     @GetMapping("/order/{orderId}")
     public Result<BookingOrder> getOrderDetail(@RequestHeader("Authorization") String token,

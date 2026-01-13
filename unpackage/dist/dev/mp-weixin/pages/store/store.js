@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const api_request = require("../../api/request.js");
 const BottomNav = () => "../../components/BottomNav.js";
 const _sfc_main = {
   components: {
@@ -8,49 +9,117 @@ const _sfc_main = {
   data() {
     return {
       activeTab: 0,
+      tabCategories: ["个人畅享", "多人尊享", "家庭/次卡"],
       icons: {
         check: "https://www.figma.com/api/mcp/asset/9af7aa2c-4d02-4734-a623-ed57909f758f",
         arrow: "https://www.figma.com/api/mcp/asset/f401a2a2-7c95-4d13-b643-051c1f788de1"
       },
-      membershipCards: [
-        {
-          badge: "新人推荐",
-          title: "个人月卡",
-          desc: "尊享30天无限次纯净体验",
-          price: "¥1680",
-          originalPrice: "¥2980",
-          perTime: "约 ¥56/次",
-          features: ["有效期30天", "无限次", "支持1人绑定", ""]
-        },
-        {
-          badge: "超值",
-          title: "个人年卡",
-          desc: "全年365天健康守护",
-          price: "¥9800",
-          originalPrice: "¥15800",
-          perTime: "约 ¥27/次",
-          features: ["有效期365天", "无限次", "支持1人绑定", ""]
-        },
-        {
-          title: "个人季卡",
-          desc: "90天无限次畅享",
-          price: "¥3680",
-          originalPrice: "¥5800",
-          features: ["有效期90天", "无限次", "支持1人绑定", ""]
-        },
-        {
-          title: "个人半年卡",
-          desc: "180天无限次畅享",
-          price: "¥5800",
-          originalPrice: "¥9800",
-          features: ["有效期180天", "无限次", "支持1人绑定", ""]
-        }
-      ]
+      membershipCards: [],
+      // 从数据库获取的数据
+      errorMessage: "",
+      // 错误提示信息
+      loading: false
+      // 加载状态
     };
   },
+  onLoad() {
+    this.loadMembershipCards();
+  },
+  watch: {
+    activeTab: {
+      handler(newVal) {
+        this.loadMembershipCards();
+      },
+      immediate: true
+    }
+  },
   methods: {
+    async loadMembershipCards() {
+      this.loading = true;
+      this.errorMessage = "";
+      this.membershipCards = [];
+      try {
+        const category = this.tabCategories[this.activeTab];
+        common_vendor.index.__f__("log", "at pages/store/store.vue:129", "正在请求分类:", category);
+        common_vendor.index.__f__("log", "at pages/store/store.vue:130", "请求的分类参数:", category);
+        const response = await api_request.api.packages.getByCategory(category);
+        common_vendor.index.__f__("log", "at pages/store/store.vue:133", "API响应:", response);
+        if (response.code === 200) {
+          if (response.data && response.data.length > 0) {
+            this.membershipCards = response.data;
+            this.errorMessage = "";
+            common_vendor.index.__f__("log", "at pages/store/store.vue:139", "成功加载", response.data.length, "个套餐");
+          } else {
+            this.membershipCards = [];
+            common_vendor.index.__f__("log", "at pages/store/store.vue:142", "该分类没有套餐数据");
+          }
+        } else {
+          const errorMsg = response.message || "获取会员套餐数据失败";
+          this.errorMessage = `错误: ${errorMsg}`;
+          this.membershipCards = [];
+          common_vendor.index.showToast({
+            title: errorMsg,
+            icon: "none",
+            duration: 3e3
+          });
+        }
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/store/store.vue:157", "API请求错误:", error);
+        let errorMsg = "网络连接失败";
+        if (error.errMsg) {
+          if (error.errMsg.includes("fail")) {
+            errorMsg = "无法连接到服务器，请检查后端服务是否启动";
+          } else {
+            errorMsg = `网络错误: ${error.errMsg}`;
+          }
+        } else if (error.message) {
+          errorMsg = `请求错误: ${error.message}`;
+        }
+        this.errorMessage = errorMsg;
+        this.membershipCards = [];
+        common_vendor.index.__f__("error", "at pages/store/store.vue:172", "获取会员套餐数据异常:", error);
+        common_vendor.index.showToast({
+          title: errorMsg,
+          icon: "none",
+          duration: 3e3
+        });
+      } finally {
+        this.loading = false;
+      }
+    },
     switchTab(index) {
+      common_vendor.index.__f__("log", "at pages/store/store.vue:183", "切换到标签:", index);
       this.activeTab = index;
+    },
+    formatDescription(item) {
+      if (item.validDays > 0) {
+        return `有效期${item.validDays}天，不限次数（每人每天仅限一次）`;
+      } else if (item.validDays === -1) {
+        return `不限时间，不限次数（每人每天仅限一次）`;
+      } else {
+        return "尊享专属健康方案（每人每天仅限一次）";
+      }
+    },
+    formatFeatures(item) {
+      const features = [];
+      if (item.people > 0) {
+        if (item.people === -1) {
+          features.push("多人共享");
+        } else {
+          features.push(`支持${item.people}人绑定`);
+        }
+      }
+      if (this.activeTab !== 1 && item.timesPerPerson > 0) {
+        features.push(`每人${item.timesPerPerson}次`);
+      }
+      return features;
+    }
+  },
+  filters: {
+    currency(value) {
+      if (!value)
+        return "¥0";
+      return typeof value === "number" ? `¥${value}` : value;
     }
   }
 };
@@ -59,7 +128,7 @@ if (!Array) {
   _component_BottomNav();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return {
+  return common_vendor.e({
     a: $data.activeTab === 0 ? 1 : "",
     b: $data.activeTab === 0 ? 1 : "",
     c: common_vendor.o(($event) => $options.switchTab(0)),
@@ -69,35 +138,41 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     g: $data.activeTab === 2 ? 1 : "",
     h: $data.activeTab === 2 ? 1 : "",
     i: common_vendor.o(($event) => $options.switchTab(2)),
-    j: common_vendor.f($data.membershipCards, (item, index, i0) => {
+    j: $data.loading
+  }, $data.loading ? {} : $data.errorMessage ? {
+    l: common_vendor.t($data.errorMessage)
+  } : $data.membershipCards.length === 0 && !$data.loading ? {} : {
+    n: common_vendor.f($data.membershipCards, (item, index, i0) => {
       return common_vendor.e({
         a: item.badge
       }, item.badge ? {
         b: common_vendor.t(item.badge)
       } : {}, {
-        c: common_vendor.t(item.title),
-        d: common_vendor.t(item.desc),
+        c: common_vendor.t(item.name),
+        d: common_vendor.t($options.formatDescription(item)),
         e: common_vendor.t(item.price),
-        f: common_vendor.t(item.originalPrice),
-        g: item.perTime
-      }, item.perTime ? {
-        h: common_vendor.t(item.perTime)
+        f: item.avgPricePerTime
+      }, item.avgPricePerTime ? {
+        g: common_vendor.t(item.avgPricePerTime)
       } : {}, {
-        i: common_vendor.f(item.features, (feature, fIndex, i1) => {
+        h: common_vendor.f($options.formatFeatures(item), (feature, fIndex, i1) => {
           return {
             a: common_vendor.t(feature),
             b: fIndex
           };
         }),
-        j: index
+        i: item.id || index
       });
     }),
-    k: $data.icons.check,
-    l: $data.icons.arrow,
-    m: common_vendor.p({
+    o: $data.icons.check,
+    p: $data.icons.arrow
+  }, {
+    k: $data.errorMessage,
+    m: $data.membershipCards.length === 0 && !$data.loading,
+    q: common_vendor.p({
       current: 1
     })
-  };
+  });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-c1a2745a"]]);
 wx.createPage(MiniProgramPage);

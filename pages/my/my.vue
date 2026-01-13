@@ -8,10 +8,10 @@
 
 		<!-- User Info -->
 		<view class="user-section">
-			<image class="user-avatar" :src="images.avatar" mode="aspectFill"></image>
+			<image class="user-avatar" :src="userInfo.avatarUrl || images.avatar" mode="aspectFill"></image>
 			<view class="user-info">
-				<text class="user-name">微信用户</text>
-				<text class="user-phone">138****8888</text>
+				<text class="user-name">{{ userInfo.nickname || '微信用户' }}</text>
+				<text class="user-phone">{{ formattedPhone || '未绑定手机' }}</text>
 			</view>
 		</view>
 
@@ -19,20 +19,20 @@
 		<view class="membership-card">
 			<view class="membership-header">
 				<image class="membership-icon" :src="icons.crown" mode="aspectFit"></image>
-				<text class="membership-title">普通用户</text>
+				<text class="membership-title">{{ membershipLevel }}</text>
 			</view>
-			<text class="membership-desc">尚未开通会员</text>
+			<text class="membership-desc">{{ membershipDesc }}</text>
 			<view class="membership-stats">
 				<view class="stat-item">
-					<text class="stat-value">-</text>
+					<text class="stat-value">{{ userInfo.remainingVisits || '-' }}</text>
 					<text class="stat-label">剩余次数</text>
 				</view>
 				<view class="stat-item">
-					<text class="stat-value">0</text>
-					<text class="stat-label">已绑定</text>
+					<text class="stat-value">{{ userInfo.totalVisits || 0 }}</text>
+					<text class="stat-label">已体验</text>
 				</view>
 				<view class="stat-item">
-					<text class="stat-value">0</text>
+					<text class="stat-value">{{ userInfo.points || 0 }}</text>
 					<text class="stat-label">积分余额</text>
 				</view>
 			</view>
@@ -66,10 +66,10 @@
 				</view>
 			</view>
 			<view class="order-list">
-				<view class="order-item" v-for="(order, index) in orders" :key="index">
+				<view class="order-item" v-for="(order, index) in orders" :key="order.id || index">
 					<view class="order-header">
 						<view class="order-left">
-							<view class="order-badge">{{ order.cabin }}</view>
+							<view class="order-badge">{{ order.cabinName }}</view>
 							<text class="order-date">{{ order.date }}</text>
 						</view>
 						<view class="order-status">{{ order.status }}</view>
@@ -77,11 +77,11 @@
 					<view class="order-info">
 						<view class="info-item">
 							<image class="info-icon" :src="icons.clock" mode="aspectFit"></image>
-							<text class="info-text">{{ order.time }}</text>
+							<text class="info-text">{{ order.timeSlot }}</text>
 						</view>
 						<view class="info-item">
 							<image class="info-icon" :src="icons.seat" mode="aspectFit"></image>
-							<text class="info-text">{{ order.seat }}</text>
+							<text class="info-text">{{ order.seatName }}</text>
 						</view>
 					</view>
 				</view>
@@ -95,6 +95,7 @@
 
 <script>
 import BottomNav from '@/components/BottomNav.vue'
+import { api } from '@/api/request'
 
 export default {
 	components: {
@@ -103,6 +104,7 @@ export default {
 	data() {
 		return {
 			activeTab: 0,
+			userInfo: {},
 			icons: {
 				settings: 'https://www.figma.com/api/mcp/asset/5ed2b362-9495-4961-ad72-a22eab14d2af',
 				crown: 'https://www.figma.com/api/mcp/asset/d4df2c09-130a-4366-a7db-6370dd5ebb57',
@@ -112,18 +114,90 @@ export default {
 			images: {
 				avatar: 'https://www.figma.com/api/mcp/asset/e62fc854-cb73-44b5-96be-9d778af361fb'
 			},
-			orders: [
-				{
-					cabin: '1号舱',
-					date: '2025-01-02',
-					status: '已完成',
-					time: '10:00–11:00',
-					seat: 'A座'
-				}
-			]
+			orders: [],
+			orderStatusMap: {
+				'0': '全部',
+				'1': '待核销',
+				'2': '已完成'
+			}
+		}
+	},
+	onLoad() {
+		this.loadUserData()
+	},
+	computed: {
+		formattedPhone() {
+			if (!this.userInfo.phone) return '未绑定手机'
+			const phone = this.userInfo.phone
+			return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+		},
+		membershipLevel() {
+			if (this.userInfo.memberLevel >= 1) {
+				return '会员用户'
+			}
+			return '普通用户'
+		},
+		membershipDesc() {
+			if (this.userInfo.memberLevel >= 1) {
+				return `到期时间: ${this.userInfo.memberExpireTime || '无限期'}`
+			}
+			return '尚未开通会员'
+		}
+	},
+	watch: {
+		activeTab: {
+			handler(newVal) {
+				this.loadOrders()
+			},
+			immediate: true
 		}
 	},
 	methods: {
+		async loadUserData() {
+			try {
+				// 获取用户信息
+				const response = await api.user.getInfo()
+				if (response.code === 200) {
+					this.userInfo = response.data
+				} else {
+					console.error('获取用户信息失败:', response.message)
+				}
+				
+				// 获取订单数据
+				this.loadOrders()
+			} catch (error) {
+				console.error('加载用户数据失败:', error)
+			}
+		},
+		
+		async loadOrders() {
+			try {
+				let status = ''
+				if (this.activeTab === 1) {
+					status = 'pending'  // 待核销
+				} else if (this.activeTab === 2) {
+					status = 'completed'  // 已完成
+				}
+				
+				let response
+				if (status) {
+					response = await api.booking.getOrdersByStatus(status)
+				} else {
+					response = await api.booking.getOrders()
+				}
+				
+				if (response.code === 200) {
+					this.orders = response.data || []
+				} else {
+					console.error('获取订单数据失败:', response.message)
+					this.orders = []
+				}
+			} catch (error) {
+				console.error('加载订单数据失败:', error)
+				this.orders = []
+			}
+		},
+		
 		switchTab(index) {
 			this.activeTab = index
 		}

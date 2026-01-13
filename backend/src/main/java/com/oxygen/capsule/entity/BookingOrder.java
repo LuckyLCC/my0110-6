@@ -15,7 +15,7 @@ public class BookingOrder {
     @Column(name = "order_no", unique = true, nullable = false)
     private String orderNo;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false) // 使用ID关联，不使用外键约束
     private Long userId;
 
     @Column(name = "date", nullable = false) // 预约日期

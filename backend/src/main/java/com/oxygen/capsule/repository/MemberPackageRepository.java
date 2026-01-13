@@ -9,4 +9,6 @@ import java.util.List;
 public interface MemberPackageRepository extends JpaRepository<MemberPackage, Long> {
     List<MemberPackage> findAllByCategoryAndIsActiveTrueOrderBySortOrderAsc(String category);
     List<MemberPackage> findAllByIsActiveTrueOrderBySortOrderAsc();
+    MemberPackage findByCode(String code);
+    List<MemberPackage> findAllByCategory(String category);
 }

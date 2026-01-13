@@ -9,4 +9,5 @@ public interface MemberPackageService {
     MemberPackage findById(Long id);
     MemberPackage save(MemberPackage memberPackage);
     List<MemberPackage> findByCategory(String category);
+    MemberPackage findByCode(String code);
 }

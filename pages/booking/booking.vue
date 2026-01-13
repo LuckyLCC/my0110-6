@@ -75,11 +75,11 @@
 				<text v-else class="summary-details">{{ selectedDateText }} {{ selectedTimeText }} {{ selectedCabinText }}-{{ selectedSeatText }}</text>
 				<view class="summary-price">
 					<text class="price-label">总计:</text>
-					<text class="price-value">¥398</text>
-					<text class="price-original">¥598</text>
+					<text class="price-value">¥{{ totalPrice.current }}</text>
+					<text class="price-original">¥{{ totalPrice.original }}</text>
 				</view>
 			</view>
-			<view class="summary-btn" :class="{ disabled: !isComplete }">
+			<view class="summary-btn" :class="{ disabled: !isComplete }" @tap="createBooking">
 				<text class="summary-btn-text">支付并预约</text>
 			</view>
 		</view>
@@ -91,6 +91,7 @@
 
 <script>
 import BottomNav from '@/components/BottomNav.vue'
+import { api } from '@/api/request'
 
 export default {
 	components: {
@@ -110,7 +111,11 @@ export default {
 			cabins: [
 				{ name: '1号舱', seats: ['A座', 'B座'] },
 				{ name: '2号舱', seats: ['A座', 'B座'] }
-			]
+			],
+			totalPrice: {
+				current: 398,
+				original: 598
+			}
 		}
 	},
 	computed: {
@@ -175,6 +180,84 @@ export default {
 		selectSeat(cabinIndex, seatIndex) {
 			const seatKey = `${cabinIndex}-${seatIndex}`
 			this.selectedSeat = this.selectedSeat === seatKey ? '' : seatKey
+		},
+		async createBooking() {
+			if (!this.isComplete) {
+				uni.showToast({
+					title: '请先选择日期、时段和座位',
+					icon: 'none'
+				})
+				return
+			}
+
+			try {
+				// 获取完整的日期格式
+				const selectedDateInfo = this.dates[this.selectedDate]
+				const currentDate = new Date()
+				currentDate.setDate(currentDate.getDate() + this.selectedDate)
+				const formattedDate = currentDate.toISOString().split('T')[0] // YYYY-MM-DD格式
+
+				// 检查用户是否可以预订当天（每人每天只能消费一次）
+				const canBookResponse = await api.booking.canBookToday(formattedDate)
+				if (canBookResponse.code === 200 && !canBookResponse.data) {
+					uni.showModal({
+						title: '提醒',
+						content: '您今天已经消费过了，每人每天只能消费一次',
+						showCancel: false,
+						confirmText: '知道了'
+					})
+					return
+				}
+
+				// 获取选中的舱位和座位信息
+				const [cabinIndex, seatIndex] = this.selectedSeat.split('-')
+				const cabinName = this.cabins[parseInt(cabinIndex)].name
+				const seatName = this.cabins[parseInt(cabinIndex)].seats[parseInt(seatIndex)]
+
+				// 调用后端API创建预约订单
+				const response = await api.booking.create({
+					date: formattedDate,
+					timeSlot: this.timeSlots[this.selectedTime],
+					cabinName: cabinName,
+					seatName: seatName,
+					price: this.totalPrice.current,
+					originalPrice: this.totalPrice.original
+				})
+
+				if (response.code === 200) {
+					const orderId = response.data.id
+					
+					// 调用支付接口
+					const payResponse = await api.booking.pay(orderId)
+					if (payResponse.code === 200) {
+						uni.showToast({
+							title: '预约支付成功',
+							icon: 'success'
+						})
+						
+						// 跳转回上一页
+						setTimeout(() => {
+							uni.navigateBack()
+						}, 1500)
+					} else {
+						uni.showToast({
+							title: payResponse.message || '支付失败',
+							icon: 'none'
+						})
+					}
+				} else {
+					uni.showToast({
+						title: response.message || '预约失败',
+						icon: 'none'
+					})
+				}
+			} catch (error) {
+				console.error('创建预约订单失败:', error)
+				uni.showToast({
+					title: '网络错误，请稍后重试',
+					icon: 'none'
+				})
+			}
 		}
 	}
 }

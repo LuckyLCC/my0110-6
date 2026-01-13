@@ -1,0 +1,90 @@
+{
+  "title": "氧舱会员卡价格表（简洁完整版）",
+  "currency": "CNY",
+  "cards": [
+    {
+      "code": "MONTHLY",
+      "name": "月卡",
+      "price": 3980,
+      "people": 1,
+      "valid_days": 30,
+      "avg_price_per_time": 159
+    },
+    {
+      "code": "QUARTERLY",
+      "name": "季卡",
+      "price": 10800,
+      "people": 1,
+      "valid_days": 90,
+      "avg_price_per_time": 144
+    },
+    {
+      "code": "HALF_YEAR",
+      "name": "半年卡",
+      "price": 19800,
+      "people": 1,
+      "valid_days": 180,
+      "avg_price_per_time": 132
+    },
+    {
+      "code": "YEARLY",
+      "name": "年卡",
+      "price": 29800,
+      "people": 1,
+      "valid_days": 365,
+      "avg_price_per_time": 99
+    },
+    {
+      "code": "TWO_PEOPLE_HALF_YEAR",
+      "name": "2人半年卡",
+      "price": 23800,
+      "people": 2,
+      "valid_days": 180,
+      "times_per_person": 150,
+      "avg_price_per_time": 79
+    },
+    {
+      "code": "TWO_PEOPLE_YEAR",
+      "name": "2人年卡",
+      "price": 39800,
+      "people": 2,
+      "valid_days": 365,
+      "times_per_person": 300,
+      "avg_price_per_time": 66
+    },
+    {
+      "code": "THREE_PEOPLE_YEAR",
+      "name": "3人年卡",
+      "price": 55800,
+      "people": 3,
+      "valid_days": 365,
+      "times_per_person": 300,
+      "avg_price_per_time": 62
+    },
+    {
+      "code": "FOUR_PEOPLE_YEAR",
+      "name": "4人年卡",
+      "price": 69800,
+      "people": 4,
+      "valid_days": 365,
+      "times_per_person": 300,
+      "avg_price_per_time": 58
+    },
+    {
+      "code": "FAMILY_100",
+      "name": "家庭100次卡",
+      "price": 19800,
+      "people": -1,
+      "valid_days": -1,
+      "avg_price_per_time": 198
+    },
+    {
+      "code": "FAMILY_200",
+      "name": "家庭200次卡",
+      "price": 36800,
+      "people": -1,
+      "valid_days": -1,
+      "avg_price_per_time": 184
+    }
+  ]
+}
