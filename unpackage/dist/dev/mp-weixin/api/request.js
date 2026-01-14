@@ -79,6 +79,11 @@ const api = {
     getWechatPayParams: (orderId) => request({
       url: `/payment/wechat-pay/${orderId}`,
       method: "POST"
+    }),
+    // Mock支付成功（仅用于开发测试）
+    mockPaymentSuccess: (orderId) => request({
+      url: `/payment/mock-success/${orderId}`,
+      method: "POST"
     })
   }
 };

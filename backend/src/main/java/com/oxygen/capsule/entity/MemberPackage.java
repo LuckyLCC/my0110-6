@@ -11,7 +11,7 @@ public class MemberPackage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "code", unique = true, nullable = false) // 对应JSON中的code字段
+    @Column(name = "code", nullable = false) // 对应JSON中的code字段
     private String code;
 
     @Column(name = "name", nullable = false) // 对应JSON中的name字段
@@ -23,7 +23,7 @@ public class MemberPackage {
     @Column(name = "people", nullable = false) // 对应JSON中的people字段
     private Integer people;
 
-    @Column(name = "valid_days", nullable = false) // 对应JSON中的valid_days字段
+    @Column(name = "validity_days", nullable = false) // 对应JSON中的validity_days字段
     private Integer validDays;
 
     @Column(name = "avg_price_per_time") // 对应JSON中的avg_price_per_time字段

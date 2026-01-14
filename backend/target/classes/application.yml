@@ -54,6 +54,13 @@ wechat:
   miniapp:
     appid: wx1a44cbe925471245
     secret: 019d069035074ed1c45d1c35d69ed8c2
+  pay:
+    mock: true  # 是否使用mock模式（true=使用mock数据，false=使用真实微信支付）
+    appid: wx1a44cbe925471245  # 小程序 AppID（以 wx 开头）
+    mchid: 1234567890  # 商户号（纯数字，8-10位），请替换为你的真实商户号
+    apiKey: your-api-key-here  # API密钥，请替换为你的真实API密钥
+    certPath: classpath:cert/apiclient_cert.p12  # 证书路径（可选，用于RSA签名）
+    notifyUrl: https://your-domain.com/api/payment/notify  # 支付回调URL（必须是HTTPS）
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml

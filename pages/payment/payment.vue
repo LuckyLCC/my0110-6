@@ -175,6 +175,60 @@ export default {
 		goBack() {
 			uni.navigateBack()
 		},
+		async handleMockPaymentSuccess() {
+			// Mock模式下模拟支付成功
+			uni.showLoading({
+				title: '模拟支付中...',
+				mask: true
+			})
+			
+			try {
+				// 获取订单ID
+				const orderId = this.orderId
+				
+				if (!orderId) {
+					uni.hideLoading()
+					uni.showToast({
+						title: '订单信息缺失',
+						icon: 'none'
+					})
+					return
+				}
+				
+				// 调用后端接口更新订单状态为已支付
+				const response = await api.payment.mockPaymentSuccess(orderId)
+				
+				if (response.code === 200) {
+					uni.hideLoading()
+					uni.showToast({
+						title: '支付成功（Mock模式）',
+						icon: 'success',
+						duration: 2000
+					})
+					
+					// 跳转到我的页面
+					setTimeout(() => {
+						uni.reLaunch({
+							url: '/pages/my/my'
+						})
+					}, 2000)
+				} else {
+					uni.hideLoading()
+					uni.showToast({
+						title: response.message || '模拟支付失败',
+						icon: 'none'
+					})
+				}
+				
+			} catch (error) {
+				uni.hideLoading()
+				uni.showToast({
+					title: '模拟支付失败',
+					icon: 'none'
+				})
+				console.error('模拟支付失败:', error)
+			}
+		},
 		async handlePay() {
 			// 检查是否登录
 			const token = uni.getStorageSync('token')
@@ -218,6 +272,9 @@ export default {
 				if (!orderId) {
 					throw new Error('订单创建失败，未返回订单ID')
 				}
+				
+				// 保存订单ID，用于mock支付成功
+				this.orderId = orderId
 
 				// 步骤2: 获取微信支付参数
 				const payResponse = await api.payment.getWechatPayParams(orderId)
@@ -267,11 +324,36 @@ export default {
 							}
 						}
 						
-						uni.showToast({
-							title: errorMsg,
-							icon: 'none',
-							duration: 2000
-						})
+						// 检查是否是mock模式（通过检查prepay_id是否包含MOCK）
+						const isMockMode = payParams.package && payParams.package.includes('MOCK_PREPAY_ID')
+						
+						if (isMockMode) {
+							// Mock模式下，提供模拟支付成功的选项
+							uni.showModal({
+								title: 'Mock模式提示',
+								content: '当前为Mock模式，真实支付会失败。是否模拟支付成功？',
+								confirmText: '模拟成功',
+								cancelText: '取消',
+								success: (modalRes) => {
+									if (modalRes.confirm) {
+										// 模拟支付成功
+										this.handleMockPaymentSuccess()
+									} else {
+										uni.showToast({
+											title: '支付已取消',
+											icon: 'none',
+											duration: 2000
+										})
+									}
+								}
+							})
+						} else {
+							uni.showToast({
+								title: errorMsg,
+								icon: 'none',
+								duration: 2000
+							})
+						}
 					}
 				})
 			} catch (error) {

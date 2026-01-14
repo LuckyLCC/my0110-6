@@ -20,14 +20,16 @@ CREATE TABLE IF NOT EXISTS users (
 -- 会员套餐表
 CREATE TABLE IF NOT EXISTS member_packages (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(50) UNIQUE NOT NULL COMMENT '套餐代码',
     name VARCHAR(100) NOT NULL COMMENT '套餐名称',
     description TEXT COMMENT '套餐描述',
     price DECIMAL(10,2) NOT NULL COMMENT '价格',
     original_price DECIMAL(10,2) COMMENT '原价',
     validity_days INT NOT NULL COMMENT '有效期天数',
-    bind_limit INT DEFAULT 1 COMMENT '绑定限制',
+    people INT NOT NULL COMMENT '适用人数',
+    avg_price_per_time DECIMAL(10,2) COMMENT '单次平均价格',
+    times_per_person INT COMMENT '每人可使用次数',
     badge VARCHAR(50) COMMENT '徽章/标签',
-    per_time_price VARCHAR(50) COMMENT '单次价格描述',
     category VARCHAR(50) NOT NULL COMMENT '分类',
     sort_order INT DEFAULT 0 COMMENT '排序',
     is_active BOOLEAN DEFAULT TRUE COMMENT '是否激活',
@@ -66,6 +68,21 @@ CREATE TABLE IF NOT EXISTS daily_visit_records (
     UNIQUE KEY uk_user_date (user_id, visit_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='每日访问记录表';
 
+-- 支付订单表
+CREATE TABLE IF NOT EXISTS payment_orders (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_no VARCHAR(50) UNIQUE NOT NULL COMMENT '订单号',
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    package_id BIGINT NOT NULL COMMENT '套餐ID',
+    package_name VARCHAR(100) NOT NULL COMMENT '套餐名称',
+    price DECIMAL(10,2) NOT NULL COMMENT '价格',
+    status VARCHAR(20) DEFAULT 'unpaid' COMMENT '状态: unpaid未支付, paid已支付, cancelled已取消',
+    payment_method VARCHAR(50) COMMENT '支付方式',
+    payment_time DATETIME COMMENT '支付时间',
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='支付订单表';
+
 -- 创建索引
 CREATE INDEX idx_users_openid ON users(openid);
 CREATE INDEX idx_users_phone ON users(phone);
@@ -76,8 +93,7 @@ CREATE INDEX idx_member_packages_is_active ON member_packages(is_active);
 CREATE INDEX idx_daily_visit_records_user_id ON daily_visit_records(user_id);
 CREATE INDEX idx_daily_visit_records_visit_date ON daily_visit_records(visit_date);
 
--- 插入初始会员套餐数据示例
-INSERT INTO member_packages (name, description, price, original_price, validity_days, visit_count, category, sort_order, is_active, features) VALUES
-('体验卡', '初次体验氧舱服务', 99.00, 129.00, 7, 1, '个人畅享', 1, TRUE, '免费WiFi,专业指导'),
-('周卡', '一周无限次体验', 199.00, 259.00, 7, -1, '个人畅享', 2, TRUE, '免费WiFi,专业指导,饮品'),
-('月卡', '一个月无限次体验', 499.00, 699.00, 30, -1, '个人畅享', 3, TRUE, '免费WiFi,专业指导,饮品,按摩椅');
+-- 创建支付订单表索引
+CREATE INDEX idx_payment_orders_user_id ON payment_orders(user_id);
+CREATE INDEX idx_payment_orders_order_no ON payment_orders(order_no);
+CREATE INDEX idx_payment_orders_status ON payment_orders(status);

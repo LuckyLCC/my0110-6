@@ -54,6 +54,50 @@ const _sfc_main = {
     goBack() {
       common_vendor.index.navigateBack();
     },
+    async handleMockPaymentSuccess() {
+      common_vendor.index.showLoading({
+        title: "模拟支付中...",
+        mask: true
+      });
+      try {
+        const orderId = this.orderId;
+        if (!orderId) {
+          common_vendor.index.hideLoading();
+          common_vendor.index.showToast({
+            title: "订单信息缺失",
+            icon: "none"
+          });
+          return;
+        }
+        const response = await api_request.api.payment.mockPaymentSuccess(orderId);
+        if (response.code === 200) {
+          common_vendor.index.hideLoading();
+          common_vendor.index.showToast({
+            title: "支付成功（Mock模式）",
+            icon: "success",
+            duration: 2e3
+          });
+          setTimeout(() => {
+            common_vendor.index.reLaunch({
+              url: "/pages/my/my"
+            });
+          }, 2e3);
+        } else {
+          common_vendor.index.hideLoading();
+          common_vendor.index.showToast({
+            title: response.message || "模拟支付失败",
+            icon: "none"
+          });
+        }
+      } catch (error) {
+        common_vendor.index.hideLoading();
+        common_vendor.index.showToast({
+          title: "模拟支付失败",
+          icon: "none"
+        });
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:229", "模拟支付失败:", error);
+      }
+    },
     async handlePay() {
       const token = common_vendor.index.getStorageSync("token");
       if (!token) {
@@ -89,6 +133,7 @@ const _sfc_main = {
         if (!orderId) {
           throw new Error("订单创建失败，未返回订单ID");
         }
+        this.orderId = orderId;
         const payResponse = await api_request.api.payment.getWechatPayParams(orderId);
         if (payResponse.code !== 200) {
           throw new Error(payResponse.message || "获取支付参数失败");
@@ -102,7 +147,7 @@ const _sfc_main = {
           signType: payParams.signType || "RSA",
           paySign: payParams.paySign,
           success: (res) => {
-            common_vendor.index.__f__("log", "at pages/payment/payment.vue:240", "支付成功:", res);
+            common_vendor.index.__f__("log", "at pages/payment/payment.vue:297", "支付成功:", res);
             common_vendor.index.hideLoading();
             common_vendor.index.showToast({
               title: "支付成功",
@@ -116,7 +161,7 @@ const _sfc_main = {
             }, 2e3);
           },
           fail: (err) => {
-            common_vendor.index.__f__("error", "at pages/payment/payment.vue:256", "支付失败:", err);
+            common_vendor.index.__f__("error", "at pages/payment/payment.vue:313", "支付失败:", err);
             common_vendor.index.hideLoading();
             let errorMsg = "支付失败";
             if (err.errMsg) {
@@ -128,15 +173,36 @@ const _sfc_main = {
                 errorMsg = err.errMsg;
               }
             }
-            common_vendor.index.showToast({
-              title: errorMsg,
-              icon: "none",
-              duration: 2e3
-            });
+            const isMockMode = payParams.package && payParams.package.includes("MOCK_PREPAY_ID");
+            if (isMockMode) {
+              common_vendor.index.showModal({
+                title: "Mock模式提示",
+                content: "当前为Mock模式，真实支付会失败。是否模拟支付成功？",
+                confirmText: "模拟成功",
+                cancelText: "取消",
+                success: (modalRes) => {
+                  if (modalRes.confirm) {
+                    this.handleMockPaymentSuccess();
+                  } else {
+                    common_vendor.index.showToast({
+                      title: "支付已取消",
+                      icon: "none",
+                      duration: 2e3
+                    });
+                  }
+                }
+              });
+            } else {
+              common_vendor.index.showToast({
+                title: errorMsg,
+                icon: "none",
+                duration: 2e3
+              });
+            }
           }
         });
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/payment/payment.vue:278", "支付流程错误:", error);
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:360", "支付流程错误:", error);
         common_vendor.index.hideLoading();
         let errorMsg = "支付失败，请重试";
         if (error.message) {

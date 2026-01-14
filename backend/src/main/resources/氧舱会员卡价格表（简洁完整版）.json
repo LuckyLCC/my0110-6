@@ -23,7 +23,7 @@
       "name": "半年卡",
       "price": 19800,
       "people": 1,
-      "valid_days": 180,
+      "validity_days": 180,
       "avg_price_per_time": 132
     },
     {
@@ -31,7 +31,7 @@
       "name": "年卡",
       "price": 29800,
       "people": 1,
-      "valid_days": 365,
+      "validity_days": 365,
       "avg_price_per_time": 99
     },
     {
@@ -39,7 +39,7 @@
       "name": "2人半年卡",
       "price": 23800,
       "people": 2,
-      "valid_days": 180,
+      "validity_days": 180,
       "times_per_person": 150,
       "avg_price_per_time": 79
     },
@@ -48,7 +48,7 @@
       "name": "2人年卡",
       "price": 39800,
       "people": 2,
-      "valid_days": 365,
+      "validity_days": 365,
       "times_per_person": 300,
       "avg_price_per_time": 66
     },
@@ -57,7 +57,7 @@
       "name": "3人年卡",
       "price": 55800,
       "people": 3,
-      "valid_days": 365,
+      "validity_days": 365,
       "times_per_person": 300,
       "avg_price_per_time": 62
     },
@@ -66,7 +66,7 @@
       "name": "4人年卡",
       "price": 69800,
       "people": 4,
-      "valid_days": 365,
+      "validity_days": 365,
       "times_per_person": 300,
       "avg_price_per_time": 58
     },
@@ -75,7 +75,7 @@
       "name": "家庭100次卡",
       "price": 19800,
       "people": -1,
-      "valid_days": -1,
+      "validity_days": -1,
       "avg_price_per_time": 198
     },
     {
@@ -83,7 +83,7 @@
       "name": "家庭200次卡",
       "price": 36800,
       "people": -1,
-      "valid_days": -1,
+      "validity_days": -1,
       "avg_price_per_time": 184
     }
   ]
