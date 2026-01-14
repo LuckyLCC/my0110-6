@@ -4412,3 +4412,2732 @@
         bo1_0.user_id=? 
     order by
         bo1_0.created_at desc
+2026-01-14 16:39:08.851 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:39:08.873 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:39:09.998 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:39:09.998 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:39:10.003 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:39:10.028 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:39:10.031 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:43:03.326 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:45:55.207 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.code=?
+2026-01-14 16:45:55.214 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.code=?
+2026-01-14 16:45:55.216 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.code=?
+2026-01-14 16:45:55.217 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.code=?
+2026-01-14 16:45:55.218 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.code=?
+2026-01-14 16:45:55.219 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.code=?
+2026-01-14 16:45:55.220 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.code=?
+2026-01-14 16:45:55.221 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.code=?
+2026-01-14 16:45:55.221 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.code=?
+2026-01-14 16:45:55.222 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.code=?
+2026-01-14 16:46:07.386 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:46:10.034 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:10.034 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:10.041 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:46:10.041 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.user_id=? 
+        and po1_0.status=?
+2026-01-14 16:46:10.058 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:10.061 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:46:11.134 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:46:11.153 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:46:15.490 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:15.497 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.id=?
+2026-01-14 16:46:15.511 - 
+    insert 
+    into
+        payment_orders
+        (created_at, order_no, package_id, package_name, payment_method, payment_time, price, status, updated_at, user_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-01-14 16:46:15.566 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.id=?
+2026-01-14 16:46:15.568 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:27.271 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.id=?
+2026-01-14 16:46:27.275 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:27.278 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.id=?
+2026-01-14 16:46:27.290 - 
+    update
+        payment_orders 
+    set
+        created_at=?,
+        order_no=?,
+        package_id=?,
+        package_name=?,
+        payment_method=?,
+        payment_time=?,
+        price=?,
+        status=?,
+        updated_at=?,
+        user_id=? 
+    where
+        id=?
+2026-01-14 16:46:27.293 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-14 16:46:29.483 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:29.489 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:29.492 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:46:29.494 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.user_id=? 
+        and po1_0.status=?
+2026-01-14 16:46:29.520 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:29.524 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:46:41.259 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:46:41.280 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:46:43.387 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:43.391 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:43.393 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:46:43.394 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.user_id=? 
+        and po1_0.status=?
+2026-01-14 16:46:43.424 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:43.427 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:46:57.917 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:57.917 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:57.921 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:46:57.921 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.user_id=? 
+        and po1_0.status=?
+2026-01-14 16:46:57.947 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:46:57.951 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:47:48.273 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:47:52.429 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:47:52.443 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:48:03.274 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.openid=?
+2026-01-14 16:48:03.279 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-14 16:48:04.969 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:48:06.017 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:48:06.053 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:48:06.056 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:48:06.066 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.user_id=? 
+        and po1_0.status=?
+2026-01-14 16:48:06.102 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 16:48:06.104 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 16:48:48.788 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:48:51.849 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:48:51.854 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:49:11.911 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:49:15.930 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:49:22.257 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 16:49:22.257 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:33:28.206 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:33:48.092 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:33:52.489 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:33:52.489 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:33:55.182 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:33:55.193 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.id=?
+2026-01-14 21:33:55.202 - 
+    insert 
+    into
+        payment_orders
+        (created_at, order_no, package_id, package_name, payment_method, payment_time, price, status, updated_at, user_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2026-01-14 21:33:55.256 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.id=?
+2026-01-14 21:33:55.257 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:33:57.173 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.id=?
+2026-01-14 21:33:57.178 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:33:57.182 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.id=?
+2026-01-14 21:33:57.187 - 
+    update
+        payment_orders 
+    set
+        created_at=?,
+        order_no=?,
+        package_id=?,
+        package_name=?,
+        payment_method=?,
+        payment_time=?,
+        price=?,
+        status=?,
+        updated_at=?,
+        user_id=? 
+    where
+        id=?
+2026-01-14 21:33:57.192 - 
+    update
+        users 
+    set
+        avatar_url=?,
+        created_at=?,
+        last_login_time=?,
+        member_expire_time=?,
+        member_level=?,
+        nickname=?,
+        openid=?,
+        phone=?,
+        points=?,
+        remaining_visits=?,
+        total_visits=?,
+        updated_at=? 
+    where
+        id=?
+2026-01-14 21:33:59.266 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:33:59.270 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:33:59.274 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:33:59.276 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.user_id=? 
+        and po1_0.status=?
+2026-01-14 21:33:59.303 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:33:59.305 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:34:07.374 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:07.374 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:07.393 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:34:07.393 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.user_id=? 
+        and po1_0.status=?
+2026-01-14 21:34:07.434 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:07.435 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:34:25.707 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:25.716 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+        and bo1_0.status=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:34:26.032 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:26.036 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+        and bo1_0.status=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:34:26.507 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:26.509 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:34:28.141 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:28.144 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+        and bo1_0.status=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:34:28.719 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:28.724 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+        and bo1_0.status=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:34:29.231 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:29.234 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:34:33.533 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:34:33.542 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:34:34.527 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:34:35.491 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:34:35.497 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:34:37.966 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:34:39.315 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:34:39.850 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:34:40.171 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:34:40.494 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:34:41.682 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:41.682 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:41.684 - 
+    select
+        po1_0.id,
+        po1_0.created_at,
+        po1_0.order_no,
+        po1_0.package_id,
+        po1_0.package_name,
+        po1_0.payment_method,
+        po1_0.payment_time,
+        po1_0.price,
+        po1_0.status,
+        po1_0.updated_at,
+        po1_0.user_id 
+    from
+        payment_orders po1_0 
+    where
+        po1_0.user_id=? 
+        and po1_0.status=?
+2026-01-14 21:34:41.684 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:34:41.721 - 
+    select
+        u1_0.id,
+        u1_0.avatar_url,
+        u1_0.created_at,
+        u1_0.last_login_time,
+        u1_0.member_expire_time,
+        u1_0.member_level,
+        u1_0.nickname,
+        u1_0.openid,
+        u1_0.phone,
+        u1_0.points,
+        u1_0.remaining_visits,
+        u1_0.total_visits,
+        u1_0.updated_at 
+    from
+        users u1_0 
+    where
+        u1_0.id=?
+2026-01-14 21:34:41.724 - 
+    select
+        bo1_0.id,
+        bo1_0.cabin_name,
+        bo1_0.consume_time,
+        bo1_0.created_at,
+        bo1_0.date,
+        bo1_0.order_no,
+        bo1_0.original_price,
+        bo1_0.payment_method,
+        bo1_0.payment_status,
+        bo1_0.payment_time,
+        bo1_0.price,
+        bo1_0.seat_name,
+        bo1_0.status,
+        bo1_0.time_slot,
+        bo1_0.updated_at,
+        bo1_0.user_id 
+    from
+        booking_orders bo1_0 
+    where
+        bo1_0.user_id=? 
+    order by
+        bo1_0.created_at desc
+2026-01-14 21:35:58.849 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order
+2026-01-14 21:35:58.850 - 
+    select
+        mp1_0.id,
+        mp1_0.avg_price_per_time,
+        mp1_0.badge,
+        mp1_0.category,
+        mp1_0.code,
+        mp1_0.description,
+        mp1_0.features,
+        mp1_0.is_active,
+        mp1_0.name,
+        mp1_0.people,
+        mp1_0.price,
+        mp1_0.sort_order,
+        mp1_0.times_per_person,
+        mp1_0.validity_days 
+    from
+        member_packages mp1_0 
+    where
+        mp1_0.category=? 
+        and mp1_0.is_active 
+    order by
+        mp1_0.sort_order

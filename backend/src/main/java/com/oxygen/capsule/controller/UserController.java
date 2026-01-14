@@ -2,6 +2,8 @@ package com.oxygen.capsule.controller;
 
 import com.oxygen.capsule.common.Result;
 import com.oxygen.capsule.entity.User;
+import com.oxygen.capsule.entity.PaymentOrder;
+import com.oxygen.capsule.repository.PaymentOrderRepository;
 import com.oxygen.capsule.service.UserService;
 import com.oxygen.capsule.util.JwtUtil;
 import com.oxygen.capsule.util.WechatUtil;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,6 +26,9 @@ public class UserController {
 
     @Autowired
     private WechatUtil wechatUtil;
+    
+    @Autowired
+    private PaymentOrderRepository paymentOrderRepository;
 
     // 用户登录/注册接口（真实微信登录）
     @PostMapping("/login")
@@ -99,7 +105,7 @@ public class UserController {
 
     // 获取用户信息
     @GetMapping("/info")
-    public Result<User> getUserInfo(@RequestHeader("Authorization") String token) {
+    public Result<Map<String, Object>> getUserInfo(@RequestHeader("Authorization") String token) {
         if (token == null || !token.startsWith("Bearer ")) {
             return Result.error("未提供有效的认证令牌");
         }
@@ -111,7 +117,40 @@ public class UserController {
             return Result.error("用户不存在");
         }
         
-        return Result.success(user);
+        // 获取用户最新的已支付订单，用于显示卡种名称
+        String packageName = null;
+        try {
+            List<PaymentOrder> paidOrders = 
+                paymentOrderRepository.findByUserIdAndStatus(userId, "paid");
+            if (paidOrders != null && !paidOrders.isEmpty()) {
+                // 按支付时间倒序排列，获取最新的订单
+                paidOrders.sort((a, b) -> {
+                    if (a.getPaymentTime() == null && b.getPaymentTime() == null) return 0;
+                    if (a.getPaymentTime() == null) return 1;
+                    if (b.getPaymentTime() == null) return -1;
+                    return b.getPaymentTime().compareTo(a.getPaymentTime());
+                });
+                packageName = paidOrders.get(0).getPackageName();
+            }
+        } catch (Exception e) {
+            System.err.println("获取用户套餐信息失败: " + e.getMessage());
+        }
+        
+        // 构建返回数据
+        Map<String, Object> userData = new java.util.HashMap<>();
+        userData.put("id", user.getId());
+        userData.put("openid", user.getOpenid());
+        userData.put("nickname", user.getNickname());
+        userData.put("avatarUrl", user.getAvatarUrl());
+        userData.put("phone", user.getPhone());
+        userData.put("memberLevel", user.getMemberLevel());
+        userData.put("memberExpireTime", user.getMemberExpireTime());
+        userData.put("totalVisits", user.getTotalVisits());
+        userData.put("remainingVisits", user.getRemainingVisits());
+        userData.put("points", user.getPoints());
+        userData.put("packageName", packageName); // 添加套餐名称
+        
+        return Result.success(userData);
     }
 
     // 更新用户信息

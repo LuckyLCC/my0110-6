@@ -110,6 +110,8 @@ public class PaymentServiceImpl implements PaymentService {
             order.setStatus(status);
             if ("paid".equals(status)) {
                 order.setPaymentTime(LocalDateTime.now());
+                // 支付成功后，更新用户会员信息
+                updateUserInfoForPaidOrder(order);
             }
             order = paymentOrderRepository.save(order);
         }
@@ -200,13 +202,69 @@ public class PaymentServiceImpl implements PaymentService {
     
     // 更新用户信息以反映支付成功的订单
     private void updateUserInfoForPaidOrder(PaymentOrder order) {
-        // 这里可以根据购买的套餐类型更新用户信息
-        // 例如，更新会员等级、到期时间等
-        System.out.println("更新用户" + order.getUserId() + "的会员信息，购买了套餐" + order.getPackageName());
-        
-        // 实际实现可能包括：
-        // 1. 延长会员到期时间
-        // 2. 更新会员等级
-        // 3. 增加用户积分等
+        try {
+            // 获取用户信息
+            User user = userService.findById(order.getUserId()).orElse(null);
+            if (user == null) {
+                System.err.println("用户不存在，无法更新会员信息: " + order.getUserId());
+                return;
+            }
+            
+            // 获取套餐信息
+            MemberPackage pkg = memberPackageService.findById(order.getPackageId());
+            if (pkg == null) {
+                System.err.println("套餐不存在，无法更新会员信息: " + order.getPackageId());
+                return;
+            }
+            
+            // 更新会员等级
+            user.setMemberLevel(1); // 设置为会员
+            
+            // 计算会员到期时间
+            LocalDateTime currentTime = LocalDateTime.now();
+            LocalDateTime expireTime = null;
+            
+            if (pkg.getValidDays() != null && pkg.getValidDays() > 0) {
+                // 如果用户已有会员到期时间，且未过期，则延长到期时间
+                if (user.getMemberExpireTime() != null && user.getMemberExpireTime().isAfter(currentTime)) {
+                    // 在现有到期时间基础上延长
+                    expireTime = user.getMemberExpireTime().plusDays(pkg.getValidDays());
+                } else {
+                    // 从当前时间开始计算
+                    expireTime = currentTime.plusDays(pkg.getValidDays());
+                }
+            } else if (pkg.getValidDays() == -1) {
+                // 无限期会员
+                expireTime = null; // null 表示无限期
+            } else {
+                // 默认30天
+                if (user.getMemberExpireTime() != null && user.getMemberExpireTime().isAfter(currentTime)) {
+                    expireTime = user.getMemberExpireTime().plusDays(30);
+                } else {
+                    expireTime = currentTime.plusDays(30);
+                }
+            }
+            
+            user.setMemberExpireTime(expireTime);
+            
+            // 更新剩余次数（根据套餐类型）
+            if (pkg.getTimesPerPerson() != null && pkg.getTimesPerPerson() > 0) {
+                // 如果套餐有次数限制，增加剩余次数
+                int currentRemaining = user.getRemainingVisits() != null ? user.getRemainingVisits() : 0;
+                user.setRemainingVisits(currentRemaining + pkg.getTimesPerPerson());
+            } else {
+                // 无限次数，设置为-1或保持原值
+                // 这里可以根据业务需求设置
+            }
+            
+            // 保存用户信息
+            userService.save(user);
+            
+            System.out.println("成功更新用户" + order.getUserId() + "的会员信息，购买了套餐" + order.getPackageName() + 
+                "，到期时间: " + (expireTime != null ? expireTime.toString() : "无限期"));
+        } catch (Exception e) {
+            System.err.println("更新用户会员信息失败: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
