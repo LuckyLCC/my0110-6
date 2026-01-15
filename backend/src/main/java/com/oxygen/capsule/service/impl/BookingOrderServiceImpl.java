@@ -40,6 +40,11 @@ public class BookingOrderServiceImpl implements BookingOrderService {
     }
 
     @Override
+    public BookingOrder findByOrderNo(String orderNo) {
+        return bookingOrderRepository.findByOrderNo(orderNo);
+    }
+
+    @Override
     public BookingOrder updateStatus(Long orderId, String status) {
         BookingOrder order = findById(orderId);
         if (order != null) {

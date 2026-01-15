@@ -2,6 +2,7 @@ package com.oxygen.capsule.controller;
 
 import com.oxygen.capsule.common.Result;
 import com.oxygen.capsule.entity.PaymentOrder;
+import com.oxygen.capsule.service.MemberPackageService;
 import com.oxygen.capsule.service.PaymentService;
 import com.oxygen.capsule.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private MemberPackageService memberPackageService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -193,6 +197,19 @@ public class PaymentController {
                     orderData.put("cardStartDate", order.getCardStartDate());
                     orderData.put("cardEndDate", order.getCardEndDate());
                     orderData.put("transactionType", order.getTransactionType());
+                    
+                    // 查询套餐分类信息
+                    try {
+                        com.oxygen.capsule.entity.MemberPackage pkg = 
+                            memberPackageService.findById(order.getPackageId());
+                        if (pkg != null && pkg.getCategory() != null) {
+                            orderData.put("packageCategory", pkg.getCategory());
+                        }
+                    } catch (Exception e) {
+                        // 如果查询失败，不添加分类字段
+                        System.err.println("查询套餐分类失败: " + e.getMessage());
+                    }
+                    
                     return orderData;
                 })
                 .collect(java.util.stream.Collectors.toList());

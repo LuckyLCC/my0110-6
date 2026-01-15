@@ -5,7 +5,9 @@
     "pages/booking/booking",
     "pages/my/my",
     "pages/login/login",
-    "pages/payment/payment"
+    "pages/payment/payment",
+    "pages/staff/verify",
+    "pages/staff/login"
   ],
   "window": {
     "navigationBarTextStyle": "black",

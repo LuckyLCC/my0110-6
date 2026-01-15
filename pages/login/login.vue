@@ -33,6 +33,11 @@
 				<text class="terms-link" @tap="openPrivacyPolicy">隐私政策</text>
 			</view>
 		</view>
+
+		<!-- 商家版入口 -->
+		<view class="staff-entry" @tap="navigateToStaff">
+			<text class="staff-entry-text">商家版入口</text>
+		</view>
 	</view>
 </template>
 
@@ -112,11 +117,22 @@ export default {
 						duration: 1500
 					})
 
-					// 步骤5: 延迟跳转，让用户看到成功提示
+					// 步骤5: 根据用户角色跳转到不同页面
 					setTimeout(() => {
-						uni.reLaunch({
-							url: '/pages/index/index'
-						})
+						const userInfo = response.data?.userInfo || uni.getStorageSync('userInfo')
+						const userRole = userInfo?.role || 'user'
+						
+						if (userRole === 'staff') {
+							// 商家用户跳转到扫码核销页面
+							uni.reLaunch({
+								url: '/pages/staff/verify'
+							})
+						} else {
+							// 普通用户跳转到首页
+							uni.reLaunch({
+								url: '/pages/index/index'
+							})
+						}
 					}, 1500)
 				} else {
 					// 后端返回错误
@@ -171,6 +187,12 @@ export default {
 			// 打开隐私政策页面
 			uni.navigateTo({
 				url: '/pages/agreement/privacy-policy'
+			})
+		},
+		navigateToStaff() {
+			// 跳转到商家版登录页面
+			uni.navigateTo({
+				url: '/pages/staff/login'
 			})
 		}
 	}
@@ -353,6 +375,25 @@ export default {
 	color: #2b7fff;
 	letter-spacing: -0.3rpx;
 	text-decoration: underline;
+}
+
+/* 商家版入口 - 不明显的提示 */
+.staff-entry {
+	margin-top: 80rpx;
+	padding: 16rpx 24rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.staff-entry-text {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 24rpx;
+	line-height: 32rpx;
+	color: #99a1af;
+	letter-spacing: -0.2rpx;
+	opacity: 0.6;
 }
 </style>
 

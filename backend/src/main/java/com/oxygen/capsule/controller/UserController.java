@@ -68,16 +68,17 @@ public class UserController {
             String token = jwtUtil.generateToken(user.getId());
             
             // 构建返回数据
-            Map<String, Object> responseData = Map.of(
-                "token", token,
-                "userInfo", Map.of(
-                    "id", user.getId(),
-                    "openid", user.getOpenid(),
-                    "nickname", user.getNickname(),
-                    "avatarUrl", user.getAvatarUrl() != null ? user.getAvatarUrl() : "",
-                    "phone", user.getPhone() != null ? user.getPhone() : ""
-                )
-            );
+            Map<String, Object> userInfoMap = new java.util.HashMap<>();
+            userInfoMap.put("id", user.getId());
+            userInfoMap.put("openid", user.getOpenid());
+            userInfoMap.put("nickname", user.getNickname());
+            userInfoMap.put("avatarUrl", user.getAvatarUrl() != null ? user.getAvatarUrl() : "");
+            userInfoMap.put("phone", user.getPhone() != null ? user.getPhone() : "");
+            userInfoMap.put("role", user.getRole() != null ? user.getRole() : "user");
+            
+            Map<String, Object> responseData = new java.util.HashMap<>();
+            responseData.put("token", token);
+            responseData.put("userInfo", userInfoMap);
             
             return Result.success("登录成功", responseData);
         } catch (Exception e) {

@@ -10,6 +10,7 @@
     "build:mp-weixin": "uni build -p mp-weixin"
   },
   "dependencies": {
+    "uqrcodejs": "^4.0.7",
     "vue": "^3.2.47"
   },
   "devDependencies": {

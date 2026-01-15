@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     total_visits INT DEFAULT 0 COMMENT '总访问次数',
     remaining_visits INT DEFAULT 0 COMMENT '剩余访问次数',
     points INT DEFAULT 0 COMMENT '积分',
+    role VARCHAR(20) DEFAULT 'user' COMMENT '用户角色: user-普通用户, staff-商家',
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     last_login_time DATETIME COMMENT '最后登录时间'
@@ -100,3 +101,20 @@ CREATE INDEX idx_daily_visit_records_visit_date ON daily_visit_records(visit_dat
 CREATE INDEX idx_payment_orders_user_id ON payment_orders(user_id);
 CREATE INDEX idx_payment_orders_order_no ON payment_orders(order_no);
 CREATE INDEX idx_payment_orders_status ON payment_orders(status);
+
+-- 商家表
+CREATE TABLE IF NOT EXISTS staffs (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL COMMENT '商家用户名',
+    password VARCHAR(255) NOT NULL COMMENT '商家密码（加密后的密码）',
+    name VARCHAR(100) COMMENT '商家名称/姓名',
+    phone VARCHAR(20) COMMENT '联系电话',
+    status VARCHAR(20) DEFAULT 'active' COMMENT '状态: active-激活, inactive-停用',
+    last_login_time DATETIME COMMENT '最后登录时间',
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商家表';
+
+-- 创建商家表索引
+CREATE INDEX idx_staffs_username ON staffs(username);
+CREATE INDEX idx_staffs_status ON staffs(status);

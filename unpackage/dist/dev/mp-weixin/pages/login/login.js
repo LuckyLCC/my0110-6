@@ -38,16 +38,16 @@ const _sfc_main = {
             fail: reject
           });
         });
-        common_vendor.index.__f__("log", "at pages/login/login.vue:86", "uni.login 返回:", loginRes);
+        common_vendor.index.__f__("log", "at pages/login/login.vue:91", "uni.login 返回:", loginRes);
         if (!loginRes.code) {
           throw new Error("获取微信登录凭证失败");
         }
         const response = await api_request.api.user.login(loginRes.code);
-        common_vendor.index.__f__("log", "at pages/login/login.vue:94", "后端登录响应:", response);
+        common_vendor.index.__f__("log", "at pages/login/login.vue:99", "后端登录响应:", response);
         if (response.code === 200) {
           if (response.data && response.data.token) {
             common_vendor.index.setStorageSync("token", response.data.token);
-            common_vendor.index.__f__("log", "at pages/login/login.vue:100", "Token 已保存");
+            common_vendor.index.__f__("log", "at pages/login/login.vue:105", "Token 已保存");
           }
           if (response.data && response.data.userInfo) {
             common_vendor.index.setStorageSync("userInfo", response.data.userInfo);
@@ -59,9 +59,18 @@ const _sfc_main = {
             duration: 1500
           });
           setTimeout(() => {
-            common_vendor.index.reLaunch({
-              url: "/pages/index/index"
-            });
+            var _a;
+            const userInfo = ((_a = response.data) == null ? void 0 : _a.userInfo) || common_vendor.index.getStorageSync("userInfo");
+            const userRole = (userInfo == null ? void 0 : userInfo.role) || "user";
+            if (userRole === "staff") {
+              common_vendor.index.reLaunch({
+                url: "/pages/staff/verify"
+              });
+            } else {
+              common_vendor.index.reLaunch({
+                url: "/pages/index/index"
+              });
+            }
           }, 1500);
         } else {
           const errorMsg = response.message || "登录失败，请重试";
@@ -73,7 +82,7 @@ const _sfc_main = {
           });
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/login/login.vue:132", "微信登录错误:", error);
+        common_vendor.index.__f__("error", "at pages/login/login.vue:148", "微信登录错误:", error);
         common_vendor.index.hideLoading();
         let errorMsg = "登录失败，请重试";
         if (error.errMsg) {
@@ -111,6 +120,11 @@ const _sfc_main = {
       common_vendor.index.navigateTo({
         url: "/pages/agreement/privacy-policy"
       });
+    },
+    navigateToStaff() {
+      common_vendor.index.navigateTo({
+        url: "/pages/staff/login"
+      });
     }
   }
 };
@@ -125,7 +139,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     f: $data.termsAgreed ? 1 : "",
     g: common_vendor.o((...args) => $options.toggleTerms && $options.toggleTerms(...args)),
     h: common_vendor.o((...args) => $options.openUserAgreement && $options.openUserAgreement(...args)),
-    i: common_vendor.o((...args) => $options.openPrivacyPolicy && $options.openPrivacyPolicy(...args))
+    i: common_vendor.o((...args) => $options.openPrivacyPolicy && $options.openPrivacyPolicy(...args)),
+    j: common_vendor.o((...args) => $options.navigateToStaff && $options.navigateToStaff(...args))
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-e4e4508d"]]);

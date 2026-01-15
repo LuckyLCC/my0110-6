@@ -41,6 +41,20 @@
 				"navigationBarTitleText": "确认订单",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/staff/verify",
+			"style": {
+				"navigationBarTitleText": "扫码核销",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/staff/login",
+			"style": {
+				"navigationBarTitleText": "商家登录",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {

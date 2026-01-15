@@ -156,3 +156,21 @@
 	letter-spacing: -0.3rpx;
 	text-decoration: underline;
 }
+
+/* 商家版入口 - 不明显的提示 */
+.staff-entry.data-v-e4e4508d {
+	margin-top: 80rpx;
+	padding: 16rpx 24rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.staff-entry-text.data-v-e4e4508d {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 24rpx;
+	line-height: 32rpx;
+	color: #99a1af;
+	letter-spacing: -0.2rpx;
+	opacity: 0.6;
+}

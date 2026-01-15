@@ -50,6 +50,15 @@ export const api = {
     bindPhone: (phone) => request({ url: '/user/bind-phone', method: 'POST', data: { phone } })
   },
 
+  // 商家相关API
+  staff: {
+    // 商家登录（用户名密码）
+    login: (username, password) => request({ url: '/staff/login', method: 'POST', data: { username, password } }),
+    
+    // 获取商家信息
+    getInfo: () => request({ url: '/staff/info', method: 'GET' })
+  },
+
   // 会员套餐相关API
   packages: {
     // 获取所有会员套餐
@@ -83,7 +92,10 @@ export const api = {
     canBookToday: (date) => request({ url: `/booking/can-book-today`, method: 'GET', data: { date } }),
     
     // 获取订单详情
-    getOrderDetail: (orderId) => request({ url: `/booking/order/${orderId}`, method: 'GET' })
+    getOrderDetail: (orderId) => request({ url: `/booking/order/${orderId}`, method: 'GET' }),
+    
+    // 通过订单号核销（商家端使用）
+    verifyByOrderNo: (orderNo) => request({ url: `/booking/verify/${orderNo}`, method: 'POST' })
   },
 
   // 支付相关API

@@ -39,6 +39,9 @@ public class User {
     @Column(name = "points")
     private Integer points = 0;
 
+    @Column(name = "role")
+    private String role = "user"; // user-普通用户, staff-商家
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

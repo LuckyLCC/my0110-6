@@ -33,7 +33,7 @@
 								<text class="vip-invite-text">邀请亲友</text>
 							</view>
 						</view>
-						<text class="vip-subtitle">有效期至 {{ vip.expireAt }}</text>
+						<text v-if="!isNormalUser" class="vip-subtitle">有效期至 {{ vip.expireAt }}</text>
 						<view class="vip-stats">
 							<view class="vip-stat">
 								<text class="vip-stat-value">{{ vip.stats.left }}</text>
@@ -157,8 +157,22 @@
 				</view>
 				<view class="verify-modal-body">
 					<view class="verify-qr-container">
-						<!-- 这里可以使用二维码生成库，暂时显示订单号 -->
-						<view class="verify-qr-placeholder">
+						<!-- 使用 canvas 生成二维码（隐藏，仅用于生成） -->
+						<canvas 
+							canvas-id="qrcode-canvas" 
+							id="qrcode-canvas"
+							class="verify-qr-canvas"
+							:style="{ width: '300px', height: '300px' }"
+						></canvas>
+						<!-- 显示二维码图片（如果生成成功） -->
+						<image 
+							v-if="qrCodeImage" 
+							class="verify-qr-image" 
+							:src="qrCodeImage" 
+							mode="aspectFit"
+						/>
+						<!-- 如果二维码生成失败，显示订单号文本 -->
+						<view v-else class="verify-qr-placeholder">
 							<text class="verify-qr-text">{{ currentVerifyOrder?.orderNo || currentVerifyOrder?.orderId }}</text>
 						</view>
 					</view>
@@ -167,7 +181,7 @@
 						<text class="verify-code-value">{{ currentVerifyOrder?.orderNo || currentVerifyOrder?.orderId }}</text>
 					</view>
 					<view class="verify-tips">
-						<text class="verify-tips-text">请向工作人员出示此核销码</text>
+						<text class="verify-tips-text">请向工作人员出示此二维码</text>
 					</view>
 				</view>
 			</view>
@@ -181,6 +195,7 @@
 <script>
 import BottomNav from '@/components/BottomNav.vue'
 import { api } from '@/api/request'
+import UQRCode from 'uqrcodejs'
 
 export default {
 	components: { BottomNav },
@@ -201,21 +216,58 @@ export default {
 				avatar: 'https://www.figma.com/api/mcp/asset/48dced70-d93c-4c7e-ace6-c3b399ca5a05'
 			},
 			vip: {
-				title: '家庭100次卡',
-				expireAt: '2028-01-10',
-				stats: { left: 100, bound: 1, points: 5 }
+				title: '普通用户',
+				expireAt: '',
+				stats: { left: 0, bound: 0, points: 0 }
 			},
 			purchaseRecords: [],
 			tab: 'all',
 			orders: [], // 预约订单列表，从数据库获取
 			showVerifyModal: false, // 是否显示核销码弹窗
-			currentVerifyOrder: null // 当前要显示核销码的订单
+			currentVerifyOrder: null, // 当前要显示核销码的订单
+			qrCodeImage: '' // 二维码图片数据
 		}
 	},
 	computed: {
 		filteredOrders() {
 			if (this.tab === 'all') return this.orders
 			return this.orders.filter(o => o.status === this.tab)
+		},
+		// 判断是否是普通用户（没有生效中的卡）
+		isNormalUser() {
+			if (!this.purchaseRecords || this.purchaseRecords.length === 0) {
+				return true
+			}
+			
+			// 检查是否有生效中的卡
+			const now = new Date()
+			now.setHours(0, 0, 0, 0)
+			
+			const hasActiveCard = this.purchaseRecords.some(record => {
+				if (record.status !== '生效中') {
+					return false
+				}
+				
+				// 检查日期是否在有效期内
+				if (record.cardStartDate && record.cardEndDate) {
+					const startDate = new Date(record.cardStartDate)
+					startDate.setHours(0, 0, 0, 0)
+					const endDate = new Date(record.cardEndDate)
+					endDate.setHours(0, 0, 0, 0)
+					return now >= startDate && now <= endDate
+				} else if (record.cardEndDate) {
+					const endDate = new Date(record.cardEndDate)
+					endDate.setHours(0, 0, 0, 0)
+					return now <= endDate
+				} else if (record.cardStartDate) {
+					const startDate = new Date(record.cardStartDate)
+					startDate.setHours(0, 0, 0, 0)
+					return now >= startDate
+				}
+				return true // 没有日期限制，且状态为"生效中"
+			})
+			
+			return !hasActiveCard
 		}
 	},
 	onLoad() {
@@ -278,33 +330,40 @@ export default {
 				this.user.phoneMasked = this.maskPhone(userInfo.phoneNumber)
 			}
 			
-			// 更新会员卡信息
-			if (userInfo.packageName) {
-				this.vip.title = userInfo.packageName
+			// 只有在有生效中的卡时才更新会员卡信息
+			// 如果没有生效中的卡，保持普通用户状态（由 loadPurchaseRecords 设置）
+			if (!this.isNormalUser) {
+				// 更新会员卡信息
+				if (userInfo.packageName) {
+					this.vip.title = userInfo.packageName
+				}
+				
+				// 更新剩余次数
+				if (userInfo.remainingVisits !== undefined && userInfo.remainingVisits !== null) {
+					this.vip.stats.left = userInfo.remainingVisits
+				}
+				
+				// 更新积分余额
+				if (userInfo.points !== undefined && userInfo.points !== null) {
+					this.vip.stats.points = userInfo.points
+				}
+				
+				// 更新会员到期时间
+				if (userInfo.memberExpireTime) {
+					// 格式化日期：2028-01-10
+					const expireDate = new Date(userInfo.memberExpireTime)
+					const year = expireDate.getFullYear()
+					const month = String(expireDate.getMonth() + 1).padStart(2, '0')
+					const day = String(expireDate.getDate()).padStart(2, '0')
+					this.vip.expireAt = `${year}-${month}-${day}`
+				}
+				
+				// 更新已绑定数量（如果有的话，暂时保持默认值0）
+				// 如果后端有返回绑定数量，可以在这里更新
+				if (userInfo.boundCount !== undefined && userInfo.boundCount !== null) {
+					this.vip.stats.bound = userInfo.boundCount
+				}
 			}
-			
-			// 更新剩余次数
-			if (userInfo.remainingVisits !== undefined && userInfo.remainingVisits !== null) {
-				this.vip.stats.left = userInfo.remainingVisits
-			}
-			
-			// 更新积分余额
-			if (userInfo.points !== undefined && userInfo.points !== null) {
-				this.vip.stats.points = userInfo.points
-			}
-			
-			// 更新会员到期时间
-			if (userInfo.memberExpireTime) {
-				// 格式化日期：2028-01-10
-				const expireDate = new Date(userInfo.memberExpireTime)
-				const year = expireDate.getFullYear()
-				const month = String(expireDate.getMonth() + 1).padStart(2, '0')
-				const day = String(expireDate.getDate()).padStart(2, '0')
-				this.vip.expireAt = `${year}-${month}-${day}`
-			}
-			
-			// 更新已绑定数量（如果有的话，暂时保持默认值1）
-			// 如果后端有返回绑定数量，可以在这里更新
 		},
 		// 手机号掩码处理
 		maskPhone(phone) {
@@ -316,8 +375,9 @@ export default {
 		async loadPurchaseRecords() {
 			const token = uni.getStorageSync('token')
 			if (!token) {
-				// 未登录时清空记录
+				// 未登录时清空记录，设置为普通用户
 				this.purchaseRecords = []
+				this.setNormalUserState()
 				return
 			}
 			
@@ -332,13 +392,28 @@ export default {
 							// 按购买时间倒序排列（最新的在前）
 							return new Date(b.buyAt) - new Date(a.buyAt)
 						})
+					
+					// 检查是否有生效中的卡，如果没有，设置为普通用户状态
+					if (this.isNormalUser) {
+						this.setNormalUserState()
+					}
 				} else {
 					this.purchaseRecords = []
+					this.setNormalUserState()
 				}
 			} catch (error) {
 				console.error('获取购卡记录失败:', error)
 				this.purchaseRecords = []
+				this.setNormalUserState()
 			}
+		},
+		// 设置为普通用户状态
+		setNormalUserState() {
+			this.vip.title = '普通用户'
+			this.vip.expireAt = ''
+			this.vip.stats.left = 0
+			this.vip.stats.bound = 0
+			this.vip.stats.points = 0
 		},
 		// 格式化购卡记录
 		formatPurchaseRecord(order) {
@@ -469,7 +544,9 @@ export default {
 				icon: icon,
 				iconBg: iconBg,
 				statusPillClass: statusPillClass,
-				statusTextClass: statusTextClass
+				statusTextClass: statusTextClass,
+				packageCategory: order.packageCategory || '', // 保存套餐分类
+				packageId: order.packageId // 保存套餐ID
 			}
 		},
 		// 加载预约订单
@@ -559,6 +636,50 @@ export default {
 			this.tab = v
 		},
 		onInvite() {
+			// 检查当前是否有生效中的"多人尊享"卡
+			const now = new Date()
+			now.setHours(0, 0, 0, 0)
+			
+			// 从购卡记录中找到生效中的卡（状态为"生效中"）
+			const activeCard = this.purchaseRecords.find(record => {
+				// 首先检查状态
+				if (record.status !== '生效中') {
+					return false
+				}
+				
+				// 再次验证日期是否在有效期内（双重检查）
+				if (record.cardStartDate && record.cardEndDate) {
+					const startDate = new Date(record.cardStartDate)
+					startDate.setHours(0, 0, 0, 0)
+					const endDate = new Date(record.cardEndDate)
+					endDate.setHours(0, 0, 0, 0)
+					return now >= startDate && now <= endDate
+				} else if (record.cardEndDate) {
+					const endDate = new Date(record.cardEndDate)
+					endDate.setHours(0, 0, 0, 0)
+					return now <= endDate
+				} else if (record.cardStartDate) {
+					const startDate = new Date(record.cardStartDate)
+					startDate.setHours(0, 0, 0, 0)
+					return now >= startDate
+				}
+				// 没有日期限制，且状态为"生效中"，认为是生效的卡
+				return true
+			})
+			
+			// 如果没有生效中的卡
+			if (!activeCard) {
+				uni.showToast({ title: '该卡无法邀请亲友', icon: 'none' })
+				return
+			}
+			
+			// 检查是否是"多人尊享"类型
+			if (activeCard.packageCategory !== '多人尊享') {
+				uni.showToast({ title: '该卡无法邀请亲友', icon: 'none' })
+				return
+			}
+			
+			// 如果是"多人尊享"卡，执行邀请功能
 			uni.showToast({ title: '邀请功能待接入', icon: 'none' })
 		},
 		onShowVerifyCode(order) {
@@ -566,13 +687,80 @@ export default {
 			if (order && (order.orderId || order.orderNo)) {
 				this.currentVerifyOrder = order
 				this.showVerifyModal = true
+				// 清空之前的二维码，显示加载状态
+				this.qrCodeImage = ''
+				// 立即开始生成二维码（不等待弹窗动画）
+				this.generateQRCode(order.orderNo || order.orderId)
 			} else {
 				uni.showToast({ title: '核销码信息错误', icon: 'none' })
 			}
 		},
+		generateQRCode(orderNo) {
+			// 使用 UQRCode 生成二维码
+			// 在 uni-app 中，需要等待 DOM 渲染完成
+			this.$nextTick(() => {
+				// 减少延迟时间，从 500ms 减少到 100ms
+				setTimeout(() => {
+					try {
+						// 创建 canvas 上下文
+						const ctx = uni.createCanvasContext('qrcode-canvas', this)
+						
+						// 创建 UQRCode 实例
+						const qr = new UQRCode({
+							canvasContext: ctx,
+							text: String(orderNo), // 二维码内容为订单号
+							size: 300, // 二维码大小
+							margin: 10,
+							backgroundColor: '#ffffff',
+							foregroundColor: '#000000',
+							errorCorrectLevel: UQRCode.errorCorrectLevel.M
+						})
+						
+						// 生成二维码
+						qr.make()
+						
+						// 绘制到 canvas
+						qr.drawCanvas().then(() => {
+							// 减少延迟时间，从 300ms 减少到 50ms
+							setTimeout(() => {
+								uni.canvasToTempFilePath({
+									canvasId: 'qrcode-canvas',
+									success: (canvasRes) => {
+										this.qrCodeImage = canvasRes.tempFilePath
+									},
+									fail: (err) => {
+										console.error('导出 canvas 失败:', err)
+										this.qrCodeImage = ''
+									}
+								}, this)
+							}, 50)
+						}).catch((err) => {
+							console.error('绘制二维码失败:', err)
+							// 如果绘制失败，尝试从 canvas 导出
+							setTimeout(() => {
+								uni.canvasToTempFilePath({
+									canvasId: 'qrcode-canvas',
+									success: (canvasRes) => {
+										this.qrCodeImage = canvasRes.tempFilePath
+									},
+									fail: (canvasErr) => {
+										console.error('导出 canvas 失败:', canvasErr)
+										this.qrCodeImage = ''
+									}
+								}, this)
+							}, 50)
+						})
+					} catch (error) {
+						console.error('生成二维码异常:', error)
+						this.qrCodeImage = ''
+					}
+				}, 100) // 减少延迟到 100ms，确保 canvas 已渲染
+			})
+		},
 		closeVerifyModal() {
 			this.showVerifyModal = false
 			this.currentVerifyOrder = null
+			this.qrCodeImage = ''
 		}
 	}
 }
@@ -1147,6 +1335,8 @@ export default {
 	align-items: center;
 	justify-content: center;
 	margin-bottom: 40rpx;
+	position: relative;
+	overflow: hidden;
 }
 .verify-qr-placeholder {
 	width: 100%;
@@ -1164,6 +1354,23 @@ export default {
 	font-weight: 600;
 	color: #4a5d50;
 	letter-spacing: 2rpx;
+}
+.verify-qr-canvas {
+	position: fixed;
+	top: -9999px;
+	left: -9999px;
+	width: 300px;
+	height: 300px;
+	opacity: 0;
+	pointer-events: none;
+	z-index: -1;
+}
+.verify-qr-image {
+	width: 100%;
+	height: 100%;
+	border-radius: 16rpx;
+	position: relative;
+	z-index: 1;
 }
 .verify-code-text {
 	display: flex;

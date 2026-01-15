@@ -236,4 +236,61 @@ public class BookingController {
 
         return Result.success(order);
     }
+
+    // 通过订单号核销（商家端使用）
+    @PostMapping("/verify/{orderNo}")
+    public Result<BookingOrder> verifyOrderByOrderNo(
+            @RequestHeader("Authorization") String token,
+            @PathVariable String orderNo) {
+        
+        if (token == null || !token.startsWith("Bearer ")) {
+            return Result.error("未提供有效的认证令牌");
+        }
+
+        // 验证商家权限（这里可以根据实际需求添加商家角色验证）
+        // Long staffId = jwtUtil.getUserIdFromToken(token.substring(7));
+        
+        try {
+            // 根据订单号查找订单
+            BookingOrder order = bookingOrderService.findByOrderNo(orderNo);
+            
+            if (order == null) {
+                return Result.error("订单不存在");
+            }
+            
+            // 检查订单状态
+            if ("completed".equals(order.getStatus())) {
+                return Result.error("订单已核销");
+            }
+            
+            if (!"pending".equals(order.getStatus())) {
+                return Result.error("订单状态异常，无法核销");
+            }
+            
+            // 检查订单日期是否为今天或之前
+            java.time.LocalDate orderDate = java.time.LocalDate.parse(order.getDate());
+            java.time.LocalDate today = java.time.LocalDate.now();
+            
+            if (orderDate.isAfter(today)) {
+                return Result.error("预约日期未到，无法核销");
+            }
+            
+            // 更新订单状态为已完成
+            order = bookingOrderService.updateStatus(order.getId(), "completed");
+            
+            // 记录核销时间
+            order.setConsumeTime(java.time.LocalDateTime.now());
+            order = bookingOrderService.save(order);
+            
+            // 增加用户当日访问次数
+            dailyVisitRecordService.incrementVisitCount(order.getUserId(), orderDate);
+            
+            return Result.success("核销成功", order);
+            
+        } catch (Exception e) {
+            System.err.println("核销失败: " + e.getMessage());
+            e.printStackTrace();
+            return Result.error("核销失败: " + e.getMessage());
+        }
+    }
 }
