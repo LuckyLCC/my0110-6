@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -32,7 +33,7 @@ public class PaymentServiceImpl implements PaymentService {
     private WxPayUtil wxPayUtil;
 
     @Override
-    public PaymentOrder createPackageOrder(Long userId, Long packageId, Double price) {
+    public PaymentOrder createPackageOrder(Long userId, Long packageId, Double price, LocalDateTime cardStartDate) {
         try {
             // 验证用户是否存在
             User user = userService.findById(userId).orElse(null);
@@ -53,6 +54,90 @@ public class PaymentServiceImpl implements PaymentService {
             order.setPackageName(pkg.getName());
             order.setPrice(price);
             order.setStatus("unpaid");
+            
+            // 先检查用户是否有已支付的购卡记录（排除当前正在创建的订单）
+            // 注意：这里查询的是已支付的订单，不包括当前未支付的订单
+            // 简化逻辑：有已支付的购卡记录就是续费，没有就是新开卡
+            List<PaymentOrder> paidOrders = paymentOrderRepository.findByUserIdAndStatus(userId, "paid");
+            // 再次确认：只统计状态为 "paid" 的订单（双重检查，确保数据正确）
+            if (paidOrders != null) {
+                paidOrders = paidOrders.stream()
+                    .filter(po -> "paid".equals(po.getStatus()))
+                    .collect(java.util.stream.Collectors.toList());
+            }
+            boolean hasPaidOrders = paidOrders != null && !paidOrders.isEmpty();
+            
+            // 调试日志：输出查询结果
+            System.out.println("========== 创建订单 - 交易类型判断 ==========");
+            System.out.println("用户ID: " + userId);
+            System.out.println("已支付订单数量: " + (paidOrders != null ? paidOrders.size() : 0));
+            if (paidOrders != null && !paidOrders.isEmpty()) {
+                System.out.println("已支付订单列表:");
+                for (PaymentOrder po : paidOrders) {
+                    System.out.println("  - 订单ID: " + po.getId() + ", 状态: " + po.getStatus() + ", 交易类型: " + po.getTransactionType() + ", 创建时间: " + po.getCreatedAt());
+                }
+            }
+            System.out.println("是否有已支付订单: " + hasPaidOrders);
+            
+            // 使用用户选择的卡开始日期，如果没有提供则使用默认逻辑
+            LocalDateTime currentTime = LocalDateTime.now();
+            LocalDateTime finalCardStartDate;
+            String transactionType;
+            
+            // 简化逻辑：有已支付的购卡记录就是续费，没有就是新开卡
+            if (hasPaidOrders) {
+                // 有已支付的购卡记录，判断为续费
+                transactionType = "RENEW";
+                System.out.println("判断为续费：用户有已支付的购卡记录");
+                
+                // 如果没有提供卡开始日期，且用户有未过期的会员，从会员到期时间开始
+                if (cardStartDate == null && user.getMemberExpireTime() != null && user.getMemberExpireTime().isAfter(currentTime)) {
+                    finalCardStartDate = user.getMemberExpireTime();
+                    System.out.println("续费：从会员到期时间开始: " + finalCardStartDate);
+                } else if (cardStartDate != null) {
+                    // 使用用户选择的日期
+                    finalCardStartDate = cardStartDate;
+                    System.out.println("续费：使用用户选择的日期: " + finalCardStartDate);
+                } else {
+                    // 没有会员到期时间或已过期，从当前时间开始
+                    finalCardStartDate = currentTime;
+                    System.out.println("续费：从当前时间开始: " + finalCardStartDate);
+                }
+            } else {
+                // 没有已支付的购卡记录，判断为新开卡（第一次购买）
+                transactionType = "NEW";
+                System.out.println("判断为新开卡：用户没有已支付的购卡记录");
+                
+                if (cardStartDate != null) {
+                    finalCardStartDate = cardStartDate;
+                    System.out.println("新开卡：使用用户选择的日期: " + finalCardStartDate);
+                } else {
+                    finalCardStartDate = currentTime;
+                    System.out.println("新开卡：从当前时间开始: " + finalCardStartDate);
+                }
+            }
+            
+            // 调试日志：输出最终判断结果
+            System.out.println("========== 最终判断结果 ==========");
+            System.out.println("订单交易类型: " + transactionType);
+            System.out.println("卡开始日期: " + finalCardStartDate);
+            System.out.println("===================================");
+            
+            order.setTransactionType(transactionType);
+            order.setCardStartDate(finalCardStartDate);
+            
+            // 计算卡到期日期：根据套餐的有效期天数
+            LocalDateTime cardEndDate = null;
+            if (pkg.getValidDays() != null && pkg.getValidDays() > 0) {
+                cardEndDate = finalCardStartDate.plusDays(pkg.getValidDays());
+            } else if (pkg.getValidDays() == -1) {
+                // 无限期，设置为null
+                cardEndDate = null;
+            } else {
+                // 默认30天
+                cardEndDate = finalCardStartDate.plusDays(30);
+            }
+            order.setCardEndDate(cardEndDate);
     
             return paymentOrderRepository.save(order);
         } catch (Exception e) {
@@ -121,6 +206,11 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentOrder findByOrderNo(String orderNo) {
         return paymentOrderRepository.findByOrderNo(orderNo).orElse(null);
+    }
+    
+    @Override
+    public List<PaymentOrder> findByUserId(Long userId) {
+        return paymentOrderRepository.findByUserId(userId);
     }
 
     private String generateNonceStr() {

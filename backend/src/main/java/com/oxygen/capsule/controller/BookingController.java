@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/booking")
@@ -31,12 +32,7 @@ public class BookingController {
     // 创建预约订单
     @PostMapping("/create")
     public Result<BookingOrder> createBooking(@RequestHeader("Authorization") String token,
-                                              @RequestParam String date,
-                                              @RequestParam String timeSlot,
-                                              @RequestParam String cabinName,
-                                              @RequestParam String seatName,
-                                              @RequestParam Double price,
-                                              @RequestParam(required = false) Double originalPrice) {
+                                              @RequestBody Map<String, Object> params) {
         if (token == null || !token.startsWith("Bearer ")) {
             return Result.error("未提供有效的认证令牌");
         }
@@ -46,6 +42,37 @@ public class BookingController {
 
         if (user == null) {
             return Result.error("用户不存在");
+        }
+
+        // 从请求体中获取参数
+        String date = (String) params.get("date");
+        String timeSlot = (String) params.get("timeSlot");
+        String cabinName = (String) params.get("cabinName");
+        String seatName = (String) params.get("seatName");
+        
+        // 处理价格参数，支持 Integer 和 Double
+        Double price = null;
+        Object priceObj = params.get("price");
+        if (priceObj != null) {
+            if (priceObj instanceof Integer) {
+                price = ((Integer) priceObj).doubleValue();
+            } else if (priceObj instanceof Double) {
+                price = (Double) priceObj;
+            } else {
+                price = Double.valueOf(priceObj.toString());
+            }
+        }
+        
+        Double originalPrice = null;
+        Object originalPriceObj = params.get("originalPrice");
+        if (originalPriceObj != null) {
+            if (originalPriceObj instanceof Integer) {
+                originalPrice = ((Integer) originalPriceObj).doubleValue();
+            } else if (originalPriceObj instanceof Double) {
+                originalPrice = (Double) originalPriceObj;
+            } else {
+                originalPrice = Double.valueOf(originalPriceObj.toString());
+            }
         }
 
         // 检查用户今天是否已经消费过（每人每天只能消费一次）

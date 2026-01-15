@@ -73,15 +73,15 @@
 			<view class="summary-left">
 				<text v-if="!isComplete" class="summary-hint">请选择时间和座位</text>
 				<text v-else class="summary-details">{{ selectedDateText }} {{ selectedTimeText }} {{ selectedCabinText }}-{{ selectedSeatText }}</text>
-				<view class="summary-price">
-					<text class="price-label">总计:</text>
-					<text class="price-value">¥{{ totalPrice.current }}</text>
-					<text class="price-original">¥{{ totalPrice.original }}</text>
-				</view>
+			<view class="summary-price">
+				<text class="price-label">总计:</text>
+				<text class="price-value">¥{{ isMember ? 0 : totalPrice.current }}</text>
+				<text v-if="!isMember" class="price-original">¥{{ totalPrice.original }}</text>
 			</view>
-			<view class="summary-btn" :class="{ disabled: !isComplete }" @tap="createBooking">
-				<text class="summary-btn-text">支付并预约</text>
-			</view>
+		</view>
+		<view class="summary-btn" :class="{ disabled: !isComplete }" @tap="createBooking">
+			<text class="summary-btn-text">{{ isMember ? '立即预约' : '支付并预约' }}</text>
+		</view>
 		</view>
 
 		<!-- Bottom Navigation -->
@@ -115,7 +115,8 @@ export default {
 			totalPrice: {
 				current: 398,
 				original: 598
-			}
+			},
+			isMember: false // 是否是会员用户
 		}
 	},
 	computed: {
@@ -149,7 +150,116 @@ export default {
 			return ''
 		}
 	},
+	onLoad() {
+		this.checkMemberStatus()
+	},
+	onShow() {
+		// 页面显示时重新检查会员状态
+		this.checkMemberStatus()
+	},
 	methods: {
+		// 检查用户是否是会员（是否有生效中的卡）
+		async checkMemberStatus() {
+			const token = uni.getStorageSync('token')
+			if (!token) {
+				this.isMember = false
+				console.log('未登录，不是会员')
+				return
+			}
+			
+			try {
+				const ordersResponse = await api.payment.getOrders()
+				console.log('购卡记录响应:', ordersResponse)
+				
+				if (ordersResponse.code === 200 && ordersResponse.data) {
+					// 获取已支付的订单
+					const paidOrders = ordersResponse.data.filter(order => order.status === 'paid')
+					console.log('已支付的订单:', paidOrders)
+					
+					// 检查是否有生效中的卡（复用"我的"页面的判断逻辑）
+					const now = new Date()
+					now.setHours(0, 0, 0, 0)
+					
+					const hasActiveCard = paidOrders.some(order => {
+						// 判断状态：未生效/生效中/已过期（完全复用"我的"页面的判断逻辑）
+						if (order.status === 'paid') {
+							// 检查卡开始日期
+							if (order.cardStartDate) {
+								// 解析开始日期，支持多种格式
+								let startDateStr = String(order.cardStartDate)
+								if (startDateStr.includes('T')) {
+									startDateStr = startDateStr.split('T')[0]
+								}
+								const startDate = new Date(startDateStr)
+								startDate.setHours(0, 0, 0, 0)
+								
+								// 如果当前时间 < 卡开始日期，则为未生效
+								if (now < startDate) {
+									console.log(`订单 ${order.id}: 未生效（当前时间 < 开始日期）`)
+									return false
+								} else {
+									// 当前时间 >= 卡开始日期，检查是否过期
+									if (order.cardEndDate) {
+										// 解析到期日期
+										let endDateStr = String(order.cardEndDate)
+										if (endDateStr.includes('T')) {
+											endDateStr = endDateStr.split('T')[0]
+										}
+										const endDate = new Date(endDateStr)
+										endDate.setHours(0, 0, 0, 0)
+										
+										// 如果当前时间 <= 到期日期，则为生效中；否则为已过期
+										if (now <= endDate) {
+											console.log(`订单 ${order.id}: 生效中（${startDateStr} <= ${now.toISOString().split('T')[0]} <= ${endDateStr}）`)
+											return true
+										} else {
+											console.log(`订单 ${order.id}: 已过期（当前时间 > 到期日期）`)
+											return false
+										}
+									} else {
+										// 没有到期日期，默认为生效中（可能是无限期）
+										console.log(`订单 ${order.id}: 生效中（没有到期日期，无限期）`)
+										return true
+									}
+								}
+							} else {
+								// 没有开始日期，检查到期日期
+								if (order.cardEndDate) {
+									let endDateStr = String(order.cardEndDate)
+									if (endDateStr.includes('T')) {
+										endDateStr = endDateStr.split('T')[0]
+									}
+									const endDate = new Date(endDateStr)
+									endDate.setHours(0, 0, 0, 0)
+									
+									if (now <= endDate) {
+										console.log(`订单 ${order.id}: 生效中（当前时间 <= 到期日期）`)
+										return true
+									} else {
+										console.log(`订单 ${order.id}: 已过期（当前时间 > 到期日期）`)
+										return false
+									}
+								} else {
+									// 既没有开始日期也没有到期日期，默认为生效中
+									console.log(`订单 ${order.id}: 生效中（没有日期信息，无限期）`)
+									return true
+								}
+							}
+						}
+						return false
+					})
+					
+					this.isMember = hasActiveCard
+					console.log('最终会员状态:', this.isMember)
+				} else {
+					this.isMember = false
+					console.log('没有购卡记录或请求失败')
+				}
+			} catch (error) {
+				console.error('检查会员状态失败:', error)
+				this.isMember = false
+			}
+		},
 		generateDates() {
 			const dates = []
 			const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
@@ -215,35 +325,54 @@ export default {
 				const seatName = this.cabins[parseInt(cabinIndex)].seats[parseInt(seatIndex)]
 
 				// 调用后端API创建预约订单
+				// 如果是会员，价格为0；否则使用原价
+				const finalPrice = this.isMember ? 0 : this.totalPrice.current
+				const finalOriginalPrice = this.isMember ? 0 : this.totalPrice.original
+				
 				const response = await api.booking.create({
 					date: formattedDate,
 					timeSlot: this.timeSlots[this.selectedTime],
 					cabinName: cabinName,
 					seatName: seatName,
-					price: this.totalPrice.current,
-					originalPrice: this.totalPrice.original
+					price: finalPrice,
+					originalPrice: finalOriginalPrice
 				})
 
 				if (response.code === 200) {
 					const orderId = response.data.id
 					
-					// 调用支付接口
-					const payResponse = await api.booking.pay(orderId)
-					if (payResponse.code === 200) {
+					// 如果是会员（价格为0），直接成功，不需要支付
+					if (this.isMember) {
 						uni.showToast({
-							title: '预约支付成功',
+							title: '预约成功',
 							icon: 'success'
 						})
 						
-						// 跳转回上一页
+						// 跳转到我的页面
 						setTimeout(() => {
-							uni.navigateBack()
+							uni.reLaunch({
+								url: '/pages/my/my'
+							})
 						}, 1500)
 					} else {
-						uni.showToast({
-							title: payResponse.message || '支付失败',
-							icon: 'none'
-						})
+						// 普通用户需要支付
+						const payResponse = await api.booking.pay(orderId)
+						if (payResponse.code === 200) {
+							uni.showToast({
+								title: '预约支付成功',
+								icon: 'success'
+							})
+							
+							// 跳转回上一页
+							setTimeout(() => {
+								uni.navigateBack()
+							}, 1500)
+						} else {
+							uni.showToast({
+								title: payResponse.message || '支付失败',
+								icon: 'none'
+							})
+						}
 					}
 				} else {
 					uni.showToast({

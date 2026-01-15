@@ -3,107 +3,324 @@ const common_vendor = require("../../common/vendor.js");
 const api_request = require("../../api/request.js");
 const BottomNav = () => "../../components/BottomNav.js";
 const _sfc_main = {
-  components: {
-    BottomNav
-  },
+  components: { BottomNav },
   data() {
     return {
-      activeTab: 0,
-      userInfo: {},
-      icons: {
-        settings: "https://www.figma.com/api/mcp/asset/5ed2b362-9495-4961-ad72-a22eab14d2af",
-        crown: "https://www.figma.com/api/mcp/asset/d4df2c09-130a-4366-a7db-6370dd5ebb57",
-        clock: "https://www.figma.com/api/mcp/asset/62825eba-30db-4e17-986f-16509882f006",
-        seat: "https://www.figma.com/api/mcp/asset/e29a6eaf-07e3-4f31-8860-2cf07c88f6b3"
+      assets: {
+        avatar: "https://www.figma.com/api/mcp/asset/48dced70-d93c-4c7e-ace6-c3b399ca5a05",
+        iconSettings: "https://www.figma.com/api/mcp/asset/51c7f686-bd66-4431-934b-4740a9719f6a",
+        iconVip: "https://www.figma.com/api/mcp/asset/e74344f2-0649-44d7-bb9f-08f2c853e984",
+        iconInvite: "https://www.figma.com/api/mcp/asset/97d47ae7-b35c-4d00-a688-1d5a2a7b8905",
+        iconClock: "https://www.figma.com/api/mcp/asset/ebdc0f3f-8fb4-4dcb-b0db-1a693cb69da8",
+        iconLocation: "https://www.figma.com/api/mcp/asset/7cd435a5-6518-4258-bb95-7d274e49bf10",
+        iconQr: "https://www.figma.com/api/mcp/asset/3629e2b7-0fbd-4283-a904-2a39665d503c"
       },
-      images: {
-        avatar: "https://www.figma.com/api/mcp/asset/e62fc854-cb73-44b5-96be-9d778af361fb"
+      user: {
+        name: "微信用户",
+        phoneMasked: "138****8888",
+        avatar: "https://www.figma.com/api/mcp/asset/48dced70-d93c-4c7e-ace6-c3b399ca5a05"
       },
+      vip: {
+        title: "家庭100次卡",
+        expireAt: "2028-01-10",
+        stats: { left: 100, bound: 1, points: 5 }
+      },
+      purchaseRecords: [],
+      tab: "all",
       orders: [],
-      orderStatusMap: {
-        "0": "全部",
-        "1": "待核销",
-        "2": "已完成"
-      }
+      // 预约订单列表，从数据库获取
+      showVerifyModal: false,
+      // 是否显示核销码弹窗
+      currentVerifyOrder: null
+      // 当前要显示核销码的订单
     };
   },
-  onLoad() {
-    this.loadUserData();
-  },
   computed: {
-    formattedPhone() {
-      if (!this.userInfo.phone)
-        return "未绑定手机";
-      const phone = this.userInfo.phone;
-      return phone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2");
-    },
-    membershipLevel() {
-      if (this.userInfo.memberLevel >= 1) {
-        return "会员用户";
-      }
-      return "普通用户";
-    },
-    membershipDesc() {
-      if (this.userInfo.memberLevel >= 1) {
-        return `到期时间: ${this.userInfo.memberExpireTime || "无限期"}`;
-      }
-      return "尚未开通会员";
+    filteredOrders() {
+      if (this.tab === "all")
+        return this.orders;
+      return this.orders.filter((o) => o.status === this.tab);
     }
   },
-  watch: {
-    activeTab: {
-      handler(newVal) {
-        this.loadOrders();
-      },
-      immediate: true
-    }
+  onLoad() {
+    this.loadUserInfo();
+    this.loadPurchaseRecords();
+    this.loadBookingOrders();
+  },
+  onShow() {
+    this.loadUserInfo();
+    this.loadPurchaseRecords();
+    this.loadBookingOrders();
   },
   methods: {
+    // 加载用户信息
+    async loadUserInfo() {
+      try {
+        const localUserInfo = common_vendor.index.getStorageSync("userInfo");
+        if (localUserInfo) {
+          this.updateUserInfo(localUserInfo);
+        }
+        const token = common_vendor.index.getStorageSync("token");
+        if (token) {
+          try {
+            const response = await api_request.api.user.getInfo();
+            if (response.code === 200 && response.data) {
+              this.updateUserInfo(response.data);
+              common_vendor.index.setStorageSync("userInfo", response.data);
+            }
+          } catch (error) {
+            common_vendor.index.__f__("log", "at pages/my/my.vue:253", "获取用户信息失败，使用本地存储:", error);
+          }
+        }
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/my/my.vue:257", "加载用户信息错误:", error);
+      }
+    },
+    // 更新用户信息显示
+    updateUserInfo(userInfo) {
+      if (!userInfo)
+        return;
+      if (userInfo.nickname || userInfo.name) {
+        this.user.name = userInfo.nickname || userInfo.name || "微信用户";
+      }
+      if (userInfo.avatar || userInfo.avatarUrl) {
+        this.user.avatar = userInfo.avatar || userInfo.avatarUrl;
+      }
+      if (userInfo.phone) {
+        this.user.phoneMasked = this.maskPhone(userInfo.phone);
+      } else if (userInfo.phoneNumber) {
+        this.user.phoneMasked = this.maskPhone(userInfo.phoneNumber);
+      }
+      if (userInfo.packageName) {
+        this.vip.title = userInfo.packageName;
+      }
+      if (userInfo.remainingVisits !== void 0 && userInfo.remainingVisits !== null) {
+        this.vip.stats.left = userInfo.remainingVisits;
+      }
+      if (userInfo.points !== void 0 && userInfo.points !== null) {
+        this.vip.stats.points = userInfo.points;
+      }
+      if (userInfo.memberExpireTime) {
+        const expireDate = new Date(userInfo.memberExpireTime);
+        const year = expireDate.getFullYear();
+        const month = String(expireDate.getMonth() + 1).padStart(2, "0");
+        const day = String(expireDate.getDate()).padStart(2, "0");
+        this.vip.expireAt = `${year}-${month}-${day}`;
+      }
+    },
+    // 手机号掩码处理
+    maskPhone(phone) {
+      if (!phone || phone.length < 11)
+        return phone;
+      return phone.substring(0, 3) + "****" + phone.substring(7);
+    },
+    // 加载购卡记录
+    async loadPurchaseRecords() {
+      const token = common_vendor.index.getStorageSync("token");
+      if (!token) {
+        this.purchaseRecords = [];
+        return;
+      }
+      try {
+        const response = await api_request.api.payment.getOrders();
+        if (response.code === 200 && response.data) {
+          this.purchaseRecords = response.data.filter((order) => order.status === "paid").map((order) => this.formatPurchaseRecord(order)).sort((a, b) => {
+            return new Date(b.buyAt) - new Date(a.buyAt);
+          });
+        } else {
+          this.purchaseRecords = [];
+        }
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/my/my.vue:339", "获取购卡记录失败:", error);
+        this.purchaseRecords = [];
+      }
+    },
+    // 格式化购卡记录
+    formatPurchaseRecord(order) {
+      const formattedPrice = "¥" + order.price.toLocaleString("zh-CN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      });
+      const buyDate = order.paymentTime || order.createdAt;
+      let formattedDate = "";
+      if (buyDate) {
+        const date = new Date(buyDate);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        formattedDate = `${year}-${month}-${day}`;
+      }
+      let formattedStartDate = "";
+      if (order.cardStartDate) {
+        const startDate = new Date(order.cardStartDate);
+        const year = startDate.getFullYear();
+        const month = String(startDate.getMonth() + 1).padStart(2, "0");
+        const day = String(startDate.getDate()).padStart(2, "0");
+        formattedStartDate = `${year}-${month}-${day}`;
+      }
+      let formattedEndDate = "";
+      if (order.cardEndDate) {
+        const endDate = new Date(order.cardEndDate);
+        const year = endDate.getFullYear();
+        const month = String(endDate.getMonth() + 1).padStart(2, "0");
+        const day = String(endDate.getDate()).padStart(2, "0");
+        formattedEndDate = `${year}-${month}-${day}`;
+      }
+      let status = "已过期";
+      let statusPillClass = "pill-gray";
+      let statusTextClass = "pill-text-gray";
+      if (order.status === "paid") {
+        const now = /* @__PURE__ */ new Date();
+        now.setHours(0, 0, 0, 0);
+        if (order.cardStartDate) {
+          const startDate = new Date(order.cardStartDate);
+          startDate.setHours(0, 0, 0, 0);
+          if (now < startDate) {
+            status = "未生效";
+            statusPillClass = "pill-warm";
+            statusTextClass = "pill-text-warm";
+          } else {
+            if (order.cardEndDate) {
+              const endDate = new Date(order.cardEndDate);
+              endDate.setHours(0, 0, 0, 0);
+              if (now <= endDate) {
+                status = "生效中";
+                statusPillClass = "pill-green";
+                statusTextClass = "pill-text-green";
+              } else {
+                status = "已过期";
+                statusPillClass = "pill-gray";
+                statusTextClass = "pill-text-gray";
+              }
+            } else {
+              status = "生效中";
+              statusPillClass = "pill-green";
+              statusTextClass = "pill-text-green";
+            }
+          }
+        } else {
+          if (order.cardEndDate) {
+            const endDate = new Date(order.cardEndDate);
+            endDate.setHours(0, 0, 0, 0);
+            if (now <= endDate) {
+              status = "生效中";
+              statusPillClass = "pill-green";
+              statusTextClass = "pill-text-green";
+            } else {
+              status = "已过期";
+              statusPillClass = "pill-gray";
+              statusTextClass = "pill-text-gray";
+            }
+          } else {
+            status = "生效中";
+            statusPillClass = "pill-green";
+            statusTextClass = "pill-text-green";
+          }
+        }
+      }
+      let icon = "https://www.figma.com/api/mcp/asset/53c6b923-1424-4cc2-9923-6bda581a5924";
+      let iconBg = "bg-warm";
+      if (order.packageName && (order.packageName.includes("家庭") || order.packageName.includes("100次"))) {
+        icon = "https://www.figma.com/api/mcp/asset/bd32f170-e8c9-4a38-8b65-ac6e5513a467";
+        iconBg = "bg-gray";
+      }
+      return {
+        name: order.packageName || "未知套餐",
+        buyAt: formattedDate,
+        cardStartDate: formattedStartDate,
+        cardEndDate: formattedEndDate,
+        price: formattedPrice,
+        status,
+        icon,
+        iconBg,
+        statusPillClass,
+        statusTextClass
+      };
+    },
+    // 加载预约订单
+    async loadBookingOrders() {
+      const token = common_vendor.index.getStorageSync("token");
+      if (!token) {
+        this.orders = [];
+        return;
+      }
+      try {
+        const response = await api_request.api.booking.getOrders();
+        if (response.code === 200 && response.data) {
+          this.orders = response.data.map((order) => this.formatBookingOrder(order)).sort((a, b) => {
+            return new Date(b.date) - new Date(a.date);
+          });
+        } else {
+          this.orders = [];
+        }
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/my/my.vue:498", "获取预约订单失败:", error);
+        this.orders = [];
+      }
+    },
+    // 格式化预约订单
+    formatBookingOrder(order) {
+      let formattedDate = order.date || "";
+      let formattedTime = order.timeSlot || "";
+      formattedTime = formattedTime.replace(/-/g, "–");
+      const cabin = order.cabinName || "";
+      const site = order.seatName || "";
+      let status = "pending";
+      let statusText = "待核销";
+      let statusBadgeClass = "badge-warm";
+      let statusTextClass = "badge-warm-text";
+      let showVerify = false;
+      if (order.status === "completed") {
+        status = "done";
+        statusText = "已完成";
+        statusBadgeClass = "badge-gray";
+        statusTextClass = "badge-gray-text";
+        showVerify = false;
+      } else if (order.status === "pending") {
+        status = "pending";
+        statusText = "待核销";
+        statusBadgeClass = "badge-warm";
+        statusTextClass = "badge-warm-text";
+        showVerify = true;
+      }
+      return {
+        cabin,
+        date: formattedDate,
+        time: formattedTime,
+        site,
+        status,
+        statusText,
+        statusBadgeClass,
+        statusTextClass,
+        showVerify,
+        orderId: order.id,
+        // 保存订单ID，用于核销码展示
+        orderNo: order.orderNo || order.id
+        // 保存订单号，用于核销码展示
+      };
+    },
     navigateToLogin() {
       common_vendor.index.navigateTo({
         url: "/pages/login/login"
       });
     },
-    async loadUserData() {
-      try {
-        const response = await api_request.api.user.getInfo();
-        if (response.code === 200) {
-          this.userInfo = response.data;
-        } else {
-          common_vendor.index.__f__("error", "at pages/my/my.vue:168", "获取用户信息失败:", response.message);
-        }
-        this.loadOrders();
-      } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:174", "加载用户数据失败:", error);
+    setTab(v) {
+      this.tab = v;
+    },
+    onInvite() {
+      common_vendor.index.showToast({ title: "邀请功能待接入", icon: "none" });
+    },
+    onShowVerifyCode(order) {
+      if (order && (order.orderId || order.orderNo)) {
+        this.currentVerifyOrder = order;
+        this.showVerifyModal = true;
+      } else {
+        common_vendor.index.showToast({ title: "核销码信息错误", icon: "none" });
       }
     },
-    async loadOrders() {
-      try {
-        let status = "";
-        if (this.activeTab === 1) {
-          status = "pending";
-        } else if (this.activeTab === 2) {
-          status = "completed";
-        }
-        let response;
-        if (status) {
-          response = await api_request.api.booking.getOrdersByStatus(status);
-        } else {
-          response = await api_request.api.booking.getOrders();
-        }
-        if (response.code === 200) {
-          this.orders = response.data || [];
-        } else {
-          common_vendor.index.__f__("error", "at pages/my/my.vue:197", "获取订单数据失败:", response.message);
-          this.orders = [];
-        }
-      } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:201", "加载订单数据失败:", error);
-        this.orders = [];
-      }
-    },
-    switchTab(index) {
-      this.activeTab = index;
+    closeVerifyModal() {
+      this.showVerifyModal = false;
+      this.currentVerifyOrder = null;
     }
   }
 };
@@ -112,42 +329,92 @@ if (!Array) {
   _component_BottomNav();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _a, _b, _c, _d;
   return common_vendor.e({
-    a: $data.icons.settings,
-    b: $data.userInfo.avatarUrl || $data.images.avatar,
-    c: common_vendor.t($data.userInfo.nickname || "微信用户"),
-    d: common_vendor.t($options.formattedPhone || "未绑定手机"),
+    a: $data.assets.iconSettings,
+    b: $data.user.avatar || $data.assets.avatar,
+    c: common_vendor.t($data.user.name),
+    d: common_vendor.t($data.user.phoneMasked),
     e: common_vendor.o((...args) => $options.navigateToLogin && $options.navigateToLogin(...args)),
-    f: $data.icons.crown,
-    g: common_vendor.t($options.membershipLevel),
-    h: common_vendor.t($options.membershipDesc),
-    i: common_vendor.t($data.userInfo.remainingVisits || "-"),
-    j: common_vendor.t($data.userInfo.totalVisits || 0),
-    k: common_vendor.t($data.userInfo.points || 0),
-    l: $data.activeTab === 0 ? 1 : "",
-    m: $data.activeTab === 0
-  }, $data.activeTab === 0 ? {} : {}, {
-    n: $data.activeTab === 0 ? 1 : "",
-    o: common_vendor.o(($event) => $options.switchTab(0)),
-    p: $data.activeTab === 1 ? 1 : "",
-    q: $data.activeTab === 1 ? 1 : "",
-    r: common_vendor.o(($event) => $options.switchTab(1)),
-    s: $data.activeTab === 2 ? 1 : "",
-    t: $data.activeTab === 2 ? 1 : "",
-    v: common_vendor.o(($event) => $options.switchTab(2)),
-    w: common_vendor.f($data.orders, (order, index, i0) => {
-      return {
-        a: common_vendor.t(order.cabinName),
-        b: common_vendor.t(order.date),
-        c: common_vendor.t(order.status),
-        d: common_vendor.t(order.timeSlot),
-        e: common_vendor.t(order.seatName),
-        f: order.id || index
-      };
+    f: $data.assets.iconVip,
+    g: common_vendor.t($data.vip.title),
+    h: $data.assets.iconInvite,
+    i: common_vendor.o((...args) => $options.onInvite && $options.onInvite(...args)),
+    j: common_vendor.t($data.vip.expireAt),
+    k: common_vendor.t($data.vip.stats.left),
+    l: common_vendor.t($data.vip.stats.bound),
+    m: common_vendor.t($data.vip.stats.points),
+    n: $data.purchaseRecords.length === 0
+  }, $data.purchaseRecords.length === 0 ? {} : {}, {
+    o: common_vendor.f($data.purchaseRecords, (item, idx, i0) => {
+      return common_vendor.e({
+        a: item.icon,
+        b: common_vendor.n(item.iconBg),
+        c: common_vendor.t(item.name),
+        d: common_vendor.t(item.buyAt),
+        e: item.cardStartDate || item.cardEndDate
+      }, item.cardStartDate || item.cardEndDate ? common_vendor.e({
+        f: item.cardStartDate
+      }, item.cardStartDate ? {
+        g: common_vendor.t(item.cardStartDate)
+      } : {}, {
+        h: item.cardEndDate
+      }, item.cardEndDate ? {
+        i: common_vendor.t(item.cardEndDate)
+      } : {}) : {}, {
+        j: common_vendor.t(item.price),
+        k: common_vendor.t(item.status),
+        l: common_vendor.n(item.statusTextClass),
+        m: common_vendor.n(item.statusPillClass),
+        n: idx,
+        o: idx !== $data.purchaseRecords.length - 1 ? 1 : "",
+        p: idx === $data.purchaseRecords.length - 1 ? 1 : ""
+      });
     }),
-    x: $data.icons.clock,
-    y: $data.icons.seat,
-    z: common_vendor.p({
+    p: $data.tab === "all" ? 1 : "",
+    q: $data.tab === "all"
+  }, $data.tab === "all" ? {} : {}, {
+    r: common_vendor.o(($event) => $options.setTab("all")),
+    s: $data.tab === "pending" ? 1 : "",
+    t: $data.tab === "pending"
+  }, $data.tab === "pending" ? {} : {}, {
+    v: common_vendor.o(($event) => $options.setTab("pending")),
+    w: $data.tab === "done" ? 1 : "",
+    x: $data.tab === "done"
+  }, $data.tab === "done" ? {} : {}, {
+    y: common_vendor.o(($event) => $options.setTab("done")),
+    z: $data.orders.length === 0
+  }, $data.orders.length === 0 ? {} : {
+    A: common_vendor.f($options.filteredOrders, (order, idx, i0) => {
+      return common_vendor.e({
+        a: common_vendor.t(order.cabin),
+        b: common_vendor.t(order.date),
+        c: common_vendor.t(order.statusText),
+        d: common_vendor.n(order.statusTextClass),
+        e: common_vendor.n(order.statusBadgeClass),
+        f: common_vendor.t(order.time),
+        g: common_vendor.t(order.site),
+        h: order.showVerify
+      }, order.showVerify ? {
+        i: $data.assets.iconQr,
+        j: common_vendor.o(($event) => $options.onShowVerifyCode(order), idx)
+      } : {}, {
+        k: idx
+      });
+    }),
+    B: $data.assets.iconClock,
+    C: $data.assets.iconLocation
+  }, {
+    D: $data.showVerifyModal
+  }, $data.showVerifyModal ? {
+    E: common_vendor.o((...args) => $options.closeVerifyModal && $options.closeVerifyModal(...args)),
+    F: common_vendor.t(((_a = $data.currentVerifyOrder) == null ? void 0 : _a.orderNo) || ((_b = $data.currentVerifyOrder) == null ? void 0 : _b.orderId)),
+    G: common_vendor.t(((_c = $data.currentVerifyOrder) == null ? void 0 : _c.orderNo) || ((_d = $data.currentVerifyOrder) == null ? void 0 : _d.orderId)),
+    H: common_vendor.o(() => {
+    }),
+    I: common_vendor.o((...args) => $options.closeVerifyModal && $options.closeVerifyModal(...args))
+  } : {}, {
+    J: common_vendor.p({
       current: 3
     })
   });

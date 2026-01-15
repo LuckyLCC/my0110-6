@@ -30,7 +30,9 @@ const _sfc_main = {
       totalPrice: {
         current: 398,
         original: 598
-      }
+      },
+      isMember: false
+      // 是否是会员用户
     };
   },
   computed: {
@@ -64,7 +66,95 @@ const _sfc_main = {
       return "";
     }
   },
+  onLoad() {
+    this.checkMemberStatus();
+  },
+  onShow() {
+    this.checkMemberStatus();
+  },
   methods: {
+    // 检查用户是否是会员（是否有生效中的卡）
+    async checkMemberStatus() {
+      const token = common_vendor.index.getStorageSync("token");
+      if (!token) {
+        this.isMember = false;
+        common_vendor.index.__f__("log", "at pages/booking/booking.vue:166", "未登录，不是会员");
+        return;
+      }
+      try {
+        const ordersResponse = await api_request.api.payment.getOrders();
+        common_vendor.index.__f__("log", "at pages/booking/booking.vue:172", "购卡记录响应:", ordersResponse);
+        if (ordersResponse.code === 200 && ordersResponse.data) {
+          const paidOrders = ordersResponse.data.filter((order) => order.status === "paid");
+          common_vendor.index.__f__("log", "at pages/booking/booking.vue:177", "已支付的订单:", paidOrders);
+          const now = /* @__PURE__ */ new Date();
+          now.setHours(0, 0, 0, 0);
+          const hasActiveCard = paidOrders.some((order) => {
+            if (order.status === "paid") {
+              if (order.cardStartDate) {
+                let startDateStr = String(order.cardStartDate);
+                if (startDateStr.includes("T")) {
+                  startDateStr = startDateStr.split("T")[0];
+                }
+                const startDate = new Date(startDateStr);
+                startDate.setHours(0, 0, 0, 0);
+                if (now < startDate) {
+                  common_vendor.index.__f__("log", "at pages/booking/booking.vue:198", `订单 ${order.id}: 未生效（当前时间 < 开始日期）`);
+                  return false;
+                } else {
+                  if (order.cardEndDate) {
+                    let endDateStr = String(order.cardEndDate);
+                    if (endDateStr.includes("T")) {
+                      endDateStr = endDateStr.split("T")[0];
+                    }
+                    const endDate = new Date(endDateStr);
+                    endDate.setHours(0, 0, 0, 0);
+                    if (now <= endDate) {
+                      common_vendor.index.__f__("log", "at pages/booking/booking.vue:213", `订单 ${order.id}: 生效中（${startDateStr} <= ${now.toISOString().split("T")[0]} <= ${endDateStr}）`);
+                      return true;
+                    } else {
+                      common_vendor.index.__f__("log", "at pages/booking/booking.vue:216", `订单 ${order.id}: 已过期（当前时间 > 到期日期）`);
+                      return false;
+                    }
+                  } else {
+                    common_vendor.index.__f__("log", "at pages/booking/booking.vue:221", `订单 ${order.id}: 生效中（没有到期日期，无限期）`);
+                    return true;
+                  }
+                }
+              } else {
+                if (order.cardEndDate) {
+                  let endDateStr = String(order.cardEndDate);
+                  if (endDateStr.includes("T")) {
+                    endDateStr = endDateStr.split("T")[0];
+                  }
+                  const endDate = new Date(endDateStr);
+                  endDate.setHours(0, 0, 0, 0);
+                  if (now <= endDate) {
+                    common_vendor.index.__f__("log", "at pages/booking/booking.vue:236", `订单 ${order.id}: 生效中（当前时间 <= 到期日期）`);
+                    return true;
+                  } else {
+                    common_vendor.index.__f__("log", "at pages/booking/booking.vue:239", `订单 ${order.id}: 已过期（当前时间 > 到期日期）`);
+                    return false;
+                  }
+                } else {
+                  common_vendor.index.__f__("log", "at pages/booking/booking.vue:244", `订单 ${order.id}: 生效中（没有日期信息，无限期）`);
+                  return true;
+                }
+              }
+            }
+            return false;
+          });
+          this.isMember = hasActiveCard;
+          common_vendor.index.__f__("log", "at pages/booking/booking.vue:253", "最终会员状态:", this.isMember);
+        } else {
+          this.isMember = false;
+          common_vendor.index.__f__("log", "at pages/booking/booking.vue:256", "没有购卡记录或请求失败");
+        }
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/booking/booking.vue:259", "检查会员状态失败:", error);
+        this.isMember = false;
+      }
+    },
     generateDates() {
       const dates = [];
       const weekdays = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
@@ -118,30 +208,44 @@ const _sfc_main = {
         const [cabinIndex, seatIndex] = this.selectedSeat.split("-");
         const cabinName = this.cabins[parseInt(cabinIndex)].name;
         const seatName = this.cabins[parseInt(cabinIndex)].seats[parseInt(seatIndex)];
+        const finalPrice = this.isMember ? 0 : this.totalPrice.current;
+        const finalOriginalPrice = this.isMember ? 0 : this.totalPrice.original;
         const response = await api_request.api.booking.create({
           date: formattedDate,
           timeSlot: this.timeSlots[this.selectedTime],
           cabinName,
           seatName,
-          price: this.totalPrice.current,
-          originalPrice: this.totalPrice.original
+          price: finalPrice,
+          originalPrice: finalOriginalPrice
         });
         if (response.code === 200) {
           const orderId = response.data.id;
-          const payResponse = await api_request.api.booking.pay(orderId);
-          if (payResponse.code === 200) {
+          if (this.isMember) {
             common_vendor.index.showToast({
-              title: "预约支付成功",
+              title: "预约成功",
               icon: "success"
             });
             setTimeout(() => {
-              common_vendor.index.navigateBack();
+              common_vendor.index.reLaunch({
+                url: "/pages/my/my"
+              });
             }, 1500);
           } else {
-            common_vendor.index.showToast({
-              title: payResponse.message || "支付失败",
-              icon: "none"
-            });
+            const payResponse = await api_request.api.booking.pay(orderId);
+            if (payResponse.code === 200) {
+              common_vendor.index.showToast({
+                title: "预约支付成功",
+                icon: "success"
+              });
+              setTimeout(() => {
+                common_vendor.index.navigateBack();
+              }, 1500);
+            } else {
+              common_vendor.index.showToast({
+                title: payResponse.message || "支付失败",
+                icon: "none"
+              });
+            }
           }
         } else {
           common_vendor.index.showToast({
@@ -150,7 +254,7 @@ const _sfc_main = {
           });
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/booking/booking.vue:255", "创建预约订单失败:", error);
+        common_vendor.index.__f__("error", "at pages/booking/booking.vue:384", "创建预约订单失败:", error);
         common_vendor.index.showToast({
           title: "网络错误，请稍后重试",
           icon: "none"
@@ -209,11 +313,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     g: common_vendor.t($options.selectedCabinText),
     h: common_vendor.t($options.selectedSeatText)
   }, {
-    i: common_vendor.t($data.totalPrice.current),
-    j: common_vendor.t($data.totalPrice.original),
-    k: !$options.isComplete ? 1 : "",
-    l: common_vendor.o((...args) => $options.createBooking && $options.createBooking(...args)),
-    m: common_vendor.p({
+    i: common_vendor.t($data.isMember ? 0 : $data.totalPrice.current),
+    j: !$data.isMember
+  }, !$data.isMember ? {
+    k: common_vendor.t($data.totalPrice.original)
+  } : {}, {
+    l: common_vendor.t($data.isMember ? "立即预约" : "支付并预约"),
+    m: !$options.isComplete ? 1 : "",
+    n: common_vendor.o((...args) => $options.createBooking && $options.createBooking(...args)),
+    o: common_vendor.p({
       current: 2
     })
   });

@@ -79,6 +79,9 @@ CREATE TABLE IF NOT EXISTS payment_orders (
     status VARCHAR(20) DEFAULT 'unpaid' COMMENT '状态: unpaid未支付, paid已支付, cancelled已取消',
     payment_method VARCHAR(50) COMMENT '支付方式',
     payment_time DATETIME COMMENT '支付时间',
+    card_start_date DATETIME COMMENT '卡开始日期',
+    card_end_date DATETIME COMMENT '卡到期日期',
+    transaction_type VARCHAR(10) DEFAULT 'NEW' COMMENT '交易类型: NEW-新开卡, RENEW-续费',
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='支付订单表';

@@ -70,10 +70,10 @@ const api = {
   // 支付相关API
   payment: {
     // 创建会员套餐支付订单
-    createPackageOrder: (packageId, price) => request({
+    createPackageOrder: (packageId, price, cardStartDate) => request({
       url: "/payment/create-package-order",
       method: "POST",
-      data: { packageId, price }
+      data: { packageId, price, cardStartDate }
     }),
     // 获取微信支付参数
     getWechatPayParams: (orderId) => request({
@@ -84,6 +84,11 @@ const api = {
     mockPaymentSuccess: (orderId) => request({
       url: `/payment/mock-success/${orderId}`,
       method: "POST"
+    }),
+    // 获取用户的支付订单列表（购卡记录）
+    getOrders: () => request({
+      url: "/payment/orders",
+      method: "GET"
     })
   }
 };

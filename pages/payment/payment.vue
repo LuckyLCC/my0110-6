@@ -66,6 +66,26 @@
 						</view>
 						<view class="detail-divider"></view>
 						<view class="detail-row">
+							<text class="detail-label">交易类型</text>
+							<text class="detail-value">{{ transactionTypeText }}</text>
+						</view>
+						<view class="detail-divider"></view>
+						<picker mode="date" :value="cardStartDate" :start="minDate" :end="maxDate" @change="onDateChange">
+							<view class="detail-row detail-row-selectable">
+								<text class="detail-label">卡开始日期</text>
+								<view class="detail-value-wrapper">
+									<text class="detail-value">{{ cardStartDate || '请选择' }}</text>
+									<text class="detail-arrow">›</text>
+								</view>
+							</view>
+						</picker>
+						<view class="detail-divider"></view>
+						<view class="detail-row">
+							<text class="detail-label">卡到期日期</text>
+							<text class="detail-value">{{ cardEndDate }}</text>
+						</view>
+						<view class="detail-divider"></view>
+						<view class="detail-row">
 							<text class="detail-label">总计金额</text>
 							<text class="detail-value">¥{{ formattedPrice }}</text>
 						</view>
@@ -125,6 +145,10 @@ export default {
 			originalPrice: 0,
 			validDays: 30,
 			statusBarHeight: 0,
+			cardStartDate: '',
+			cardEndDate: '',
+			transactionType: 'NEW', // NEW-新开卡, RENEW-续费
+			orderId: null,
 			icons: {
 				back: 'https://www.figma.com/api/mcp/asset/6e0ab730-69c1-4a8c-9c93-837acebcbedd',
 				star: 'https://www.figma.com/api/mcp/asset/d8a75e34-91f3-4668-9f68-1aa515439cc8',
@@ -135,7 +159,7 @@ export default {
 			}
 		}
 	},
-	onLoad(options) {
+	async onLoad(options) {
 		// 获取状态栏高度
 		const systemInfo = uni.getSystemInfoSync()
 		this.statusBarHeight = systemInfo.statusBarHeight || 0
@@ -159,6 +183,9 @@ export default {
 			// 接收有效期天数
 			this.validDays = parseInt(options.validDays)
 		}
+		
+		// 预计算卡开始日期、到期日期和交易类型
+		await this.calculateCardDates()
 	},
 	computed: {
 		formattedPrice() {
@@ -169,9 +196,151 @@ export default {
 		},
 		priceDecimal() {
 			return (this.price % 1).toFixed(2).substring(1)
+		},
+		transactionTypeText() {
+			return this.transactionType === 'RENEW' ? '续费' : '新开卡'
+		},
+		// 最小日期（今天）
+		minDate() {
+			const today = new Date()
+			return this.formatDateForPicker(today)
+		},
+		// 最大日期（一年后）
+		maxDate() {
+			const today = new Date()
+			const maxDate = new Date(today)
+			maxDate.setFullYear(today.getFullYear() + 1)
+			return this.formatDateForPicker(maxDate)
 		}
 	},
-	methods: {
+		methods: {
+		// 日期选择器变化事件
+		onDateChange(e) {
+			const selectedDate = e.detail.value
+			this.cardStartDate = selectedDate
+			// 根据选择的开始日期计算到期日期
+			this.calculateEndDate(selectedDate)
+			// 根据选择的日期判断交易类型
+			this.updateTransactionType(selectedDate)
+		},
+		// 根据开始日期计算到期日期
+		calculateEndDate(startDateStr) {
+			if (!startDateStr) return
+			const startDate = new Date(startDateStr)
+			const endDate = new Date(startDate.getTime() + this.validDays * 24 * 60 * 60 * 1000)
+			this.cardEndDate = this.formatDate(endDate)
+		},
+		// 根据选择的日期更新交易类型
+		async updateTransactionType(selectedDateStr) {
+			const token = uni.getStorageSync('token')
+			if (!token) {
+				// 未登录时，默认为新开卡
+				this.transactionType = 'NEW'
+				return
+			}
+			
+			try {
+				// 检查是否有已支付的购卡记录
+				const ordersResponse = await api.payment.getOrders()
+				const hasPaidOrders = ordersResponse.code === 200 && 
+					ordersResponse.data && 
+					ordersResponse.data.some(order => order.status === 'paid')
+				
+				// 简化逻辑：有已支付的购卡记录就是续费，没有就是新开卡
+				if (hasPaidOrders) {
+					this.transactionType = 'RENEW'
+					console.log('判断为续费：用户有已支付的购卡记录')
+				} else {
+					this.transactionType = 'NEW'
+					console.log('判断为新开卡：用户没有已支付的购卡记录')
+				}
+			} catch (error) {
+				console.error('获取购卡记录失败:', error)
+				// 获取失败，默认为新开卡
+				this.transactionType = 'NEW'
+			}
+		},
+		// 格式化日期为picker格式：YYYY-MM-DD
+		formatDateForPicker(date) {
+			if (!date) return ''
+			const d = date instanceof Date ? date : new Date(date)
+			const year = d.getFullYear()
+			const month = String(d.getMonth() + 1).padStart(2, '0')
+			const day = String(d.getDate()).padStart(2, '0')
+			return `${year}-${month}-${day}`
+		},
+		// 预计算卡开始日期、到期日期和交易类型（初始化默认值）
+		async calculateCardDates() {
+			const token = uni.getStorageSync('token')
+			if (!token) {
+				// 未登录时，默认为新开卡，从当前时间开始
+				const now = new Date()
+				this.cardStartDate = this.formatDateForPicker(now)
+				this.calculateEndDate(this.cardStartDate)
+				this.transactionType = 'NEW'
+				return
+			}
+			
+			try {
+				// 先检查是否有已支付的购卡记录
+				const ordersResponse = await api.payment.getOrders()
+				const hasPaidOrders = ordersResponse.code === 200 && 
+					ordersResponse.data && 
+					ordersResponse.data.some(order => order.status === 'paid')
+				
+				// 简化逻辑：有已支付的购卡记录就是续费，没有就是新开卡
+				if (hasPaidOrders) {
+					// 有已支付的购卡记录，判断为续费
+					this.transactionType = 'RENEW'
+					
+					// 获取用户信息，获取会员到期时间作为默认开始日期
+					try {
+						const userResponse = await api.user.getInfo()
+						if (userResponse.code === 200 && userResponse.data && userResponse.data.memberExpireTime) {
+							const expireTime = new Date(userResponse.data.memberExpireTime)
+							const now = new Date()
+							// 如果会员未过期，从会员到期时间开始；如果已过期，从今天开始
+							if (expireTime > now) {
+								this.cardStartDate = this.formatDateForPicker(expireTime)
+							} else {
+								this.cardStartDate = this.formatDateForPicker(now)
+							}
+						} else {
+							// 没有会员到期时间，从今天开始
+							const now = new Date()
+							this.cardStartDate = this.formatDateForPicker(now)
+						}
+					} catch (error) {
+						// 获取用户信息失败，从今天开始
+						const now = new Date()
+						this.cardStartDate = this.formatDateForPicker(now)
+					}
+					this.calculateEndDate(this.cardStartDate)
+				} else {
+					// 没有已支付的购卡记录，判断为新开卡，从今天开始
+					const now = new Date()
+					this.cardStartDate = this.formatDateForPicker(now)
+					this.calculateEndDate(this.cardStartDate)
+					this.transactionType = 'NEW'
+				}
+			} catch (error) {
+				console.error('获取购卡记录失败:', error)
+				// 获取失败，默认为新开卡
+				const now = new Date()
+				this.cardStartDate = this.formatDateForPicker(now)
+				this.calculateEndDate(this.cardStartDate)
+				this.transactionType = 'NEW'
+			}
+		},
+		// 格式化日期：2026-01-10
+		formatDate(date) {
+			if (!date) return ''
+			const d = date instanceof Date ? date : new Date(date)
+			const year = d.getFullYear()
+			const month = String(d.getMonth() + 1).padStart(2, '0')
+			const day = String(d.getDate()).padStart(2, '0')
+			return `${year}-${month}-${day}`
+		},
 		goBack() {
 			uni.navigateBack()
 		},
@@ -260,9 +429,18 @@ export default {
 				mask: true
 			})
 
+			// 检查是否选择了卡开始日期
+			if (!this.cardStartDate) {
+				uni.showToast({
+					title: '请选择卡开始日期',
+					icon: 'none'
+				})
+				return
+			}
+			
 			try {
-				// 步骤1: 创建支付订单
-				const orderResponse = await api.payment.createPackageOrder(this.packageId, this.price)
+				// 步骤1: 创建支付订单（传递用户选择的卡开始日期）
+				const orderResponse = await api.payment.createPackageOrder(this.packageId, this.price, this.cardStartDate)
 				
 				if (orderResponse.code !== 200) {
 					throw new Error(orderResponse.message || '创建订单失败')
@@ -275,6 +453,17 @@ export default {
 				
 				// 保存订单ID，用于mock支付成功
 				this.orderId = orderId
+				
+				// 更新卡开始日期、到期日期和交易类型（如果后端返回了这些字段）
+				if (orderResponse.data.cardStartDate) {
+					this.cardStartDate = this.formatDateForPicker(new Date(orderResponse.data.cardStartDate))
+				}
+				if (orderResponse.data.cardEndDate) {
+					this.cardEndDate = this.formatDate(new Date(orderResponse.data.cardEndDate))
+				}
+				if (orderResponse.data.transactionType) {
+					this.transactionType = orderResponse.data.transactionType
+				}
 
 				// 步骤2: 获取微信支付参数
 				const payResponse = await api.payment.getWechatPayParams(orderId)
@@ -671,6 +860,31 @@ export default {
 	line-height: 40rpx;
 	color: #1a1c1a;
 	letter-spacing: -0.3rpx;
+}
+
+.detail-row-selectable {
+	cursor: pointer;
+	position: relative;
+}
+
+/* picker组件样式 */
+picker {
+	width: 100%;
+	display: block;
+}
+
+.detail-value-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 16rpx;
+	flex: 1;
+	justify-content: flex-end;
+}
+
+.detail-arrow {
+	font-size: 32rpx;
+	color: rgba(74, 93, 80, 0.4);
+	line-height: 40rpx;
 }
 
 .detail-divider {

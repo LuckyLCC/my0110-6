@@ -42,6 +42,15 @@ public class PaymentOrder {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "card_start_date")
+    private LocalDateTime cardStartDate; // 卡开始日期
+
+    @Column(name = "card_end_date")
+    private LocalDateTime cardEndDate; // 卡到期日期
+
+    @Column(name = "transaction_type")
+    private String transactionType = "NEW"; // 交易类型: NEW-新开卡, RENEW-续费
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

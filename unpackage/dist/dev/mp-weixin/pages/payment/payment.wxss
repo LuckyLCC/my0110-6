@@ -260,6 +260,28 @@
 	color: #1a1c1a;
 	letter-spacing: -0.3rpx;
 }
+.detail-row-selectable.data-v-eade9ab2 {
+	cursor: pointer;
+	position: relative;
+}
+
+/* picker组件样式 */
+picker.data-v-eade9ab2 {
+	width: 100%;
+	display: block;
+}
+.detail-value-wrapper.data-v-eade9ab2 {
+	display: flex;
+	align-items: center;
+	gap: 16rpx;
+	flex: 1;
+	justify-content: flex-end;
+}
+.detail-arrow.data-v-eade9ab2 {
+	font-size: 32rpx;
+	color: rgba(74, 93, 80, 0.4);
+	line-height: 40rpx;
+}
 .detail-divider.data-v-eade9ab2 {
 	height: 2rpx;
 	background-color: #f3f4f6;
