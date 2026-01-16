@@ -27,7 +27,7 @@
 	box-shadow: 0 2rpx 6rpx 0 rgba(0, 0, 0, 0.1), 0 2rpx 4rpx -2rpx rgba(0, 0, 0, 0.1);
 }
 .section-label.data-v-d331dabb {
-	color: #6a7282;
+	color: #999999;
 	font-size: 28rpx;
 	font-weight: 300;
 	line-height: 40rpx;
@@ -119,7 +119,7 @@
 	color: #4a5d50;
 }
 .time-text-disabled.data-v-d331dabb {
-	color: #9ca3af;
+	color: #999999;
 }
 .time-check.data-v-d331dabb {
 	position: absolute;
@@ -198,7 +198,7 @@
 	color: #ffffff;
 }
 .seat-label-disabled.data-v-d331dabb {
-	color: #9ca3af;
+	color: #999999;
 }
 .summary-bar.data-v-d331dabb {
 	position: fixed;
@@ -220,14 +220,14 @@
 	gap: 8rpx;
 }
 .summary-hint.data-v-d331dabb {
-	color: #99a1af;
+	color: #999999;
 	font-size: 24rpx;
 	font-weight: 300;
 	line-height: 32rpx;
 	letter-spacing: 0.6rpx;
 }
 .summary-details.data-v-d331dabb {
-	color: #99a1af;
+	color: #999999;
 	font-size: 24rpx;
 	font-weight: 300;
 	line-height: 32rpx;
@@ -253,7 +253,7 @@
 	letter-spacing: -1.9rpx;
 }
 .price-original.data-v-d331dabb {
-	color: #d1d5dc;
+	color: #999999;
 	font-size: 24rpx;
 	font-weight: 300;
 	line-height: 32rpx;

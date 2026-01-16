@@ -111,7 +111,7 @@
 }
 .divider-text.data-v-4bf333e7 {
 	font-size: 24rpx;
-	color: #99a1af;
+	color: #999999;
 	margin: 0 20rpx;
 }
 .wechat-login-btn.data-v-4bf333e7 {

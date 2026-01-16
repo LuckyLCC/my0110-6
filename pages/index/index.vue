@@ -440,7 +440,7 @@ export default {
 }
 
 .experience-desc {
-	color: #99a1af;
+	color: #999999;
 	font-size: 24rpx;
 	font-weight: 300;
 	line-height: 32rpx;
@@ -463,7 +463,7 @@ export default {
 }
 
 .price-original {
-	color: #d1d5dc;
+	color: #999999;
 	font-size: 20rpx;
 	font-weight: 300;
 	line-height: 30rpx;
@@ -502,7 +502,7 @@ export default {
 }
 
 .feature-text {
-	color: #6a7282;
+	color: #999999;
 	font-size: 24rpx;
 	font-weight: 300;
 	line-height: 32rpx;
@@ -552,7 +552,7 @@ export default {
 }
 
 .gallery-label {
-	color: #99a1af;
+	color: #999999;
 	font-size: 20rpx;
 	font-weight: 300;
 	line-height: 30rpx;

@@ -246,10 +246,6 @@ const _sfc_main = {
         });
         return;
       }
-      common_vendor.index.showLoading({
-        title: "正在支付...",
-        mask: true
-      });
       if (!this.cardStartDate) {
         common_vendor.index.showToast({
           title: "请选择卡开始日期",
@@ -257,6 +253,32 @@ const _sfc_main = {
         });
         return;
       }
+      const confirmResult = await new Promise((resolve) => {
+        common_vendor.index.showModal({
+          title: "确认订单信息",
+          content: `卡种：${this.packageName}
+卡开始日期：${this.cardStartDate}
+卡到期日期：${this.cardEndDate}
+交易类型：${this.transactionTypeText}
+
+请确认信息无误后支付`,
+          confirmText: "确认支付",
+          cancelText: "取消",
+          success: (res) => {
+            resolve(res.confirm);
+          },
+          fail: () => {
+            resolve(false);
+          }
+        });
+      });
+      if (!confirmResult) {
+        return;
+      }
+      common_vendor.index.showLoading({
+        title: "正在支付...",
+        mask: true
+      });
       try {
         const orderResponse = await api_request.api.payment.createPackageOrder(this.packageId, this.price, this.cardStartDate);
         if (orderResponse.code !== 200) {
@@ -281,6 +303,28 @@ const _sfc_main = {
           throw new Error(payResponse.message || "获取支付参数失败");
         }
         const payParams = payResponse.data;
+        const isMockMode = payParams.package && payParams.package.includes("MOCK_PREPAY_ID");
+        if (isMockMode) {
+          common_vendor.index.hideLoading();
+          common_vendor.index.showModal({
+            title: "Mock模式提示",
+            content: "当前为Mock模式，真实支付会失败。是否模拟支付成功？",
+            confirmText: "模拟成功",
+            cancelText: "取消",
+            success: (modalRes) => {
+              if (modalRes.confirm) {
+                this.handleMockPaymentSuccess();
+              } else {
+                common_vendor.index.showToast({
+                  title: "支付已取消",
+                  icon: "none",
+                  duration: 2e3
+                });
+              }
+            }
+          });
+          return;
+        }
         common_vendor.index.requestPayment({
           provider: "wxpay",
           timeStamp: payParams.timeStamp,
@@ -289,7 +333,7 @@ const _sfc_main = {
           signType: payParams.signType || "RSA",
           paySign: payParams.paySign,
           success: (res) => {
-            common_vendor.index.__f__("log", "at pages/payment/payment.vue:486", "支付成功:", res);
+            common_vendor.index.__f__("log", "at pages/payment/payment.vue:534", "支付成功:", res);
             common_vendor.index.hideLoading();
             common_vendor.index.showToast({
               title: "支付成功",
@@ -303,7 +347,7 @@ const _sfc_main = {
             }, 2e3);
           },
           fail: (err) => {
-            common_vendor.index.__f__("error", "at pages/payment/payment.vue:502", "支付失败:", err);
+            common_vendor.index.__f__("error", "at pages/payment/payment.vue:550", "支付失败:", err);
             common_vendor.index.hideLoading();
             let errorMsg = "支付失败";
             if (err.errMsg) {
@@ -315,36 +359,15 @@ const _sfc_main = {
                 errorMsg = err.errMsg;
               }
             }
-            const isMockMode = payParams.package && payParams.package.includes("MOCK_PREPAY_ID");
-            if (isMockMode) {
-              common_vendor.index.showModal({
-                title: "Mock模式提示",
-                content: "当前为Mock模式，真实支付会失败。是否模拟支付成功？",
-                confirmText: "模拟成功",
-                cancelText: "取消",
-                success: (modalRes) => {
-                  if (modalRes.confirm) {
-                    this.handleMockPaymentSuccess();
-                  } else {
-                    common_vendor.index.showToast({
-                      title: "支付已取消",
-                      icon: "none",
-                      duration: 2e3
-                    });
-                  }
-                }
-              });
-            } else {
-              common_vendor.index.showToast({
-                title: errorMsg,
-                icon: "none",
-                duration: 2e3
-              });
-            }
+            common_vendor.index.showToast({
+              title: errorMsg,
+              icon: "none",
+              duration: 2e3
+            });
           }
         });
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/payment/payment.vue:549", "支付流程错误:", error);
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:572", "支付流程错误:", error);
         common_vendor.index.hideLoading();
         let errorMsg = "支付失败，请重试";
         if (error.message) {

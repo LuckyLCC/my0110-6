@@ -202,7 +202,7 @@ export default {
 .header-subtitle {
 	font-size: 28rpx;
 	line-height: 40rpx;
-	color: #99a1af;
+	color: #999999;
 }
 
 .form-section {

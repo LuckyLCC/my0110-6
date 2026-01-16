@@ -755,7 +755,7 @@ export default {
 }
 
 .section-label {
-	color: #6a7282;
+	color: #999999;
 	font-size: 28rpx;
 	font-weight: 300;
 	line-height: 40rpx;
@@ -863,7 +863,7 @@ export default {
 }
 
 .time-text-disabled {
-	color: #9ca3af;
+	color: #999999;
 }
 
 .time-check {
@@ -955,7 +955,7 @@ export default {
 }
 
 .seat-label-disabled {
-	color: #9ca3af;
+	color: #999999;
 }
 
 .summary-bar {
@@ -980,7 +980,7 @@ export default {
 }
 
 .summary-hint {
-	color: #99a1af;
+	color: #999999;
 	font-size: 24rpx;
 	font-weight: 300;
 	line-height: 32rpx;
@@ -988,7 +988,7 @@ export default {
 }
 
 .summary-details {
-	color: #99a1af;
+	color: #999999;
 	font-size: 24rpx;
 	font-weight: 300;
 	line-height: 32rpx;
@@ -1018,7 +1018,7 @@ export default {
 }
 
 .price-original {
-	color: #d1d5dc;
+	color: #999999;
 	font-size: 24rpx;
 	font-weight: 300;
 	line-height: 32rpx;

@@ -424,11 +424,6 @@ export default {
 				return
 			}
 
-			uni.showLoading({
-				title: '正在支付...',
-				mask: true
-			})
-
 			// 检查是否选择了卡开始日期
 			if (!this.cardStartDate) {
 				uni.showToast({
@@ -437,6 +432,32 @@ export default {
 				})
 				return
 			}
+
+			// 显示日期确认对话框
+			const confirmResult = await new Promise((resolve) => {
+				uni.showModal({
+					title: '确认订单信息',
+					content: `卡种：${this.packageName}\n卡开始日期：${this.cardStartDate}\n卡到期日期：${this.cardEndDate}\n交易类型：${this.transactionTypeText}\n\n请确认信息无误后支付`,
+					confirmText: '确认支付',
+					cancelText: '取消',
+					success: (res) => {
+						resolve(res.confirm)
+					},
+					fail: () => {
+						resolve(false)
+					}
+				})
+			})
+
+			// 如果用户取消，不继续支付
+			if (!confirmResult) {
+				return
+			}
+
+			uni.showLoading({
+				title: '正在支付...',
+				mask: true
+			})
 			
 			try {
 				// 步骤1: 创建支付订单（传递用户选择的卡开始日期）
@@ -474,7 +495,34 @@ export default {
 
 				const payParams = payResponse.data
 				
-				// 步骤3: 调起微信支付
+				// 检查是否是mock模式（通过检查prepay_id是否包含MOCK）
+				const isMockMode = payParams.package && payParams.package.includes('MOCK_PREPAY_ID')
+				
+				if (isMockMode) {
+					// Mock模式下，直接显示模拟支付成功的选项
+					uni.hideLoading()
+					uni.showModal({
+						title: 'Mock模式提示',
+						content: '当前为Mock模式，真实支付会失败。是否模拟支付成功？',
+						confirmText: '模拟成功',
+						cancelText: '取消',
+						success: (modalRes) => {
+							if (modalRes.confirm) {
+								// 模拟支付成功
+								this.handleMockPaymentSuccess()
+							} else {
+								uni.showToast({
+									title: '支付已取消',
+									icon: 'none',
+									duration: 2000
+								})
+							}
+						}
+					})
+					return
+				}
+				
+				// 步骤3: 调起微信支付（非mock模式）
 				uni.requestPayment({
 					provider: 'wxpay',
 					timeStamp: payParams.timeStamp,
@@ -513,36 +561,11 @@ export default {
 							}
 						}
 						
-						// 检查是否是mock模式（通过检查prepay_id是否包含MOCK）
-						const isMockMode = payParams.package && payParams.package.includes('MOCK_PREPAY_ID')
-						
-						if (isMockMode) {
-							// Mock模式下，提供模拟支付成功的选项
-							uni.showModal({
-								title: 'Mock模式提示',
-								content: '当前为Mock模式，真实支付会失败。是否模拟支付成功？',
-								confirmText: '模拟成功',
-								cancelText: '取消',
-								success: (modalRes) => {
-									if (modalRes.confirm) {
-										// 模拟支付成功
-										this.handleMockPaymentSuccess()
-									} else {
-										uni.showToast({
-											title: '支付已取消',
-											icon: 'none',
-											duration: 2000
-										})
-									}
-								}
-							})
-						} else {
-							uni.showToast({
-								title: errorMsg,
-								icon: 'none',
-								duration: 2000
-							})
-						}
+						uni.showToast({
+							title: errorMsg,
+							icon: 'none',
+							duration: 2000
+						})
 					}
 				})
 			} catch (error) {
@@ -852,7 +875,7 @@ export default {
 	font-weight: normal;
 	font-size: 28rpx;
 	line-height: 40rpx;
-	color: rgba(74, 93, 80, 0.6);
+	color: #999999;
 	letter-spacing: -0.3rpx;
 }
 

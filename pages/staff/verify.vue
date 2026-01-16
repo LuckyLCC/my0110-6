@@ -273,7 +273,7 @@ export default {
 .divider-text {
 	font-size: 26rpx;
 	line-height: 36rpx;
-	color: #99a1af;
+	color: #999999;
 }
 
 .input-section {
@@ -384,7 +384,7 @@ export default {
 .result-info {
 	font-size: 26rpx;
 	line-height: 36rpx;
-	color: #99a1af;
+	color: #999999;
 	text-align: center;
 }
 </style>

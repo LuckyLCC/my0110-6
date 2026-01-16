@@ -20,7 +20,7 @@
 					class="invite-code-input" 
 					v-model="inviteCode" 
 					placeholder="请输入邀请码"
-					placeholder-style="color:#99a1af;"
+					placeholder-style="color:#999999;"
 					maxlength="8"
 				/>
 			</view>
@@ -351,7 +351,7 @@ export default {
 
 .divider-text {
 	font-size: 24rpx;
-	color: #99a1af;
+	color: #999999;
 	margin: 0 20rpx;
 }
 

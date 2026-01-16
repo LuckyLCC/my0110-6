@@ -1336,7 +1336,7 @@ export default {
 	font-size: 32rpx; /* 调大约18% */
 	line-height: 44rpx;
 	font-weight: 300;
-	color: #6a7282;
+	color: #999999;
 	letter-spacing: 1.05rpx;
 }
 
@@ -1475,7 +1475,7 @@ export default {
 }
 
 .empty-text {
-	color: #99a1af;
+	color: #999999;
 	font-size: 28rpx;
 	font-weight: 300;
 	line-height: 40rpx;
@@ -1535,7 +1535,7 @@ export default {
 	font-size: 28rpx; /* 调大约22% */
 	line-height: 36rpx;
 	font-weight: 300;
-	color: #99a1af;
+	color: #999999;
 	margin-top: 4rpx;
 }
 
@@ -1550,7 +1550,7 @@ export default {
 	font-size: 28rpx; /* 与购买日期字体大小一致 */
 	line-height: 36rpx;
 	font-weight: 300;
-	color: #99a1af;
+	color: #999999;
 	letter-spacing: 0.12rpx;
 }
 .record-right {
@@ -1588,7 +1588,7 @@ export default {
 	background: #f3f4f6;
 }
 .pill-text-gray {
-	color: #99a1af;
+	color: #999999;
 }
 .pill-warm {
 	background: #fff8e1;
@@ -1606,9 +1606,10 @@ export default {
 	border-bottom: 2rpx solid #f3f4f6;
 	display: flex;
 	align-items: flex-start;
-	gap: 60rpx; /* 增加间距，从32rpx调整为60rpx */
+	justify-content: space-between; /* 让标签均匀分布 */
 	width: 674rpx;
 	padding-left: 8rpx; /* 与标题左缩进对齐 */
+	padding-right: 8rpx; /* 右侧内边距与左侧一致 */
 	box-sizing: border-box;
 }
 .tab {
@@ -1621,7 +1622,7 @@ export default {
 	font-size: 32rpx; /* 调大约18% */
 	line-height: 44rpx;
 	font-weight: 300;
-	color: #99a1af;
+	color: #999999;
 	letter-spacing: 0.38rpx;
 	white-space: nowrap;
 }
@@ -1707,7 +1708,7 @@ export default {
 	background: #f3f4f6;
 }
 .badge-gray-text {
-	color: #99a1af;
+	color: #999999;
 }
 .booking-meta {
 	margin-top: 30rpx;
@@ -1728,7 +1729,7 @@ export default {
 	font-size: 28rpx; /* 调大约22% */
 	line-height: 36rpx;
 	font-weight: 300;
-	color: #6a7282;
+	color: #999999;
 }
 .booking-foot {
 	margin-top: 32rpx;
@@ -1769,7 +1770,7 @@ export default {
 	font-size: 28rpx;
 	line-height: 40rpx;
 	font-weight: 400;
-	color: #6a7282;
+	color: #999999;
 }
 
 /* 核销码弹窗样式 */
@@ -1807,7 +1808,7 @@ export default {
 .verify-modal-close {
 	font-size: 48rpx;
 	line-height: 48rpx;
-	color: #99a1af;
+	color: #999999;
 	width: 48rpx;
 	height: 48rpx;
 	display: flex;
@@ -1876,7 +1877,7 @@ export default {
 	font-size: 28rpx;
 	line-height: 40rpx;
 	font-weight: 400;
-	color: #99a1af;
+	color: #999999;
 }
 .verify-code-value {
 	font-size: 32rpx;
@@ -1892,7 +1893,7 @@ export default {
 	font-size: 26rpx;
 	line-height: 36rpx;
 	font-weight: 300;
-	color: #99a1af;
+	color: #999999;
 }
 
 /* 邀请码弹窗样式 */
@@ -1930,7 +1931,7 @@ export default {
 .invite-modal-close {
 	font-size: 48rpx;
 	line-height: 48rpx;
-	color: #99a1af;
+	color: #999999;
 	width: 48rpx;
 	height: 48rpx;
 	display: flex;
@@ -1953,7 +1954,7 @@ export default {
 }
 .invite-code-label {
 	font-size: 28rpx;
-	color: #6a7282;
+	color: #999999;
 }
 .invite-code-value {
 	font-size: 48rpx;
@@ -2006,7 +2007,7 @@ export default {
 }
 .invite-tips-text {
 	font-size: 24rpx;
-	color: #99a1af;
+	color: #999999;
 	text-align: center;
 	line-height: 36rpx;
 	margin-bottom: 8rpx;
@@ -2014,7 +2015,7 @@ export default {
 }
 .invite-tips-subtext {
 	font-size: 22rpx;
-	color: #99a1af;
+	color: #999999;
 	text-align: center;
 	line-height: 32rpx;
 	opacity: 0.8;

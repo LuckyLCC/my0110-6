@@ -514,7 +514,7 @@ export default {
 	font-weight: normal;
 	font-size: 32rpx;
 	line-height: 48rpx;
-	color: #6a7282;
+	color: #999999;
 	letter-spacing: -0.625rpx;
 	text-align: center;
 }
@@ -620,7 +620,7 @@ export default {
 	font-weight: normal;
 	font-size: 28rpx;
 	line-height: 40rpx;
-	color: #99a1af;
+	color: #999999;
 	letter-spacing: -0.3rpx;
 }
 
@@ -648,7 +648,7 @@ export default {
 	font-weight: normal;
 	font-size: 24rpx;
 	line-height: 32rpx;
-	color: #99a1af;
+	color: #999999;
 	letter-spacing: -0.2rpx;
 	opacity: 0.6;
 }
@@ -693,7 +693,7 @@ export default {
 	font-weight: normal;
 	font-size: 26rpx;
 	line-height: 38rpx;
-	color: #99a1af;
+	color: #999999;
 	text-align: center;
 }
 
@@ -740,7 +740,7 @@ export default {
 	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
 	font-weight: normal;
 	font-size: 24rpx;
-	color: #99a1af;
+	color: #999999;
 }
 
 .nickname-input {
@@ -782,7 +782,7 @@ export default {
 
 .cancel-btn {
 	background-color: #f3f4f6;
-	color: #6b7280;
+	color: #999999;
 }
 
 .confirm-btn {

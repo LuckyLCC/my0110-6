@@ -42,7 +42,7 @@
 .header-subtitle.data-v-abc7fc9c {
 	font-size: 28rpx;
 	line-height: 40rpx;
-	color: #99a1af;
+	color: #999999;
 }
 .form-section.data-v-abc7fc9c {
 	width: 100%;

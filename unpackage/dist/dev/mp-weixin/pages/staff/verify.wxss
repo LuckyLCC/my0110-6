@@ -70,7 +70,7 @@
 .divider-text.data-v-482a2f0d {
 	font-size: 26rpx;
 	line-height: 36rpx;
-	color: #99a1af;
+	color: #999999;
 }
 .input-section.data-v-482a2f0d {
 	background: #ffffff;
@@ -163,6 +163,6 @@
 .result-info.data-v-482a2f0d {
 	font-size: 26rpx;
 	line-height: 36rpx;
-	color: #99a1af;
+	color: #999999;
 	text-align: center;
 }
