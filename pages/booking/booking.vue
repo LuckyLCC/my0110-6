@@ -32,10 +32,13 @@
 					class="time-item" 
 					v-for="(time, index) in timeSlots" 
 					:key="index"
-					:class="{ active: selectedTime === index }"
+					:class="{ 
+						active: selectedTime === index,
+						disabled: isTimeSlotDisabled(index)
+					}"
 					@tap="selectTime(index)"
 				>
-					<text class="time-text" :class="{ 'time-text-active': selectedTime === index }">{{ time }}</text>
+					<text class="time-text" :class="{ 'time-text-active': selectedTime === index, 'time-text-disabled': isTimeSlotDisabled(index) }">{{ time }}</text>
 					<view v-if="selectedTime === index" class="time-check">
 						<text class="check-icon">✓</text>
 					</view>
@@ -58,10 +61,16 @@
 							class="seat-item" 
 							v-for="(seat, sIndex) in cabin.seats" 
 							:key="sIndex"
-							:class="{ active: selectedSeat === `${index}-${sIndex}` }"
+							:class="{ 
+								active: selectedSeat === `${index}-${sIndex}`,
+								disabled: isSeatDisabled(index, sIndex)
+							}"
 							@tap="selectSeat(index, sIndex)"
 						>
-							<text class="seat-label" :class="{ 'seat-label-active': selectedSeat === `${index}-${sIndex}` }">{{ seat }}</text>
+							<text class="seat-label" :class="{ 
+								'seat-label-active': selectedSeat === `${index}-${sIndex}`,
+								'seat-label-disabled': isSeatDisabled(index, sIndex)
+							}">{{ seat }}</text>
 						</view>
 					</view>
 				</view>
@@ -116,7 +125,8 @@ export default {
 				current: 398,
 				original: 598
 			},
-			isMember: false // 是否是会员用户
+			isMember: false, // 是否是会员用户
+			bookedSeats: [] // 已预约的舱位列表，格式：['1号舱-A座', '2号舱-B座']
 		}
 	},
 	computed: {
@@ -156,6 +166,10 @@ export default {
 	onShow() {
 		// 页面显示时重新检查会员状态
 		this.checkMemberStatus()
+		// 检查当前选中的时段是否已过期（如果选择的是今天）
+		if (this.selectedTime >= 0 && this.isTimeSlotDisabled(this.selectedTime)) {
+			this.selectedTime = -1
+		}
 	},
 	methods: {
 		// 检查用户是否是会员（是否有生效中的卡）
@@ -176,76 +190,17 @@ export default {
 					const paidOrders = ordersResponse.data.filter(order => order.status === 'paid')
 					console.log('已支付的订单:', paidOrders)
 					
-					// 检查是否有生效中的卡（复用"我的"页面的判断逻辑）
-					const now = new Date()
-					now.setHours(0, 0, 0, 0)
-					
+					// 检查是否有生效中的卡（必须使用 cardStatus 字段，不允许使用日期判断）
 					const hasActiveCard = paidOrders.some(order => {
-						// 判断状态：未生效/生效中/已过期（完全复用"我的"页面的判断逻辑）
-						if (order.status === 'paid') {
-							// 检查卡开始日期
-							if (order.cardStartDate) {
-								// 解析开始日期，支持多种格式
-								let startDateStr = String(order.cardStartDate)
-								if (startDateStr.includes('T')) {
-									startDateStr = startDateStr.split('T')[0]
-								}
-								const startDate = new Date(startDateStr)
-								startDate.setHours(0, 0, 0, 0)
-								
-								// 如果当前时间 < 卡开始日期，则为未生效
-								if (now < startDate) {
-									console.log(`订单 ${order.id}: 未生效（当前时间 < 开始日期）`)
-									return false
-								} else {
-									// 当前时间 >= 卡开始日期，检查是否过期
-									if (order.cardEndDate) {
-										// 解析到期日期
-										let endDateStr = String(order.cardEndDate)
-										if (endDateStr.includes('T')) {
-											endDateStr = endDateStr.split('T')[0]
-										}
-										const endDate = new Date(endDateStr)
-										endDate.setHours(0, 0, 0, 0)
-										
-										// 如果当前时间 <= 到期日期，则为生效中；否则为已过期
-										if (now <= endDate) {
-											console.log(`订单 ${order.id}: 生效中（${startDateStr} <= ${now.toISOString().split('T')[0]} <= ${endDateStr}）`)
-											return true
-										} else {
-											console.log(`订单 ${order.id}: 已过期（当前时间 > 到期日期）`)
-											return false
-										}
-									} else {
-										// 没有到期日期，默认为生效中（可能是无限期）
-										console.log(`订单 ${order.id}: 生效中（没有到期日期，无限期）`)
-										return true
-									}
-								}
-							} else {
-								// 没有开始日期，检查到期日期
-								if (order.cardEndDate) {
-									let endDateStr = String(order.cardEndDate)
-									if (endDateStr.includes('T')) {
-										endDateStr = endDateStr.split('T')[0]
-									}
-									const endDate = new Date(endDateStr)
-									endDate.setHours(0, 0, 0, 0)
-									
-									if (now <= endDate) {
-										console.log(`订单 ${order.id}: 生效中（当前时间 <= 到期日期）`)
-										return true
-									} else {
-										console.log(`订单 ${order.id}: 已过期（当前时间 > 到期日期）`)
-										return false
-									}
-								} else {
-									// 既没有开始日期也没有到期日期，默认为生效中
-									console.log(`订单 ${order.id}: 生效中（没有日期信息，无限期）`)
-									return true
-								}
-							}
+						// 必须使用后端返回的 cardStatus 字段，只有"生效中"才认为是生效的
+						if (order.cardStatus) {
+							const isActive = order.cardStatus === '生效中'
+							console.log(`订单 ${order.id} (${order.packageName}): cardStatus = ${order.cardStatus}, 是否生效中: ${isActive}`)
+							return isActive
 						}
+						
+						// 如果没有 cardStatus，说明数据异常，不允许预约
+						console.log(`订单 ${order.id} (${order.packageName}): cardStatus 为 null 或 undefined，不允许预约`)
 						return false
 					})
 					
@@ -283,13 +238,137 @@ export default {
 		},
 		selectDate(index) {
 			this.selectedDate = index
+			// 如果切换日期后，当前选中的时段已过期，清除选择
+			if (this.selectedTime >= 0 && this.isTimeSlotDisabled(this.selectedTime)) {
+				this.selectedTime = -1
+			}
+			// 清除已选座位，并重新加载已预约的舱位
+			this.selectedSeat = ''
+			this.loadBookedSeats()
 		},
 		selectTime(index) {
+			// 检查时段是否已过期
+			if (this.isTimeSlotDisabled(index)) {
+				uni.showToast({
+					title: '该时段已过期，无法选择',
+					icon: 'none',
+					duration: 2000
+				})
+				return
+			}
 			this.selectedTime = index === this.selectedTime ? -1 : index
+			// 清除已选座位，并重新加载已预约的舱位
+			this.selectedSeat = ''
+			this.loadBookedSeats()
+		},
+		// 检查时段是否已过期
+		isTimeSlotDisabled(timeIndex) {
+			// 如果选择的不是今天，不需要检查时间
+			if (this.selectedDate > 0) {
+				return false
+			}
+			
+			// 如果选择的是今天，检查当前时间是否已超过时段的开始时间
+			const timeSlot = this.timeSlots[timeIndex]
+			if (!timeSlot) {
+				return false
+			}
+			
+			// 解析时间段，提取开始时间（例如：'10:00–11:00' -> '10:00'）
+			// 支持两种分隔符：长破折号（–）和短横线（-）
+			let startTimeStr = timeSlot.split('–')[0]
+			if (!startTimeStr || startTimeStr === timeSlot) {
+				startTimeStr = timeSlot.split('-')[0]
+			}
+			
+			if (!startTimeStr) {
+				return false
+			}
+			
+			// 获取当前时间
+			const now = new Date()
+			const currentHour = now.getHours()
+			const currentMinute = now.getMinutes()
+			
+			// 解析时段的开始时间
+			const timeParts = startTimeStr.split(':')
+			if (timeParts.length !== 2) {
+				return false
+			}
+			
+			const startHour = parseInt(timeParts[0], 10)
+			const startMinute = parseInt(timeParts[1], 10)
+			
+			if (isNaN(startHour) || isNaN(startMinute)) {
+				return false
+			}
+			
+			// 比较时间：如果当前时间 >= 时段开始时间，则已过期
+			if (currentHour > startHour) {
+				return true // 已过期
+			} else if (currentHour === startHour && currentMinute >= startMinute) {
+				return true // 已过期
+			}
+			
+			return false // 未过期
 		},
 		selectSeat(cabinIndex, seatIndex) {
+			// 检查座位是否已被预约
+			if (this.isSeatDisabled(cabinIndex, seatIndex)) {
+				uni.showToast({
+					title: '该舱位已被预约，请选择其他舱位',
+					icon: 'none',
+					duration: 2000
+				})
+				return
+			}
 			const seatKey = `${cabinIndex}-${seatIndex}`
 			this.selectedSeat = this.selectedSeat === seatKey ? '' : seatKey
+		},
+		// 检查座位是否已被预约
+		isSeatDisabled(cabinIndex, seatIndex) {
+			// 如果还没有选择日期或时段，不禁用
+			if (this.selectedDate < 0 || this.selectedTime < 0) {
+				return false
+			}
+			
+			const cabinName = this.cabins[cabinIndex].name
+			const seatName = this.cabins[cabinIndex].seats[seatIndex]
+			const seatKey = `${cabinName}-${seatName}`
+			
+			// 检查该座位是否在已预约列表中
+			return this.bookedSeats.includes(seatKey)
+		},
+		// 加载已预约的舱位列表
+		async loadBookedSeats() {
+			// 如果还没有选择日期或时段，不加载
+			if (this.selectedDate < 0 || this.selectedTime < 0) {
+				this.bookedSeats = []
+				return
+			}
+			
+			try {
+				// 获取完整的日期格式
+				const currentDate = new Date()
+				currentDate.setDate(currentDate.getDate() + this.selectedDate)
+				// 使用本地时间格式化，避免时区问题
+				const year = currentDate.getFullYear()
+				const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+				const day = String(currentDate.getDate()).padStart(2, '0')
+				const formattedDate = `${year}-${month}-${day}` // YYYY-MM-DD格式
+				const timeSlot = this.timeSlots[this.selectedTime]
+				
+				const response = await api.booking.getBookedSeats(formattedDate, timeSlot)
+				if (response.code === 200 && response.data) {
+					this.bookedSeats = response.data || []
+					console.log('已预约的舱位列表:', this.bookedSeats)
+				} else {
+					this.bookedSeats = []
+				}
+			} catch (error) {
+				console.error('获取已预约舱位列表失败:', error)
+				this.bookedSeats = []
+			}
 		},
 		async createBooking() {
 			if (!this.isComplete) {
@@ -300,19 +379,27 @@ export default {
 				return
 			}
 
+			// 在预约前重新检查会员状态，确保状态是最新的
+			await this.checkMemberStatus()
+			console.log('预约前会员状态检查结果:', this.isMember)
+
 			try {
 				// 获取完整的日期格式
 				const selectedDateInfo = this.dates[this.selectedDate]
 				const currentDate = new Date()
 				currentDate.setDate(currentDate.getDate() + this.selectedDate)
-				const formattedDate = currentDate.toISOString().split('T')[0] // YYYY-MM-DD格式
+				// 使用本地时间格式化，避免时区问题
+				const year = currentDate.getFullYear()
+				const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+				const day = String(currentDate.getDate()).padStart(2, '0')
+				const formattedDate = `${year}-${month}-${day}` // YYYY-MM-DD格式
 
-				// 检查用户是否可以预订当天（每人每天只能消费一次）
+				// 检查用户是否可以预订该日期（每人每天只能预约一次）
 				const canBookResponse = await api.booking.canBookToday(formattedDate)
 				if (canBookResponse.code === 200 && !canBookResponse.data) {
 					uni.showModal({
 						title: '提醒',
-						content: '您今天已经消费过了，每人每天只能消费一次',
+						content: '您在该日期已经预约过了，每人每天只能预约一次',
 						showCancel: false,
 						confirmText: '知道了'
 					})
@@ -323,6 +410,28 @@ export default {
 				const [cabinIndex, seatIndex] = this.selectedSeat.split('-')
 				const cabinName = this.cabins[parseInt(cabinIndex)].name
 				const seatName = this.cabins[parseInt(cabinIndex)].seats[parseInt(seatIndex)]
+
+				// 显示预约提示信息
+				const confirmResult = await new Promise((resolve) => {
+					uni.showModal({
+						title: '预约须知',
+						content: '请在预约开始时间前10分钟到店准备，为避免影响其他顾客我们将于预约开始时间准时关舱，届时不能进入舱体，请取消预约订单并重新预约后续场次',
+						showCancel: true,
+						confirmText: '我已了解',
+						cancelText: '取消',
+						success: (res) => {
+							resolve(res.confirm)
+						},
+						fail: () => {
+							resolve(false)
+						}
+					})
+				})
+
+				// 如果用户点击取消，不继续预约
+				if (!confirmResult) {
+					return
+				}
 
 				// 调用后端API创建预约订单
 				// 如果是会员，价格为0；否则使用原价
@@ -345,40 +454,189 @@ export default {
 					if (this.isMember) {
 						uni.showToast({
 							title: '预约成功',
-							icon: 'success'
+							icon: 'success',
+							duration: 1500
 						})
 						
 						// 跳转到我的页面
 						setTimeout(() => {
-							uni.reLaunch({
-								url: '/pages/my/my'
-							})
+							try {
+								uni.redirectTo({
+									url: '/pages/my/my',
+									fail: (err) => {
+										console.error('跳转失败:', err)
+										// 如果 redirectTo 失败，尝试 navigateTo
+										uni.navigateTo({
+											url: '/pages/my/my',
+											fail: () => {
+												// 如果都失败，提示用户手动返回
+												uni.showToast({
+													title: '请手动返回查看订单',
+													icon: 'none'
+												})
+											}
+										})
+									}
+								})
+							} catch (error) {
+								console.error('跳转异常:', error)
+								uni.showToast({
+									title: '请手动返回查看订单',
+									icon: 'none'
+								})
+							}
 						}, 1500)
 					} else {
-						// 普通用户需要支付
-						const payResponse = await api.booking.pay(orderId)
-						if (payResponse.code === 200) {
-							uni.showToast({
-								title: '预约支付成功',
-								icon: 'success'
-							})
+						// 普通用户需要支付，调用微信支付
+						uni.showLoading({
+							title: '正在获取支付信息...',
+							mask: true
+						})
+						
+						try {
+							// 步骤1: 获取微信支付参数
+							const payResponse = await api.booking.getWechatPayParams(orderId)
 							
-							// 跳转回上一页
-							setTimeout(() => {
-								uni.navigateBack()
-							}, 1500)
-						} else {
+							if (payResponse.code !== 200) {
+								uni.hideLoading()
+								uni.showToast({
+									title: payResponse.message || '获取支付信息失败',
+									icon: 'none'
+								})
+								return
+							}
+							
+							const payParams = payResponse.data
+							
+							// 检查是否是mock模式（通过检查prepay_id是否包含MOCK）
+							const isMockMode = payParams.package && payParams.package.includes('MOCK_PREPAY_ID')
+							
+							// 步骤2: 调起微信支付
+							uni.requestPayment({
+								provider: 'wxpay',
+								timeStamp: payParams.timeStamp,
+								nonceStr: payParams.nonceStr,
+								package: payParams.package,
+								signType: payParams.signType || 'RSA',
+								paySign: payParams.paySign,
+								success: (res) => {
+									console.log('支付成功:', res)
+									uni.hideLoading()
+									uni.showToast({
+										title: '支付成功',
+										icon: 'success',
+										duration: 2000
+									})
+									
+									// 支付成功后跳转到我的页面
+									setTimeout(() => {
+										try {
+											uni.redirectTo({
+												url: '/pages/my/my',
+												fail: (err) => {
+													console.error('跳转失败:', err)
+													// 如果 redirectTo 失败，尝试 navigateTo
+													uni.navigateTo({
+														url: '/pages/my/my',
+														fail: () => {
+															// 如果都失败，提示用户手动返回
+															uni.showToast({
+																title: '请手动返回查看订单',
+																icon: 'none'
+															})
+														}
+													})
+												}
+											})
+										} catch (error) {
+											console.error('跳转异常:', error)
+											uni.showToast({
+												title: '请手动返回查看订单',
+												icon: 'none'
+											})
+										}
+									}, 2000)
+								},
+								fail: (err) => {
+									console.error('支付失败:', err)
+									uni.hideLoading()
+									
+									let errorMsg = '支付失败'
+									if (err.errMsg) {
+										if (err.errMsg.includes('cancel')) { 
+											errorMsg = '支付已取消'
+										} else if (err.errMsg.includes('fail')) {
+											errorMsg = '支付失败，请重试'
+										} else {
+											errorMsg = err.errMsg
+										}
+									}
+									
+									if (isMockMode) {
+										// Mock模式下，无论什么错误，都提供模拟支付成功的选项
+										uni.showModal({
+											title: 'Mock模式提示',
+											content: '当前为Mock模式，真实支付会失败。是否模拟支付成功？',
+											confirmText: '模拟成功',
+											cancelText: '取消',
+											success: (modalRes) => {
+												if (modalRes.confirm) {
+													// 模拟支付成功
+													this.handleMockBookingPaymentSuccess(orderId)
+												} else {
+													uni.showToast({
+														title: '支付已取消',
+														icon: 'none',
+														duration: 2000
+													})
+												}
+											}
+										})
+									} else {
+										// 非Mock模式，直接显示错误信息
+										uni.showToast({
+											title: errorMsg,
+											icon: 'none',
+											duration: 2000
+										})
+									}
+								}
+							})
+						} catch (error) {
+							console.error('获取支付信息失败:', error)
+							uni.hideLoading()
 							uni.showToast({
-								title: payResponse.message || '支付失败',
+								title: '网络错误，请稍后重试',
 								icon: 'none'
 							})
 						}
 					}
 				} else {
-					uni.showToast({
-						title: response.message || '预约失败',
-						icon: 'none'
-					})
+					// 如果是次卡次数用完的错误，使用弹窗提示
+					const errorMessage = response.message || '预约失败'
+					if (errorMessage.includes('剩余次数已用完') || errorMessage.includes('续费') || errorMessage.includes('升级')) {
+						uni.showModal({
+							title: '提示',
+							content: errorMessage,
+							showCancel: true,
+							cancelText: '取消',
+							confirmText: '去续费',
+							success: (res) => {
+								if (res.confirm) {
+									// 跳转到商城页面
+									uni.navigateTo({
+										url: '/pages/store/store'
+									})
+								}
+							}
+						})
+					} else {
+						uni.showToast({
+							title: errorMessage,
+							icon: 'none',
+							duration: 2000
+						})
+					}
 				}
 			} catch (error) {
 				console.error('创建预约订单失败:', error)
@@ -386,6 +644,78 @@ export default {
 					title: '网络错误，请稍后重试',
 					icon: 'none'
 				})
+			}
+		},
+		async handleMockBookingPaymentSuccess(orderId) {
+			// Mock模式下模拟支付成功
+			uni.showLoading({
+				title: '模拟支付中...',
+				mask: true
+			})
+			
+			try {
+				if (!orderId) {
+					uni.hideLoading()
+					uni.showToast({
+						title: '订单信息缺失',
+						icon: 'none'
+					})
+					return
+				}
+				
+				// 调用后端接口更新订单状态为已支付
+				const response = await api.booking.mockPaymentSuccess(orderId)
+				
+				if (response.code === 200) {
+					uni.hideLoading()
+					uni.showToast({
+						title: '支付成功（Mock模式）',
+						icon: 'success',
+						duration: 2000
+					})
+					
+					// 跳转到我的页面
+					setTimeout(() => {
+						try {
+							uni.redirectTo({
+								url: '/pages/my/my',
+								fail: (err) => {
+									console.error('跳转失败:', err)
+									// 如果 redirectTo 失败，尝试 navigateTo
+									uni.navigateTo({
+										url: '/pages/my/my',
+										fail: () => {
+											// 如果都失败，提示用户手动返回
+											uni.showToast({
+												title: '请手动返回查看订单',
+												icon: 'none'
+											})
+										}
+									})
+								}
+							})
+						} catch (error) {
+							console.error('跳转异常:', error)
+							uni.showToast({
+								title: '请手动返回查看订单',
+								icon: 'none'
+							})
+						}
+					}, 2000)
+				} else {
+					uni.hideLoading()
+					uni.showToast({
+						title: response.message || '模拟支付失败',
+						icon: 'none'
+					})
+				}
+			} catch (error) {
+				uni.hideLoading()
+				uni.showToast({
+					title: '模拟支付失败',
+					icon: 'none'
+				})
+				console.error('模拟支付失败:', error)
 			}
 		}
 	}
@@ -514,6 +844,12 @@ export default {
 	border-color: #4a5d50;
 }
 
+.time-item.disabled {
+	background-color: #f9fafb;
+	border-color: #e5e7eb;
+	opacity: 0.5;
+}
+
 .time-text {
 	color: #4a5565;
 	font-size: 24rpx;
@@ -524,6 +860,10 @@ export default {
 
 .time-text-active {
 	color: #4a5d50;
+}
+
+.time-text-disabled {
+	color: #9ca3af;
 }
 
 .time-check {
@@ -597,6 +937,12 @@ export default {
 	box-shadow: 0 8rpx 12rpx -2rpx rgba(0, 0, 0, 0.1), 0 4rpx 8rpx -4rpx rgba(0, 0, 0, 0.1);
 }
 
+.seat-item.disabled {
+	background-color: #f9fafb;
+	border-color: #e5e7eb;
+	opacity: 0.5;
+}
+
 .seat-label {
 	color: #0a0a0a;
 	font-size: 24rpx;
@@ -606,6 +952,10 @@ export default {
 
 .seat-label-active {
 	color: #ffffff;
+}
+
+.seat-label-disabled {
+	color: #9ca3af;
 }
 
 .summary-bar {

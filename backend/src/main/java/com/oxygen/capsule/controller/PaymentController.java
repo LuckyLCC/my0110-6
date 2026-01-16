@@ -2,6 +2,7 @@ package com.oxygen.capsule.controller;
 
 import com.oxygen.capsule.common.Result;
 import com.oxygen.capsule.entity.PaymentOrder;
+import com.oxygen.capsule.service.BookingOrderService;
 import com.oxygen.capsule.service.MemberPackageService;
 import com.oxygen.capsule.service.PaymentService;
 import com.oxygen.capsule.util.JwtUtil;
@@ -21,6 +22,9 @@ public class PaymentController {
 
     @Autowired
     private MemberPackageService memberPackageService;
+
+    @Autowired
+    private BookingOrderService bookingOrderService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -185,6 +189,13 @@ public class PaymentController {
             // 转换为前端需要的格式
             List<Map<String, Object>> orderList = orders.stream()
                 .map(order -> {
+                    // 如果 cardStatus 为 null，设置默认值（确保永远不为 null）
+                    // 这种情况不应该发生，但为了安全起见，设置默认值
+                    if (order.getCardStatus() == null) {
+                        System.err.println("警告：订单 " + order.getId() + " 的 cardStatus 为 null，设置默认值");
+                        order.setCardStatus("未生效");
+                    }
+                    
                     Map<String, Object> orderData = new java.util.HashMap<>();
                     orderData.put("id", order.getId());
                     orderData.put("orderNo", order.getOrderNo());
@@ -197,17 +208,32 @@ public class PaymentController {
                     orderData.put("cardStartDate", order.getCardStartDate());
                     orderData.put("cardEndDate", order.getCardEndDate());
                     orderData.put("transactionType", order.getTransactionType());
+                    // 确保 cardStatus 不为 null（如果还是 null，使用默认值）
+                    orderData.put("cardStatus", order.getCardStatus() != null ? order.getCardStatus() : "未生效");
+                    orderData.put("remainingTimes", order.getRemainingTimes()); // 剩余次数（仅次卡有效）
                     
                     // 查询套餐分类信息
                     try {
                         com.oxygen.capsule.entity.MemberPackage pkg = 
                             memberPackageService.findById(order.getPackageId());
-                        if (pkg != null && pkg.getCategory() != null) {
-                            orderData.put("packageCategory", pkg.getCategory());
+                        if (pkg != null) {
+                            if (pkg.getCategory() != null) {
+                                orderData.put("packageCategory", pkg.getCategory());
+                            }
+                            
+                            // 如果是家庭次卡，返回总次数（用于前端显示）
+                            if ("家庭/次卡".equals(pkg.getCategory()) && pkg.getTimesPerPerson() != null) {
+                                orderData.put("totalTimes", pkg.getTimesPerPerson());
+                                // 已消费次数 = 总次数 - 剩余次数
+                                if (order.getRemainingTimes() != null) {
+                                    int consumedTimes = pkg.getTimesPerPerson() - order.getRemainingTimes();
+                                    orderData.put("consumedTimes", Math.max(0, consumedTimes));
+                                }
+                            }
                         }
                     } catch (Exception e) {
                         // 如果查询失败，不添加分类字段
-                        System.err.println("查询套餐分类失败: " + e.getMessage());
+                        System.err.println("查询套餐信息失败: " + e.getMessage());
                     }
                     
                     return orderData;

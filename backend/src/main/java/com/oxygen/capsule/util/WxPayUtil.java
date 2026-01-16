@@ -121,7 +121,7 @@ public class WxPayUtil {
             // 1. 构建统一下单请求
             com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest request = 
                 com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest.newBuilder()
-                    .body("氧舱会员套餐购买")
+                    .body("氧舱预约服务")
                     .outTradeNo(orderNo)
                     .feeType("CNY")
                     .totalFee(amount) // 金额，单位分

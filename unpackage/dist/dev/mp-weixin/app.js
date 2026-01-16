@@ -11,6 +11,7 @@ if (!Math) {
   "./pages/payment/payment.js";
   "./pages/staff/verify.js";
   "./pages/staff/login.js";
+  "./pages/invite/accept.js";
 }
 const _sfc_main = {
   onLaunch: function() {

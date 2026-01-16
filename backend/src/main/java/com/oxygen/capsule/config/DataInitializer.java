@@ -137,16 +137,6 @@ public class DataInitializer implements CommandLineRunner {
                         }
                     }
                     
-                    // times_per_person 可能不存在
-                    if (card.containsKey("times_per_person")) {
-                        Object timesObj = card.get("times_per_person");
-                        if (timesObj instanceof Integer) {
-                            memberPackage.setTimesPerPerson((Integer) timesObj);
-                        } else if (timesObj instanceof Number) {
-                            memberPackage.setTimesPerPerson(((Number) timesObj).intValue());
-                        }
-                    }
-                    
                     // 设置分类（name已经在前面检查过，不会为null）
                     if (name.contains("人") && !name.contains("1人")) {
                         memberPackage.setCategory("多人尊享");
@@ -154,6 +144,16 @@ public class DataInitializer implements CommandLineRunner {
                         memberPackage.setCategory("家庭/次卡");
                     } else {
                         memberPackage.setCategory("个人畅享");
+                    }
+                    
+                    // times_per_person 只有次卡（家庭/次卡）才设置，其他卡种不设置
+                    if ("家庭/次卡".equals(memberPackage.getCategory()) && card.containsKey("times_per_person")) {
+                        Object timesObj = card.get("times_per_person");
+                        if (timesObj instanceof Integer) {
+                            memberPackage.setTimesPerPerson((Integer) timesObj);
+                        } else if (timesObj instanceof Number) {
+                            memberPackage.setTimesPerPerson(((Number) timesObj).intValue());
+                        }
                     }
                     
                     memberPackage.setIsActive(true);
@@ -271,7 +271,7 @@ public class DataInitializer implements CommandLineRunner {
             twoPeopleHalfYearCard.setPrice(23800.0);
             twoPeopleHalfYearCard.setPeople(2);
             twoPeopleHalfYearCard.setValidDays(180);
-            twoPeopleHalfYearCard.setTimesPerPerson(150);
+            // 多人尊享卡不设置 times_per_person，只有次卡才设置
             twoPeopleHalfYearCard.setAvgPricePerTime(79.0);
             twoPeopleHalfYearCard.setCategory("多人尊享");
             twoPeopleHalfYearCard.setFeatures("有效期180天,300次体验,支持2人使用");
@@ -287,7 +287,7 @@ public class DataInitializer implements CommandLineRunner {
             twoPeopleYearCard.setPrice(39800.0);
             twoPeopleYearCard.setPeople(2);
             twoPeopleYearCard.setValidDays(365);
-            twoPeopleYearCard.setTimesPerPerson(300);
+            // 多人尊享卡不设置 times_per_person，只有次卡才设置
             twoPeopleYearCard.setAvgPricePerTime(66.0);
             twoPeopleYearCard.setCategory("多人尊享");
             twoPeopleYearCard.setFeatures("有效期365天,600次体验,支持2人使用");
@@ -303,6 +303,7 @@ public class DataInitializer implements CommandLineRunner {
             family100Card.setPrice(19800.0);
             family100Card.setPeople(-1); // -1表示无限制
             family100Card.setValidDays(-1); // -1表示无限制
+            family100Card.setTimesPerPerson(100); // 总次数为100次（对于家庭次卡，times_per_person就是总次数）
             family100Card.setAvgPricePerTime(198.0);
             family100Card.setCategory("家庭/次卡");
             family100Card.setFeatures("100次体验,无时间限制,多人共享");
@@ -318,6 +319,7 @@ public class DataInitializer implements CommandLineRunner {
             family200Card.setPrice(36800.0);
             family200Card.setPeople(-1); // -1表示无限制
             family200Card.setValidDays(-1); // -1表示无限制
+            family200Card.setTimesPerPerson(200); // 总次数为200次（对于家庭次卡，times_per_person就是总次数）
             family200Card.setAvgPricePerTime(184.0);
             family200Card.setCategory("家庭/次卡");
             family200Card.setFeatures("200次体验,无时间限制,多人共享");

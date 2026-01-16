@@ -24,17 +24,20 @@
 	left: 32rpx;
 	width: 80rpx;
 	height: 80rpx;
-	background-color: rgba(0, 0, 0, 0.05);
-	border-radius: 9999rpx;
+	background: transparent;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	top: 50%;
-	transform: translateY(-50%);
+	top: 0;
+	bottom: 0;
+	margin: auto 0;
 }
 .back-icon.data-v-eade9ab2 {
-	width: 48rpx;
-	height: 48rpx;
+	width: 60rpx;
+	height: 60rpx;
+	display: block;
+	background: transparent;
+	border: none;
 }
 .header-title.data-v-eade9ab2 {
 	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;

@@ -8,6 +8,28 @@
 	align-items: center;
 	padding: 208rpx 48rpx 0;
 	box-sizing: border-box;
+	position: relative;
+}
+
+/* 返回按钮 */
+.back-button.data-v-e4e4508d {
+	position: fixed;
+	top: 88rpx;
+	left: 32rpx;
+	width: 80rpx;
+	height: 80rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100;
+	background: transparent;
+}
+.back-icon.data-v-e4e4508d {
+	width: 60rpx;
+	height: 60rpx;
+	display: block;
+	background: transparent;
+	border: none;
 }
 .welcome-section.data-v-e4e4508d {
 	display: flex;
@@ -173,4 +195,126 @@
 	color: #99a1af;
 	letter-spacing: -0.2rpx;
 	opacity: 0.6;
+}
+
+/* 用户信息填写表单 */
+.user-info-form-overlay.data-v-e4e4508d {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+.user-info-form.data-v-e4e4508d {
+	width: 600rpx;
+	background-color: #ffffff;
+	border-radius: 32rpx;
+	padding: 60rpx 48rpx;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 40rpx;
+}
+.form-title.data-v-e4e4508d {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: 600;
+	font-size: 36rpx;
+	line-height: 52rpx;
+	color: #333333;
+	text-align: center;
+}
+.form-tip.data-v-e4e4508d {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 26rpx;
+	line-height: 38rpx;
+	color: #99a1af;
+	text-align: center;
+}
+.avatar-selector.data-v-e4e4508d {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+.avatar-btn.data-v-e4e4508d {
+	width: 160rpx;
+	height: 160rpx;
+	border-radius: 50%;
+	border: 2rpx solid #e5e7eb;
+	background-color: #f9fafb;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+.avatar-btn.data-v-e4e4508d::after {
+	border: none;
+}
+.avatar-preview.data-v-e4e4508d {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+}
+.avatar-placeholder.data-v-e4e4508d {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f3f4f6;
+}
+.avatar-placeholder-text.data-v-e4e4508d {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 24rpx;
+	color: #99a1af;
+}
+.nickname-input.data-v-e4e4508d {
+	width: 100%;
+	height: 88rpx;
+	border: 2rpx solid #e5e7eb;
+	border-radius: 16rpx;
+	padding: 0 32rpx;
+	box-sizing: border-box;
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-size: 30rpx;
+	color: #333333;
+	background-color: #ffffff;
+}
+.nickname-input.data-v-e4e4508d:focus {
+	border-color: #4a5d50;
+}
+.form-buttons.data-v-e4e4508d {
+	width: 100%;
+	display: flex;
+	gap: 24rpx;
+	margin-top: 20rpx;
+}
+.form-btn.data-v-e4e4508d {
+	flex: 1;
+	height: 88rpx;
+	border-radius: 16rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: 500;
+	font-size: 32rpx;
+	line-height: 48rpx;
+}
+.cancel-btn.data-v-e4e4508d {
+	background-color: #f3f4f6;
+	color: #6b7280;
+}
+.confirm-btn.data-v-e4e4508d {
+	background-color: #4a5d50;
+	color: #ffffff;
 }

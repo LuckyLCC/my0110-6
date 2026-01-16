@@ -14,4 +14,8 @@ public interface PaymentService {
     PaymentOrder findByOrderNo(String orderNo);
     void handlePaymentNotify(String notifyData);
     List<PaymentOrder> findByUserId(Long userId);
+    void updateCardStatus(Long paymentOrderId); // 更新卡状态
+    
+    // 返还次卡次数（用于未到店订单）
+    void refundTimesCard(Long paymentOrderId);
 }

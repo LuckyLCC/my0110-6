@@ -1,5 +1,10 @@
 <template>
 	<view class="staff-login-page">
+		<!-- 返回按钮 -->
+		<view class="back-button" @tap="goBack">
+			<image class="back-icon" src="/static/Button.png" mode="aspectFit"></image>
+		</view>
+		
 		<!-- Header -->
 		<view class="header">
 			<text class="header-title">商家登录</text>
@@ -53,7 +58,19 @@ export default {
 			return this.username.trim().length > 0 && this.password.trim().length > 0 && !this.loading
 		}
 	},
-	methods: {
+		methods: {
+		goBack() {
+			// 返回上一页
+			uni.navigateBack({
+				delta: 1,
+				fail: () => {
+					// 如果无法返回，则跳转到登录页面
+					uni.redirectTo({
+						url: '/pages/login/login'
+					})
+				}
+			})
+		},
 		onUsernameInput(e) {
 			this.username = e.detail.value
 		},
@@ -142,6 +159,29 @@ export default {
 	min-height: 100vh;
 	background: #f9f9f9;
 	padding: 120rpx 48rpx 0;
+	position: relative;
+}
+
+/* 返回按钮 */
+.back-button {
+	position: fixed;
+	top: 88rpx;
+	left: 32rpx;
+	width: 80rpx;
+	height: 80rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100;
+	background: transparent;
+}
+
+.back-icon {
+	width: 60rpx;
+	height: 60rpx;
+	display: block;
+	background: transparent;
+	border: none;
 }
 
 .header {

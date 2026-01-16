@@ -23,7 +23,9 @@ const _sfc_main = {
       vip: {
         title: "普通用户",
         expireAt: "",
-        stats: { left: 0, bound: 0, points: 0 }
+        stats: { left: 0, bound: 0, points: 0 },
+        packageCategory: ""
+        // 当前生效卡的分类，用于判断是否显示具体次数
       },
       purchaseRecords: [],
       tab: "all",
@@ -33,15 +35,32 @@ const _sfc_main = {
       // 是否显示核销码弹窗
       currentVerifyOrder: null,
       // 当前要显示核销码的订单
-      qrCodeImage: ""
+      qrCodeImage: "",
       // 二维码图片数据
+      showInviteModal: false,
+      // 是否显示邀请码弹窗
+      inviteCode: "",
+      // 邀请码
+      currentInvitePaymentOrderId: null,
+      // 当前邀请关联的支付订单ID
+      inviteQrCodeImage: ""
+      // 邀请二维码图片
     };
   },
   computed: {
     filteredOrders() {
-      if (this.tab === "all")
+      if (this.tab === "all") {
         return this.orders;
-      return this.orders.filter((o) => o.status === this.tab);
+      } else if (this.tab === "pending") {
+        return this.orders.filter((o) => o.status === "pending");
+      } else if (this.tab === "done") {
+        return this.orders.filter((o) => o.status === "done");
+      } else if (this.tab === "cancelled") {
+        return this.orders.filter((o) => o.status === "cancelled");
+      } else if (this.tab === "no_show") {
+        return this.orders.filter((o) => o.status === "no_show");
+      }
+      return this.orders;
     },
     // 判断是否是普通用户（没有生效中的卡）
     isNormalUser() {
@@ -84,6 +103,30 @@ const _sfc_main = {
     this.loadPurchaseRecords();
     this.loadBookingOrders();
   },
+  // 微信分享功能
+  onShareAppMessage(options) {
+    common_vendor.index.__f__("log", "at pages/my/my.vue:355", "onShareAppMessage 被调用，options:", options);
+    common_vendor.index.__f__("log", "at pages/my/my.vue:356", "showInviteModal:", this.showInviteModal);
+    common_vendor.index.__f__("log", "at pages/my/my.vue:357", "inviteCode:", this.inviteCode);
+    if (this.showInviteModal && this.inviteCode) {
+      const sharePath = `/pages/invite/accept?code=${this.inviteCode}`;
+      common_vendor.index.__f__("log", "at pages/my/my.vue:362", "分享邀请码，路径:", sharePath);
+      return {
+        title: `邀请您加入城市森林氧舱会员，邀请码：${this.inviteCode}`,
+        path: sharePath,
+        imageUrl: ""
+        // 可以设置分享图片，留空则使用小程序默认图片
+        // 注意：imageUrl 必须是网络图片，不能是本地路径
+        // 如果需要自定义分享图片，可以上传到服务器或使用 CDN
+      };
+    }
+    common_vendor.index.__f__("log", "at pages/my/my.vue:374", "默认分享");
+    return {
+      title: "城市森林氧舱",
+      path: "/pages/index/index",
+      imageUrl: ""
+    };
+  },
   methods: {
     // 加载用户信息
     async loadUserInfo() {
@@ -101,11 +144,11 @@ const _sfc_main = {
               common_vendor.index.setStorageSync("userInfo", response.data);
             }
           } catch (error) {
-            common_vendor.index.__f__("log", "at pages/my/my.vue:305", "获取用户信息失败，使用本地存储:", error);
+            common_vendor.index.__f__("log", "at pages/my/my.vue:402", "获取用户信息失败，使用本地存储:", error);
           }
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:309", "加载用户信息错误:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:406", "加载用户信息错误:", error);
       }
     },
     // 更新用户信息显示
@@ -122,27 +165,6 @@ const _sfc_main = {
         this.user.phoneMasked = this.maskPhone(userInfo.phone);
       } else if (userInfo.phoneNumber) {
         this.user.phoneMasked = this.maskPhone(userInfo.phoneNumber);
-      }
-      if (!this.isNormalUser) {
-        if (userInfo.packageName) {
-          this.vip.title = userInfo.packageName;
-        }
-        if (userInfo.remainingVisits !== void 0 && userInfo.remainingVisits !== null) {
-          this.vip.stats.left = userInfo.remainingVisits;
-        }
-        if (userInfo.points !== void 0 && userInfo.points !== null) {
-          this.vip.stats.points = userInfo.points;
-        }
-        if (userInfo.memberExpireTime) {
-          const expireDate = new Date(userInfo.memberExpireTime);
-          const year = expireDate.getFullYear();
-          const month = String(expireDate.getMonth() + 1).padStart(2, "0");
-          const day = String(expireDate.getDate()).padStart(2, "0");
-          this.vip.expireAt = `${year}-${month}-${day}`;
-        }
-        if (userInfo.boundCount !== void 0 && userInfo.boundCount !== null) {
-          this.vip.stats.bound = userInfo.boundCount;
-        }
       }
     },
     // 手机号掩码处理
@@ -165,17 +187,123 @@ const _sfc_main = {
           this.purchaseRecords = response.data.filter((order) => order.status === "paid").map((order) => this.formatPurchaseRecord(order)).sort((a, b) => {
             return new Date(b.buyAt) - new Date(a.buyAt);
           });
-          if (this.isNormalUser) {
-            this.setNormalUserState();
-          }
+          this.updateVipFromActiveCard();
         } else {
           this.purchaseRecords = [];
           this.setNormalUserState();
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:405", "获取购卡记录失败:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:468", "获取购卡记录失败:", error);
         this.purchaseRecords = [];
         this.setNormalUserState();
+      }
+    },
+    // 从生效中的卡更新VIP信息
+    updateVipFromActiveCard() {
+      const now = /* @__PURE__ */ new Date();
+      now.setHours(0, 0, 0, 0);
+      const activeCards = this.purchaseRecords.filter((record) => {
+        if (record.status !== "生效中") {
+          return false;
+        }
+        if (record.cardStartDate && record.cardEndDate) {
+          const startDate = new Date(record.cardStartDate);
+          startDate.setHours(0, 0, 0, 0);
+          const endDate = new Date(record.cardEndDate);
+          endDate.setHours(0, 0, 0, 0);
+          return now >= startDate && now <= endDate;
+        } else if (record.cardEndDate) {
+          const endDate = new Date(record.cardEndDate);
+          endDate.setHours(0, 0, 0, 0);
+          return now <= endDate;
+        } else if (record.cardStartDate) {
+          const startDate = new Date(record.cardStartDate);
+          startDate.setHours(0, 0, 0, 0);
+          return now >= startDate;
+        }
+        return true;
+      });
+      if (activeCards.length === 0) {
+        this.setNormalUserState();
+        return;
+      }
+      const activeCard = activeCards.sort((a, b) => {
+        if (a.cardEndDate && b.cardEndDate) {
+          const dateA = new Date(a.cardEndDate);
+          const dateB = new Date(b.cardEndDate);
+          if (dateA.getTime() !== dateB.getTime()) {
+            return dateB.getTime() - dateA.getTime();
+          }
+        } else if (a.cardEndDate) {
+          return -1;
+        } else if (b.cardEndDate) {
+          return 1;
+        }
+        return new Date(b.buyAt) - new Date(a.buyAt);
+      })[0];
+      this.vip.title = activeCard.name;
+      this.vip.expireAt = activeCard.cardEndDate || "";
+      this.vip.packageCategory = activeCard.packageCategory || "";
+      if (activeCard.packageCategory === "家庭/次卡") {
+        if (activeCard.remainingTimes !== void 0 && activeCard.remainingTimes !== null) {
+          this.vip.stats.left = activeCard.remainingTimes;
+        } else if (activeCard.totalTimes !== void 0 && activeCard.totalTimes !== null) {
+          const consumed = activeCard.consumedTimes || 0;
+          this.vip.stats.left = Math.max(0, activeCard.totalTimes - consumed);
+        } else {
+          common_vendor.index.__f__("warn", "at pages/my/my.vue:547", "家庭次卡没有剩余次数信息，activeCard:", activeCard);
+          this.vip.stats.left = 0;
+        }
+        this.loadUserStatsForPointsAndBound();
+      } else {
+        this.loadUserStats();
+      }
+    },
+    // 加载用户统计数据（剩余次数、积分等）
+    async loadUserStats() {
+      const token = common_vendor.index.getStorageSync("token");
+      if (!token) {
+        return;
+      }
+      try {
+        const response = await api_request.api.user.getInfo();
+        if (response.code === 200 && response.data) {
+          const userInfo = response.data;
+          if (this.vip.packageCategory !== "家庭/次卡") {
+            if (userInfo.remainingVisits !== void 0 && userInfo.remainingVisits !== null) {
+              this.vip.stats.left = userInfo.remainingVisits;
+            }
+          }
+          if (userInfo.points !== void 0 && userInfo.points !== null) {
+            this.vip.stats.points = userInfo.points;
+          }
+          if (userInfo.boundCount !== void 0 && userInfo.boundCount !== null) {
+            this.vip.stats.bound = userInfo.boundCount;
+          }
+        }
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/my/my.vue:584", "获取用户统计数据失败:", error);
+      }
+    },
+    // 只加载积分和已绑定数量（不更新剩余次数）
+    async loadUserStatsForPointsAndBound() {
+      const token = common_vendor.index.getStorageSync("token");
+      if (!token) {
+        return;
+      }
+      try {
+        const response = await api_request.api.user.getInfo();
+        if (response.code === 200 && response.data) {
+          const userInfo = response.data;
+          if (userInfo.points !== void 0 && userInfo.points !== null) {
+            this.vip.stats.points = userInfo.points;
+          }
+          if (userInfo.boundCount !== void 0 && userInfo.boundCount !== null) {
+            this.vip.stats.bound = userInfo.boundCount;
+          }
+        }
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/my/my.vue:608", "获取用户统计数据失败:", error);
       }
     },
     // 设置为普通用户状态
@@ -185,6 +313,7 @@ const _sfc_main = {
       this.vip.stats.left = 0;
       this.vip.stats.bound = 0;
       this.vip.stats.points = 0;
+      this.vip.packageCategory = "";
     },
     // 格式化购卡记录
     formatPurchaseRecord(order) {
@@ -217,55 +346,121 @@ const _sfc_main = {
         const day = String(endDate.getDate()).padStart(2, "0");
         formattedEndDate = `${year}-${month}-${day}`;
       }
-      let status = "已过期";
+      let status = order.cardStatus || "已完成";
       let statusPillClass = "pill-gray";
       let statusTextClass = "pill-text-gray";
-      if (order.status === "paid") {
-        const now = /* @__PURE__ */ new Date();
-        now.setHours(0, 0, 0, 0);
-        if (order.cardStartDate) {
-          const startDate = new Date(order.cardStartDate);
-          startDate.setHours(0, 0, 0, 0);
-          if (now < startDate) {
-            status = "未生效";
-            statusPillClass = "pill-warm";
-            statusTextClass = "pill-text-warm";
+      if (status === "未生效") {
+        statusPillClass = "pill-warm";
+        statusTextClass = "pill-text-warm";
+      } else if (status === "生效中") {
+        statusPillClass = "pill-green";
+        statusTextClass = "pill-text-green";
+      } else if (status === "已完成") {
+        statusPillClass = "pill-gray";
+        statusTextClass = "pill-text-gray";
+      } else {
+        if (order.status === "paid") {
+          const now = /* @__PURE__ */ new Date();
+          now.setHours(0, 0, 0, 0);
+          const isTimesCard = order.packageCategory === "家庭/次卡";
+          if (isTimesCard && order.remainingTimes !== void 0 && order.remainingTimes !== null) {
+            if (order.remainingTimes <= 0) {
+              status = "已完成";
+              statusPillClass = "pill-gray";
+              statusTextClass = "pill-text-gray";
+            } else {
+              if (order.cardStartDate) {
+                const startDate = new Date(order.cardStartDate);
+                startDate.setHours(0, 0, 0, 0);
+                if (now < startDate) {
+                  status = "未生效";
+                  statusPillClass = "pill-warm";
+                  statusTextClass = "pill-text-warm";
+                } else {
+                  if (order.cardEndDate) {
+                    const endDate = new Date(order.cardEndDate);
+                    endDate.setHours(0, 0, 0, 0);
+                    if (now <= endDate) {
+                      status = "生效中";
+                      statusPillClass = "pill-green";
+                      statusTextClass = "pill-text-green";
+                    } else {
+                      status = "已完成";
+                      statusPillClass = "pill-gray";
+                      statusTextClass = "pill-text-gray";
+                    }
+                  } else {
+                    status = "生效中";
+                    statusPillClass = "pill-green";
+                    statusTextClass = "pill-text-green";
+                  }
+                }
+              } else {
+                if (order.cardEndDate) {
+                  const endDate = new Date(order.cardEndDate);
+                  endDate.setHours(0, 0, 0, 0);
+                  if (now <= endDate) {
+                    status = "生效中";
+                    statusPillClass = "pill-green";
+                    statusTextClass = "pill-text-green";
+                  } else {
+                    status = "已完成";
+                    statusPillClass = "pill-gray";
+                    statusTextClass = "pill-text-gray";
+                  }
+                } else {
+                  status = "生效中";
+                  statusPillClass = "pill-green";
+                  statusTextClass = "pill-text-green";
+                }
+              }
+            }
           } else {
-            if (order.cardEndDate) {
-              const endDate = new Date(order.cardEndDate);
-              endDate.setHours(0, 0, 0, 0);
-              if (now <= endDate) {
+            if (order.cardStartDate) {
+              const startDate = new Date(order.cardStartDate);
+              startDate.setHours(0, 0, 0, 0);
+              if (now < startDate) {
+                status = "未生效";
+                statusPillClass = "pill-warm";
+                statusTextClass = "pill-text-warm";
+              } else {
+                if (order.cardEndDate) {
+                  const endDate = new Date(order.cardEndDate);
+                  endDate.setHours(0, 0, 0, 0);
+                  if (now <= endDate) {
+                    status = "生效中";
+                    statusPillClass = "pill-green";
+                    statusTextClass = "pill-text-green";
+                  } else {
+                    status = "已完成";
+                    statusPillClass = "pill-gray";
+                    statusTextClass = "pill-text-gray";
+                  }
+                } else {
+                  status = "生效中";
+                  statusPillClass = "pill-green";
+                  statusTextClass = "pill-text-green";
+                }
+              }
+            } else {
+              if (order.cardEndDate) {
+                const endDate = new Date(order.cardEndDate);
+                endDate.setHours(0, 0, 0, 0);
+                if (now <= endDate) {
+                  status = "生效中";
+                  statusPillClass = "pill-green";
+                  statusTextClass = "pill-text-green";
+                } else {
+                  status = "已完成";
+                  statusPillClass = "pill-gray";
+                  statusTextClass = "pill-text-gray";
+                }
+              } else {
                 status = "生效中";
                 statusPillClass = "pill-green";
                 statusTextClass = "pill-text-green";
-              } else {
-                status = "已过期";
-                statusPillClass = "pill-gray";
-                statusTextClass = "pill-text-gray";
               }
-            } else {
-              status = "生效中";
-              statusPillClass = "pill-green";
-              statusTextClass = "pill-text-green";
             }
-          }
-        } else {
-          if (order.cardEndDate) {
-            const endDate = new Date(order.cardEndDate);
-            endDate.setHours(0, 0, 0, 0);
-            if (now <= endDate) {
-              status = "生效中";
-              statusPillClass = "pill-green";
-              statusTextClass = "pill-text-green";
-            } else {
-              status = "已过期";
-              statusPillClass = "pill-gray";
-              statusTextClass = "pill-text-gray";
-            }
-          } else {
-            status = "生效中";
-            statusPillClass = "pill-green";
-            statusTextClass = "pill-text-green";
           }
         }
       }
@@ -288,8 +483,18 @@ const _sfc_main = {
         statusTextClass,
         packageCategory: order.packageCategory || "",
         // 保存套餐分类
-        packageId: order.packageId
+        packageId: order.packageId,
         // 保存套餐ID
+        paymentOrderId: order.id,
+        // 保存支付订单ID，用于生成邀请码
+        id: order.id,
+        // 同时保存 id，作为备用
+        remainingTimes: order.remainingTimes,
+        // 剩余次数（家庭次卡）
+        totalTimes: order.totalTimes,
+        // 总次数（家庭次卡）
+        consumedTimes: order.consumedTimes
+        // 已消费次数（家庭次卡）
       };
     },
     // 加载预约订单
@@ -309,7 +514,7 @@ const _sfc_main = {
           this.orders = [];
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:575", "获取预约订单失败:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:848", "获取预约订单失败:", error);
         this.orders = [];
       }
     },
@@ -325,18 +530,35 @@ const _sfc_main = {
       let statusBadgeClass = "badge-warm";
       let statusTextClass = "badge-warm-text";
       let showVerify = false;
+      let showCancel = false;
       if (order.status === "completed") {
         status = "done";
         statusText = "已完成";
         statusBadgeClass = "badge-gray";
         statusTextClass = "badge-gray-text";
         showVerify = false;
+        showCancel = false;
+      } else if (order.status === "cancelled") {
+        status = "cancelled";
+        statusText = "已取消";
+        statusBadgeClass = "badge-gray";
+        statusTextClass = "badge-gray-text";
+        showVerify = false;
+        showCancel = false;
+      } else if (order.status === "no_show") {
+        status = "no_show";
+        statusText = "未到店";
+        statusBadgeClass = "badge-gray";
+        statusTextClass = "badge-gray-text";
+        showVerify = false;
+        showCancel = false;
       } else if (order.status === "pending") {
         status = "pending";
         statusText = "待核销";
         statusBadgeClass = "badge-warm";
         statusTextClass = "badge-warm-text";
         showVerify = true;
+        showCancel = true;
       }
       return {
         cabin,
@@ -348,6 +570,8 @@ const _sfc_main = {
         statusBadgeClass,
         statusTextClass,
         showVerify,
+        showCancel,
+        // 是否显示取消按钮
         orderId: order.id,
         // 保存订单ID，用于核销码展示
         orderNo: order.orderNo || order.id
@@ -365,6 +589,7 @@ const _sfc_main = {
     onInvite() {
       const now = /* @__PURE__ */ new Date();
       now.setHours(0, 0, 0, 0);
+      common_vendor.index.__f__("log", "at pages/my/my.vue:934", "点击邀请，购卡记录:", this.purchaseRecords);
       const activeCard = this.purchaseRecords.find((record) => {
         if (record.status !== "生效中") {
           return false;
@@ -387,14 +612,128 @@ const _sfc_main = {
         return true;
       });
       if (!activeCard) {
+        common_vendor.index.__f__("log", "at pages/my/my.vue:965", "未找到生效中的卡");
         common_vendor.index.showToast({ title: "该卡无法邀请亲友", icon: "none" });
         return;
       }
+      common_vendor.index.__f__("log", "at pages/my/my.vue:970", "找到生效中的卡:", activeCard);
       if (activeCard.packageCategory !== "多人尊享") {
+        common_vendor.index.__f__("log", "at pages/my/my.vue:974", "不是多人尊享卡，分类:", activeCard.packageCategory);
         common_vendor.index.showToast({ title: "该卡无法邀请亲友", icon: "none" });
         return;
       }
-      common_vendor.index.showToast({ title: "邀请功能待接入", icon: "none" });
+      common_vendor.index.__f__("log", "at pages/my/my.vue:980", "准备生成邀请码，activeCard:", activeCard);
+      this.generateInviteCode(activeCard);
+    },
+    // 生成邀请码
+    async generateInviteCode(activeCard) {
+      try {
+        common_vendor.index.showLoading({ title: "生成邀请码中...", mask: true });
+        const token = common_vendor.index.getStorageSync("token");
+        if (!token) {
+          common_vendor.index.hideLoading();
+          common_vendor.index.showToast({ title: "请先登录", icon: "none" });
+          return;
+        }
+        const paymentOrderId = activeCard.paymentOrderId || activeCard.id;
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1000", "生成邀请码 - activeCard:", activeCard);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1001", "生成邀请码 - paymentOrderId:", paymentOrderId);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1002", "生成邀请码 - activeCard.paymentOrderId:", activeCard.paymentOrderId);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1003", "生成邀请码 - activeCard.id:", activeCard.id);
+        if (!paymentOrderId) {
+          common_vendor.index.hideLoading();
+          common_vendor.index.__f__("error", "at pages/my/my.vue:1007", "无法获取订单ID，activeCard:", JSON.stringify(activeCard, null, 2));
+          common_vendor.index.showToast({ title: "无法获取订单信息", icon: "none" });
+          return;
+        }
+        const response = await api_request.api.invitation.generate(paymentOrderId);
+        common_vendor.index.hideLoading();
+        if (response.code === 200 && response.data) {
+          this.inviteCode = response.data.inviteCode;
+          this.currentInvitePaymentOrderId = paymentOrderId;
+          this.showInviteModal = true;
+          this.$nextTick(() => {
+            setTimeout(() => {
+              this.generateInviteQRCode(this.inviteCode);
+            }, 300);
+          });
+        } else {
+          common_vendor.index.showToast({
+            title: response.message || "生成邀请码失败",
+            icon: "none"
+          });
+        }
+      } catch (error) {
+        common_vendor.index.hideLoading();
+        common_vendor.index.__f__("error", "at pages/my/my.vue:1036", "生成邀请码失败:", error);
+        common_vendor.index.showToast({
+          title: "生成邀请码失败，请重试",
+          icon: "none"
+        });
+      }
+    },
+    // 生成邀请二维码
+    generateInviteQRCode(code) {
+      this.$nextTick(() => {
+        setTimeout(() => {
+          try {
+            const ctx = common_vendor.index.createCanvasContext("invite-qrcode-canvas", this);
+            const qrContent = code;
+            const qr = new common_vendor.UQRCode({
+              canvasContext: ctx,
+              text: qrContent,
+              // 使用邀请码作为二维码内容
+              size: 300,
+              margin: 10,
+              backgroundColor: "#ffffff",
+              foregroundColor: "#000000",
+              errorCorrectLevel: common_vendor.UQRCode.errorCorrectLevel.M
+            });
+            qr.make();
+            qr.drawCanvas().then(() => {
+              setTimeout(() => {
+                common_vendor.index.canvasToTempFilePath({
+                  canvasId: "invite-qrcode-canvas",
+                  success: (canvasRes) => {
+                    this.inviteQrCodeImage = canvasRes.tempFilePath;
+                  },
+                  fail: (err) => {
+                    common_vendor.index.__f__("error", "at pages/my/my.vue:1079", "导出邀请二维码失败:", err);
+                  }
+                }, this);
+              }, 50);
+            }).catch((err) => {
+              common_vendor.index.__f__("error", "at pages/my/my.vue:1084", "绘制邀请二维码失败:", err);
+            });
+          } catch (error) {
+            common_vendor.index.__f__("error", "at pages/my/my.vue:1087", "生成邀请二维码异常:", error);
+          }
+        }, 200);
+      });
+    },
+    // 复制邀请码
+    copyInviteCode() {
+      common_vendor.index.setClipboardData({
+        data: this.inviteCode,
+        success: () => {
+          common_vendor.index.showToast({
+            title: "邀请码已复制",
+            icon: "success"
+          });
+        }
+      });
+    },
+    // 分享邀请码给微信好友（已废弃，改用 button 的 open-type="share"）
+    // 当用户点击分享按钮时，会自动触发 onShareAppMessage 生命周期函数
+    // shareInviteCode() {
+    // 	// 不再需要此方法
+    // },
+    // 关闭邀请码弹窗
+    closeInviteModal() {
+      this.showInviteModal = false;
+      this.inviteCode = "";
+      this.currentInvitePaymentOrderId = null;
+      this.inviteQrCodeImage = "";
     },
     onShowVerifyCode(order) {
       if (order && (order.orderId || order.orderNo)) {
@@ -431,13 +770,13 @@ const _sfc_main = {
                     this.qrCodeImage = canvasRes.tempFilePath;
                   },
                   fail: (err) => {
-                    common_vendor.index.__f__("error", "at pages/my/my.vue:732", "导出 canvas 失败:", err);
+                    common_vendor.index.__f__("error", "at pages/my/my.vue:1163", "导出 canvas 失败:", err);
                     this.qrCodeImage = "";
                   }
                 }, this);
               }, 50);
             }).catch((err) => {
-              common_vendor.index.__f__("error", "at pages/my/my.vue:738", "绘制二维码失败:", err);
+              common_vendor.index.__f__("error", "at pages/my/my.vue:1169", "绘制二维码失败:", err);
               setTimeout(() => {
                 common_vendor.index.canvasToTempFilePath({
                   canvasId: "qrcode-canvas",
@@ -445,14 +784,14 @@ const _sfc_main = {
                     this.qrCodeImage = canvasRes.tempFilePath;
                   },
                   fail: (canvasErr) => {
-                    common_vendor.index.__f__("error", "at pages/my/my.vue:747", "导出 canvas 失败:", canvasErr);
+                    common_vendor.index.__f__("error", "at pages/my/my.vue:1178", "导出 canvas 失败:", canvasErr);
                     this.qrCodeImage = "";
                   }
                 }, this);
               }, 50);
             });
           } catch (error) {
-            common_vendor.index.__f__("error", "at pages/my/my.vue:754", "生成二维码异常:", error);
+            common_vendor.index.__f__("error", "at pages/my/my.vue:1185", "生成二维码异常:", error);
             this.qrCodeImage = "";
           }
         }, 100);
@@ -462,6 +801,45 @@ const _sfc_main = {
       this.showVerifyModal = false;
       this.currentVerifyOrder = null;
       this.qrCodeImage = "";
+    },
+    // 取消预约
+    async onCancelBooking(order) {
+      if (!order || !order.orderId) {
+        common_vendor.index.showToast({ title: "订单信息错误", icon: "none" });
+        return;
+      }
+      common_vendor.index.showModal({
+        title: "确认取消",
+        content: "确定要取消该预约吗？",
+        success: async (res) => {
+          if (res.confirm) {
+            try {
+              common_vendor.index.showLoading({ title: "取消中...", mask: true });
+              const response = await api_request.api.booking.cancel(order.orderId);
+              common_vendor.index.hideLoading();
+              if (response.code === 200) {
+                common_vendor.index.showToast({
+                  title: "取消预约成功",
+                  icon: "success"
+                });
+                await this.loadBookingOrders();
+              } else {
+                common_vendor.index.showToast({
+                  title: response.message || "取消预约失败",
+                  icon: "none"
+                });
+              }
+            } catch (error) {
+              common_vendor.index.hideLoading();
+              common_vendor.index.__f__("error", "at pages/my/my.vue:1232", "取消预约失败:", error);
+              common_vendor.index.showToast({
+                title: "网络错误，请稍后重试",
+                icon: "none"
+              });
+            }
+          }
+        }
+      });
     }
   }
 };
@@ -485,7 +863,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, !$options.isNormalUser ? {
     k: common_vendor.t($data.vip.expireAt)
   } : {}, {
-    l: common_vendor.t($data.vip.stats.left),
+    l: common_vendor.t($data.vip.packageCategory === "家庭/次卡" ? $data.vip.stats.left : "∞"),
     m: common_vendor.t($data.vip.stats.bound),
     n: common_vendor.t($data.vip.stats.points),
     o: $data.purchaseRecords.length === 0
@@ -527,9 +905,17 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     y: $data.tab === "done"
   }, $data.tab === "done" ? {} : {}, {
     z: common_vendor.o(($event) => $options.setTab("done")),
-    A: $data.orders.length === 0
+    A: $data.tab === "cancelled" ? 1 : "",
+    B: $data.tab === "cancelled"
+  }, $data.tab === "cancelled" ? {} : {}, {
+    C: common_vendor.o(($event) => $options.setTab("cancelled")),
+    D: $data.tab === "no_show" ? 1 : "",
+    E: $data.tab === "no_show"
+  }, $data.tab === "no_show" ? {} : {}, {
+    F: common_vendor.o(($event) => $options.setTab("no_show")),
+    G: $data.orders.length === 0
   }, $data.orders.length === 0 ? {} : {
-    B: common_vendor.f($options.filteredOrders, (order, idx, i0) => {
+    H: common_vendor.f($options.filteredOrders, (order, idx, i0) => {
       return common_vendor.e({
         a: common_vendor.t(order.cabin),
         b: common_vendor.t(order.date),
@@ -538,36 +924,56 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         e: common_vendor.n(order.statusBadgeClass),
         f: common_vendor.t(order.time),
         g: common_vendor.t(order.site),
-        h: order.showVerify
-      }, order.showVerify ? {
-        i: $data.assets.iconQr,
-        j: common_vendor.o(($event) => $options.onShowVerifyCode(order), idx)
+        h: order.showVerify || order.showCancel
+      }, order.showVerify || order.showCancel ? common_vendor.e({
+        i: order.showCancel
+      }, order.showCancel ? {
+        j: common_vendor.o(($event) => $options.onCancelBooking(order), idx)
       } : {}, {
-        k: idx
+        k: order.showVerify
+      }, order.showVerify ? {
+        l: $data.assets.iconQr,
+        m: common_vendor.o(($event) => $options.onShowVerifyCode(order), idx)
+      } : {}) : {}, {
+        n: idx
       });
     }),
-    C: $data.assets.iconClock,
-    D: $data.assets.iconLocation
+    I: $data.assets.iconClock,
+    J: $data.assets.iconLocation
   }, {
-    E: $data.showVerifyModal
+    K: $data.showVerifyModal
   }, $data.showVerifyModal ? common_vendor.e({
-    F: common_vendor.o((...args) => $options.closeVerifyModal && $options.closeVerifyModal(...args)),
-    G: $data.qrCodeImage
+    L: common_vendor.o((...args) => $options.closeVerifyModal && $options.closeVerifyModal(...args)),
+    M: $data.qrCodeImage
   }, $data.qrCodeImage ? {
-    H: $data.qrCodeImage
+    N: $data.qrCodeImage
   } : {
-    I: common_vendor.t(((_a = $data.currentVerifyOrder) == null ? void 0 : _a.orderNo) || ((_b = $data.currentVerifyOrder) == null ? void 0 : _b.orderId))
+    O: common_vendor.t(((_a = $data.currentVerifyOrder) == null ? void 0 : _a.orderNo) || ((_b = $data.currentVerifyOrder) == null ? void 0 : _b.orderId))
   }, {
-    J: common_vendor.t(((_c = $data.currentVerifyOrder) == null ? void 0 : _c.orderNo) || ((_d = $data.currentVerifyOrder) == null ? void 0 : _d.orderId)),
-    K: common_vendor.o(() => {
+    P: common_vendor.t(((_c = $data.currentVerifyOrder) == null ? void 0 : _c.orderNo) || ((_d = $data.currentVerifyOrder) == null ? void 0 : _d.orderId)),
+    Q: common_vendor.o(() => {
     }),
-    L: common_vendor.o((...args) => $options.closeVerifyModal && $options.closeVerifyModal(...args))
+    R: common_vendor.o((...args) => $options.closeVerifyModal && $options.closeVerifyModal(...args))
   }) : {}, {
-    M: common_vendor.p({
+    S: $data.showInviteModal
+  }, $data.showInviteModal ? common_vendor.e({
+    T: common_vendor.o((...args) => $options.closeInviteModal && $options.closeInviteModal(...args)),
+    U: common_vendor.t($data.inviteCode),
+    V: common_vendor.o((...args) => $options.copyInviteCode && $options.copyInviteCode(...args)),
+    W: $data.inviteQrCodeImage
+  }, $data.inviteQrCodeImage ? {
+    X: $data.inviteQrCodeImage
+  } : {}, {
+    Y: common_vendor.o(() => {
+    }),
+    Z: common_vendor.o((...args) => $options.closeInviteModal && $options.closeInviteModal(...args))
+  }) : {}, {
+    aa: common_vendor.p({
       current: 3
     })
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-2f1ef635"]]);
+_sfc_main.__runtimeHooks = 2;
 wx.createPage(MiniProgramPage);
 //# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/my/my.js.map

@@ -44,6 +44,34 @@
         </rollingPolicy>
     </appender>
 
+    <!-- 定时任务日志文件输出（按天分割） -->
+    <appender name="SCHEDULED_TASK_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/scheduled-task.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/scheduled-task.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>90</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 预约相关操作日志文件输出（按天分割） -->
+    <appender name="BOOKING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/booking.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/booking.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>90</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
     <!-- 项目包日志级别 -->
     <logger name="com.oxygen.capsule" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
@@ -72,6 +100,24 @@
     <logger name="org.springframework.transaction" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
+    </logger>
+
+    <!-- 定时任务日志 -->
+    <logger name="com.oxygen.capsule.task.CardStatusUpdateTask" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="SCHEDULED_TASK_FILE"/>
+    </logger>
+
+    <!-- 未到店定时任务日志 -->
+    <logger name="com.oxygen.capsule.task.NoShowUpdateTask" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="SCHEDULED_TASK_FILE"/>
+    </logger>
+
+    <!-- 预约相关操作日志 -->
+    <logger name="com.oxygen.capsule.controller.BookingController" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="BOOKING_FILE"/>
     </logger>
 
     <!-- Spring Web 日志 -->

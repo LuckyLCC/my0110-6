@@ -3,6 +3,28 @@
 	min-height: 100vh;
 	background: #f9f9f9;
 	padding: 120rpx 48rpx 0;
+	position: relative;
+}
+
+/* 返回按钮 */
+.back-button.data-v-abc7fc9c {
+	position: fixed;
+	top: 88rpx;
+	left: 32rpx;
+	width: 80rpx;
+	height: 80rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100;
+	background: transparent;
+}
+.back-icon.data-v-abc7fc9c {
+	width: 60rpx;
+	height: 60rpx;
+	display: block;
+	background: transparent;
+	border: none;
 }
 .header.data-v-abc7fc9c {
 	display: flex;

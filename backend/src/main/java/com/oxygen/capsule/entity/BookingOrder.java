@@ -18,6 +18,9 @@ public class BookingOrder {
     @Column(name = "user_id", nullable = false) // 使用ID关联，不使用外键约束
     private Long userId;
 
+    @Column(name = "payment_order_id") // 关联的购卡记录ID（如果是使用会员卡预约）
+    private Long paymentOrderId;
+
     @Column(name = "date", nullable = false) // 预约日期
     private String date; // 格式：YYYY-MM-DD
 
@@ -36,8 +39,8 @@ public class BookingOrder {
     @Column(name = "original_price")
     private Double originalPrice;
 
-    @Column(name = "status", nullable = false) // 待核销、已完成
-    private String status = "pending"; // pending, completed
+    @Column(name = "status", nullable = false) // 待核销、已完成、已取消
+    private String status = "pending"; // pending, completed, cancelled
 
     @Column(name = "payment_status")
     private String paymentStatus = "unpaid"; // unpaid, paid

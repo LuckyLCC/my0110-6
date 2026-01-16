@@ -55,6 +55,13 @@
 				"navigationBarTitleText": "商家登录",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/invite/accept",
+			"style": {
+				"navigationBarTitleText": "接受邀请",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {

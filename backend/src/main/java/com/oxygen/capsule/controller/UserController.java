@@ -32,8 +32,16 @@ public class UserController {
 
     // 用户登录/注册接口（真实微信登录）
     @PostMapping("/login")
-    public Result<Map<String, Object>> login(@RequestBody Map<String, String> params) {
-        String code = params.get("code");
+    public Result<Map<String, Object>> login(@RequestBody Map<String, Object> params) {
+        String code = (String) params.get("code");
+        String nickname = (String) params.get("nickname");
+        String avatarUrl = (String) params.get("avatarUrl");
+        
+        // 调试日志
+        System.out.println("========== 用户登录 ==========");
+        System.out.println("收到参数 - code: " + (code != null ? "已提供" : "未提供"));
+        System.out.println("收到参数 - nickname: " + nickname);
+        System.out.println("收到参数 - avatarUrl: " + (avatarUrl != null ? "已提供" : "未提供"));
         
         if (code == null || code.trim().isEmpty()) {
             return Result.error("缺少登录凭证code");
@@ -50,14 +58,36 @@ public class UserController {
             
             // 查询或创建用户
             User user = userService.findByOpenid(openid);
+            boolean isNewUser = false;
             if (user == null) {
                 // 创建新用户
+                isNewUser = true;
                 user = new User();
                 user.setOpenid(openid);
-                user.setNickname("微信用户" + System.currentTimeMillis());
                 user.setCreatedAt(LocalDateTime.now());
                 user.setUpdatedAt(LocalDateTime.now());
-                user = userService.save(user);
+            }
+            
+            // 更新或设置用户昵称和头像（如果提供了）
+            // 对于新用户：如果提供了昵称就使用，否则使用默认值
+            // 对于老用户：如果提供了昵称就更新（即使原来有昵称也更新，因为可能是用户重新授权）
+            String oldNickname = user.getNickname();
+            if (nickname != null && !nickname.trim().isEmpty()) {
+                user.setNickname(nickname);
+                System.out.println("设置用户昵称: " + nickname + (isNewUser ? " (新用户)" : " (老用户，原昵称: " + oldNickname + ")"));
+            } else if (isNewUser) {
+                // 新用户且没有提供昵称，使用默认值
+                String defaultNickname = "微信用户" + System.currentTimeMillis();
+                user.setNickname(defaultNickname);
+                System.out.println("新用户未提供昵称，使用默认值: " + defaultNickname);
+            } else {
+                System.out.println("老用户未提供昵称，保持原有昵称: " + oldNickname);
+            }
+            // 注意：老用户如果没有提供昵称，保持原有昵称不变
+            
+            if (avatarUrl != null && !avatarUrl.trim().isEmpty()) {
+                user.setAvatarUrl(avatarUrl);
+                System.out.println("设置用户头像: " + avatarUrl);
             }
             
             // 更新用户登录时间

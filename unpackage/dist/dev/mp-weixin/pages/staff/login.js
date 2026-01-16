@@ -1,6 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const api_request = require("../../api/request.js");
+const common_assets = require("../../common/assets.js");
 const _sfc_main = {
   data() {
     return {
@@ -15,6 +16,16 @@ const _sfc_main = {
     }
   },
   methods: {
+    goBack() {
+      common_vendor.index.navigateBack({
+        delta: 1,
+        fail: () => {
+          common_vendor.index.redirectTo({
+            url: "/pages/login/login"
+          });
+        }
+      });
+    },
     onUsernameInput(e) {
       this.username = e.detail.value;
     },
@@ -73,7 +84,7 @@ const _sfc_main = {
           });
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/staff/login.vue:126", "商家登录错误:", error);
+        common_vendor.index.__f__("error", "at pages/staff/login.vue:143", "商家登录错误:", error);
         common_vendor.index.hideLoading();
         common_vendor.index.showToast({
           title: "网络错误，请重试",
@@ -87,13 +98,15 @@ const _sfc_main = {
 };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
-    a: common_vendor.o([($event) => $data.username = $event.detail.value, (...args) => $options.onUsernameInput && $options.onUsernameInput(...args)]),
-    b: $data.username,
-    c: common_vendor.o([($event) => $data.password = $event.detail.value, (...args) => $options.onPasswordInput && $options.onPasswordInput(...args)]),
-    d: common_vendor.o((...args) => $options.handleLogin && $options.handleLogin(...args)),
-    e: $data.password,
-    f: !$options.canLogin ? 1 : "",
-    g: common_vendor.o((...args) => $options.handleLogin && $options.handleLogin(...args))
+    a: common_assets._imports_0,
+    b: common_vendor.o((...args) => $options.goBack && $options.goBack(...args)),
+    c: common_vendor.o([($event) => $data.username = $event.detail.value, (...args) => $options.onUsernameInput && $options.onUsernameInput(...args)]),
+    d: $data.username,
+    e: common_vendor.o([($event) => $data.password = $event.detail.value, (...args) => $options.onPasswordInput && $options.onPasswordInput(...args)]),
+    f: common_vendor.o((...args) => $options.handleLogin && $options.handleLogin(...args)),
+    g: $data.password,
+    h: !$options.canLogin ? 1 : "",
+    i: common_vendor.o((...args) => $options.handleLogin && $options.handleLogin(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-abc7fc9c"]]);

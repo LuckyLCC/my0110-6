@@ -42,19 +42,21 @@ CREATE TABLE IF NOT EXISTS booking_orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_no VARCHAR(50) UNIQUE NOT NULL COMMENT '订单号',
     user_id BIGINT NOT NULL COMMENT '用户ID',
+    payment_order_id BIGINT COMMENT '关联的购卡记录ID（如果是使用会员卡预约）',
     date DATE NOT NULL COMMENT '预约日期',
     time_slot VARCHAR(50) NOT NULL COMMENT '时间段 HH:mm-HH:mm',
     cabin_name VARCHAR(50) NOT NULL COMMENT '舱室名称 如：1号舱',
     seat_name VARCHAR(50) NOT NULL COMMENT '座位名称 如：A座',
     price DECIMAL(10,2) NOT NULL COMMENT '价格',
     original_price DECIMAL(10,2) COMMENT '原价',
-    status VARCHAR(20) DEFAULT 'pending' COMMENT '状态: pending待核销, completed已完成',
+    status VARCHAR(20) DEFAULT 'pending' COMMENT '状态: pending待核销, completed已完成, cancelled已取消',
     payment_status VARCHAR(20) DEFAULT 'unpaid' COMMENT '支付状态: unpaid未支付, paid已支付',
     payment_method VARCHAR(50) COMMENT '支付方式',
     payment_time DATETIME COMMENT '支付时间',
     consume_time DATETIME COMMENT '消费时间',
     created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL
+    updated_at DATETIME NOT NULL,
+    INDEX idx_payment_order_id (payment_order_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='预约订单表';
 
 -- 每日访问记录表
@@ -83,6 +85,8 @@ CREATE TABLE IF NOT EXISTS payment_orders (
     card_start_date DATETIME COMMENT '卡开始日期',
     card_end_date DATETIME COMMENT '卡到期日期',
     transaction_type VARCHAR(10) DEFAULT 'NEW' COMMENT '交易类型: NEW-新开卡, RENEW-续费',
+    card_status VARCHAR(20) DEFAULT '未生效' COMMENT '卡状态: 未生效, 生效中, 已完成',
+    remaining_times INT COMMENT '剩余次数（仅次卡有效，其他卡种为NULL）',
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='支付订单表';
@@ -118,3 +122,21 @@ CREATE TABLE IF NOT EXISTS staffs (
 -- 创建商家表索引
 CREATE INDEX idx_staffs_username ON staffs(username);
 CREATE INDEX idx_staffs_status ON staffs(status);
+
+-- 邀请关系表
+CREATE TABLE IF NOT EXISTS invitations (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    inviter_id BIGINT NOT NULL COMMENT '邀请人ID',
+    invitee_id BIGINT COMMENT '被邀请人ID（接受邀请后填充）',
+    payment_order_id BIGINT NOT NULL COMMENT '关联的支付订单ID',
+    invite_code VARCHAR(50) UNIQUE NOT NULL COMMENT '邀请码',
+    status VARCHAR(20) DEFAULT 'pending' COMMENT '状态: pending-待接受, accepted-已接受, expired-已过期',
+    created_at DATETIME NOT NULL,
+    accepted_at DATETIME COMMENT '接受邀请时间',
+    expired_at DATETIME COMMENT '过期时间（可选，默认30天）',
+    INDEX idx_inviter_id (inviter_id),
+    INDEX idx_invitee_id (invitee_id),
+    INDEX idx_invite_code (invite_code),
+    INDEX idx_payment_order_id (payment_order_id),
+    INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='邀请关系表';

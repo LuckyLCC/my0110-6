@@ -16,7 +16,7 @@ const _sfc_main = {
       // NEW-新开卡, RENEW-续费
       orderId: null,
       icons: {
-        back: "https://www.figma.com/api/mcp/asset/6e0ab730-69c1-4a8c-9c93-837acebcbedd",
+        back: "/static/Button.png",
         star: "https://www.figma.com/api/mcp/asset/d8a75e34-91f3-4668-9f68-1aa515439cc8",
         crown: "https://www.figma.com/api/mcp/asset/686b2997-9764-4723-80b4-7f7a49675a6d",
         wechat: "https://www.figma.com/api/mcp/asset/bcdd9994-4ce4-418e-b4e5-497ae718d29f",

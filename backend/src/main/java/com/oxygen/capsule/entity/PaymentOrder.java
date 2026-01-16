@@ -51,6 +51,12 @@ public class PaymentOrder {
     @Column(name = "transaction_type")
     private String transactionType = "NEW"; // 交易类型: NEW-新开卡, RENEW-续费
 
+    @Column(name = "card_status")
+    private String cardStatus = "未生效"; // 卡状态: 未生效, 生效中, 已完成
+
+    @Column(name = "remaining_times")
+    private Integer remainingTimes; // 剩余次数（仅次卡有效，其他卡种为NULL）
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

@@ -1,0 +1,7 @@
+2026-01-16 23:54:21.203 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-16 23:54:21.204 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - 用户ID: 8, 预约日期: 2026-01-17
+2026-01-16 23:54:21.209 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-16 23:55:33.808 [http-nio-8080-exec-2] INFO  c.o.c.controller.BookingController - 取消预约已返还次卡次数，预约订单ID: 41, 购卡订单ID: 30
+2026-01-16 23:55:42.206 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-16 23:55:42.206 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - 用户ID: 8, 预约日期: 2026-01-17
+2026-01-16 23:55:42.210 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========

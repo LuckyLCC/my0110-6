@@ -33,7 +33,11 @@ const api = {
   // 用户相关API
   user: {
     // 用户登录
-    login: (code) => request({ url: "/user/login", method: "POST", data: { code } }),
+    login: (code, nickname, avatarUrl) => request({
+      url: "/user/login",
+      method: "POST",
+      data: { code, nickname, avatarUrl }
+    }),
     // 获取用户信息
     getInfo: () => request({ url: "/user/info", method: "GET" }),
     // 更新用户信息
@@ -61,7 +65,11 @@ const api = {
   booking: {
     // 创建预约订单
     create: (params) => request({ url: "/booking/create", method: "POST", data: params }),
-    // 支付预约订单
+    // 获取预约订单的微信支付参数
+    getWechatPayParams: (orderId) => request({ url: `/booking/wechat-pay/${orderId}`, method: "POST" }),
+    // Mock支付成功（仅用于开发测试）
+    mockPaymentSuccess: (orderId) => request({ url: `/booking/mock-success/${orderId}`, method: "POST" }),
+    // 支付预约订单（已废弃，改为使用微信支付）
     pay: (orderId) => request({ url: `/booking/pay/${orderId}`, method: "POST" }),
     // 获取用户所有订单
     getOrders: () => request({ url: "/booking/orders", method: "GET" }),
@@ -74,7 +82,11 @@ const api = {
     // 获取订单详情
     getOrderDetail: (orderId) => request({ url: `/booking/order/${orderId}`, method: "GET" }),
     // 通过订单号核销（商家端使用）
-    verifyByOrderNo: (orderNo) => request({ url: `/booking/verify/${orderNo}`, method: "POST" })
+    verifyByOrderNo: (orderNo) => request({ url: `/booking/verify/${orderNo}`, method: "POST" }),
+    // 取消预约订单
+    cancel: (orderId) => request({ url: `/booking/cancel/${orderId}`, method: "POST" }),
+    // 获取某个日期和时段已预约的舱位列表
+    getBookedSeats: (date, timeSlot) => request({ url: `/booking/booked-seats?date=${encodeURIComponent(date)}&timeSlot=${encodeURIComponent(timeSlot)}`, method: "GET" })
   },
   // 支付相关API
   payment: {
@@ -97,6 +109,37 @@ const api = {
     // 获取用户的支付订单列表（购卡记录）
     getOrders: () => request({
       url: "/payment/orders",
+      method: "GET"
+    })
+  },
+  // 邀请相关API
+  invitation: {
+    // 生成邀请码
+    generate: (paymentOrderId) => request({
+      url: "/invitation/generate",
+      method: "POST",
+      data: { paymentOrderId }
+    }),
+    // 接受邀请（已登录用户）
+    accept: (inviteCode) => request({
+      url: "/invitation/accept",
+      method: "POST",
+      data: { inviteCode }
+    }),
+    // 接受邀请（通过微信code，无需登录）
+    acceptByCode: (inviteCode, wechatCode) => request({
+      url: "/invitation/accept-by-code",
+      method: "POST",
+      data: { inviteCode, code: wechatCode }
+    }),
+    // 获取邀请列表
+    getList: () => request({
+      url: "/invitation/list",
+      method: "GET"
+    }),
+    // 根据邀请码查询邀请信息
+    getByCode: (inviteCode) => request({
+      url: `/invitation/code/${inviteCode}`,
       method: "GET"
     })
   }

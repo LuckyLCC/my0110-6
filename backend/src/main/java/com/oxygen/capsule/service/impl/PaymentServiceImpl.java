@@ -8,15 +8,18 @@ import com.oxygen.capsule.service.MemberPackageService;
 import com.oxygen.capsule.service.PaymentService;
 import com.oxygen.capsule.service.UserService;
 import com.oxygen.capsule.util.WxPayUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+@Slf4j
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
@@ -138,6 +141,18 @@ public class PaymentServiceImpl implements PaymentService {
                 cardEndDate = finalCardStartDate.plusDays(30);
             }
             order.setCardEndDate(cardEndDate);
+            
+            // 如果是次卡，设置初始剩余次数
+            if ("家庭/次卡".equals(pkg.getCategory()) && pkg.getTimesPerPerson() != null) {
+                order.setRemainingTimes(pkg.getTimesPerPerson());
+            } else {
+                // 其他卡种不记录剩余次数
+                order.setRemainingTimes(null);
+            }
+            
+            // 计算并设置初始卡状态
+            String initialCardStatus = calculateCardStatus(order, pkg);
+            order.setCardStatus(initialCardStatus);
     
             return paymentOrderRepository.save(order);
         } catch (Exception e) {
@@ -195,12 +210,134 @@ public class PaymentServiceImpl implements PaymentService {
             order.setStatus(status);
             if ("paid".equals(status)) {
                 order.setPaymentTime(LocalDateTime.now());
+                
+                // 获取套餐信息
+                MemberPackage pkg = memberPackageService.findById(order.getPackageId());
+                if (pkg != null) {
+                    // 如果是次卡且剩余次数未设置，设置初始剩余次数
+                    if ("家庭/次卡".equals(pkg.getCategory()) && pkg.getTimesPerPerson() != null && order.getRemainingTimes() == null) {
+                        order.setRemainingTimes(pkg.getTimesPerPerson());
+                    }
+                    
+                    // 重新计算并更新卡状态
+                    String cardStatus = calculateCardStatus(order, pkg);
+                    order.setCardStatus(cardStatus);
+                } else {
+                    // 如果套餐不存在，设置默认状态
+                    System.err.println("警告：订单 " + order.getId() + " 的套餐不存在，设置默认卡状态");
+                    if (order.getCardStatus() == null) {
+                        order.setCardStatus("未生效");
+                    }
+                }
+                
                 // 支付成功后，更新用户会员信息
                 updateUserInfoForPaidOrder(order);
             }
             order = paymentOrderRepository.save(order);
         }
         return order;
+    }
+    
+    /**
+     * 计算卡的状态：未生效、生效中、已完成
+     * 简化逻辑：
+     * - 次卡：检查 remaining_times <= 0 或过期 → "已完成"
+     * - 其他卡种：检查过期 → "已完成"
+     */
+    private String calculateCardStatus(PaymentOrder order, MemberPackage pkg) {
+        // 如果订单未支付，状态为未生效
+        if (!"paid".equals(order.getStatus())) {
+            return "未生效";
+        }
+        
+        LocalDate now = LocalDate.now();
+        
+        // 检查是否是次卡
+        boolean isTimesCard = "家庭/次卡".equals(pkg.getCategory());
+        
+        // 对于次卡，检查剩余次数（使用数据库中的 remaining_times 字段）
+        if (isTimesCard) {
+            // 如果剩余次数 <= 0，状态为已完成
+            if (order.getRemainingTimes() != null && order.getRemainingTimes() <= 0) {
+                return "已完成";
+            }
+        }
+        
+        // 检查日期
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+        
+        if (order.getCardStartDate() != null) {
+            startDate = order.getCardStartDate().toLocalDate();
+        }
+        if (order.getCardEndDate() != null) {
+            endDate = order.getCardEndDate().toLocalDate();
+        }
+        
+        // 如果当前时间 < 卡开始日期，则为未生效
+        if (startDate != null && now.isBefore(startDate)) {
+            return "未生效";
+        }
+        
+        // 如果当前时间 > 卡到期日期，则为已完成
+        if (endDate != null && now.isAfter(endDate)) {
+            return "已完成";
+        }
+        
+        // 如果当前时间在有效期内，则为生效中
+        if ((startDate == null || !now.isBefore(startDate)) && 
+            (endDate == null || !now.isAfter(endDate))) {
+            return "生效中";
+        }
+        
+        // 默认返回已完成
+        return "已完成";
+    }
+    
+    /**
+     * 更新卡状态（供外部调用，例如核销后更新次卡状态）
+     * 如果是次卡，同时减少剩余次数
+     */
+    @Override
+    public void updateCardStatus(Long paymentOrderId) {
+        PaymentOrder order = findById(paymentOrderId);
+        if (order != null && "paid".equals(order.getStatus())) {
+            MemberPackage pkg = memberPackageService.findById(order.getPackageId());
+            if (pkg != null) {
+                // 如果是次卡，减少剩余次数
+                if ("家庭/次卡".equals(pkg.getCategory()) && order.getRemainingTimes() != null && order.getRemainingTimes() > 0) {
+                    order.setRemainingTimes(order.getRemainingTimes() - 1);
+                }
+                
+                // 重新计算并更新卡状态
+                String cardStatus = calculateCardStatus(order, pkg);
+                order.setCardStatus(cardStatus);
+                paymentOrderRepository.save(order);
+            }
+        }
+    }
+
+    @Override
+    public void refundTimesCard(Long paymentOrderId) {
+        PaymentOrder order = findById(paymentOrderId);
+        if (order != null && "paid".equals(order.getStatus())) {
+            MemberPackage pkg = memberPackageService.findById(order.getPackageId());
+            if (pkg != null && "家庭/次卡".equals(pkg.getCategory())) {
+                // 如果是次卡，返还一次次数
+                if (order.getRemainingTimes() != null) {
+                    order.setRemainingTimes(order.getRemainingTimes() + 1);
+                } else {
+                    // 如果剩余次数为null，初始化为1
+                    order.setRemainingTimes(1);
+                }
+                
+                // 重新计算并更新卡状态
+                String cardStatus = calculateCardStatus(order, pkg);
+                order.setCardStatus(cardStatus);
+                paymentOrderRepository.save(order);
+                log.info("次卡返还次数成功，订单ID: {}, 剩余次数: {}", paymentOrderId, order.getRemainingTimes());
+            }
+        }
     }
 
     @Override

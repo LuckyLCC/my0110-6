@@ -36,7 +36,9 @@
 						<text v-if="!isNormalUser" class="vip-subtitle">有效期至 {{ vip.expireAt }}</text>
 						<view class="vip-stats">
 							<view class="vip-stat">
-								<text class="vip-stat-value">{{ vip.stats.left }}</text>
+								<text class="vip-stat-value">
+									{{ vip.packageCategory === '家庭/次卡' ? vip.stats.left : '∞' }}
+								</text>
 								<text class="vip-stat-label">剩余次数</text>
 							</view>
 							<view class="vip-stat">
@@ -106,6 +108,14 @@
 							<text class="tab-text" :class="{ active: tab === 'done' }">已完成</text>
 							<view v-if="tab === 'done'" class="tab-underline" />
 						</view>
+						<view class="tab" @tap="setTab('cancelled')">
+							<text class="tab-text" :class="{ active: tab === 'cancelled' }">已取消</text>
+							<view v-if="tab === 'cancelled'" class="tab-underline" />
+						</view>
+						<view class="tab" @tap="setTab('no_show')">
+							<text class="tab-text" :class="{ active: tab === 'no_show' }">未到店</text>
+							<view v-if="tab === 'no_show'" class="tab-underline" />
+						</view>
 					</view>
 
 					<view class="booking-list">
@@ -134,8 +144,11 @@
 									<text class="booking-meta-text">{{ order.site }}</text>
 								</view>
 							</view>
-							<view v-if="order.showVerify" class="booking-foot">
-								<view class="verify-btn" @tap="onShowVerifyCode(order)">
+							<view v-if="order.showVerify || order.showCancel" class="booking-foot">
+								<view v-if="order.showCancel" class="cancel-btn" @tap="onCancelBooking(order)">
+									<text class="cancel-text">取消预约</text>
+								</view>
+								<view v-if="order.showVerify" class="verify-btn" @tap="onShowVerifyCode(order)">
 									<image class="verify-icon" :src="assets.iconQr" mode="aspectFit" />
 									<text class="verify-text">出示核销码</text>
 								</view>
@@ -187,6 +200,42 @@
 			</view>
 		</view>
 
+		<!-- 邀请码弹窗 -->
+		<view v-if="showInviteModal" class="invite-modal" @tap="closeInviteModal">
+			<view class="invite-modal-content" @tap.stop>
+				<view class="invite-modal-header">
+					<text class="invite-modal-title">邀请亲友</text>
+					<text class="invite-modal-close" @tap="closeInviteModal">×</text>
+				</view>
+				<view class="invite-modal-body">
+					<view class="invite-code-container">
+						<text class="invite-code-label">邀请码</text>
+						<view class="invite-code-value">{{ inviteCode }}</view>
+						<button class="invite-copy-btn" @tap="copyInviteCode">复制邀请码</button>
+					</view>
+					<view class="invite-qr-container">
+						<canvas 
+							canvas-id="invite-qrcode-canvas" 
+							id="invite-qrcode-canvas"
+							class="invite-qr-canvas"
+							:style="{ width: '300px', height: '300px' }"
+						></canvas>
+						<image 
+							v-if="inviteQrCodeImage" 
+							class="invite-qr-image" 
+							:src="inviteQrCodeImage" 
+							mode="aspectFit"
+						/>
+					</view>
+					<view class="invite-tips">
+						<text class="invite-tips-text">分享邀请码或二维码给亲友，让他们绑定您的会员卡</text>
+						<text class="invite-tips-subtext">（扫描二维码可获取邀请码，或点击下方按钮直接分享给微信好友）</text>
+					</view>
+					<button class="invite-share-btn" open-type="share">分享给微信好友</button>
+				</view>
+			</view>
+		</view>
+
 		<!-- 底部导航 -->
 		<BottomNav :current="3" />
 	</view>
@@ -218,20 +267,40 @@ export default {
 			vip: {
 				title: '普通用户',
 				expireAt: '',
-				stats: { left: 0, bound: 0, points: 0 }
+				stats: { left: 0, bound: 0, points: 0 },
+				packageCategory: '' // 当前生效卡的分类，用于判断是否显示具体次数
 			},
 			purchaseRecords: [],
 			tab: 'all',
 			orders: [], // 预约订单列表，从数据库获取
 			showVerifyModal: false, // 是否显示核销码弹窗
 			currentVerifyOrder: null, // 当前要显示核销码的订单
-			qrCodeImage: '' // 二维码图片数据
+			qrCodeImage: '', // 二维码图片数据
+			showInviteModal: false, // 是否显示邀请码弹窗
+			inviteCode: '', // 邀请码
+			currentInvitePaymentOrderId: null, // 当前邀请关联的支付订单ID
+			inviteQrCodeImage: '' // 邀请二维码图片
 		}
 	},
 	computed: {
 		filteredOrders() {
-			if (this.tab === 'all') return this.orders
-			return this.orders.filter(o => o.status === this.tab)
+			if (this.tab === 'all') {
+				// 全部标签显示所有订单（包括已取消）
+				return this.orders
+			} else if (this.tab === 'pending') {
+				// 待核销标签只显示待核销的订单
+				return this.orders.filter(o => o.status === 'pending')
+			} else if (this.tab === 'done') {
+				// 已完成标签只显示已完成的订单（不包括已取消）
+				return this.orders.filter(o => o.status === 'done')
+			} else if (this.tab === 'cancelled') {
+				// 已取消标签只显示已取消的订单
+				return this.orders.filter(o => o.status === 'cancelled')
+			} else if (this.tab === 'no_show') {
+				// 未到店标签只显示未到店的订单
+				return this.orders.filter(o => o.status === 'no_show')
+			}
+			return this.orders
 		},
 		// 判断是否是普通用户（没有生效中的卡）
 		isNormalUser() {
@@ -280,6 +349,34 @@ export default {
 		this.loadUserInfo()
 		this.loadPurchaseRecords()
 		this.loadBookingOrders()
+	},
+	// 微信分享功能
+	onShareAppMessage(options) {
+		console.log('onShareAppMessage 被调用，options:', options)
+		console.log('showInviteModal:', this.showInviteModal)
+		console.log('inviteCode:', this.inviteCode)
+		
+		// 如果正在显示邀请码弹窗，分享邀请链接
+		if (this.showInviteModal && this.inviteCode) {
+			const sharePath = `/pages/invite/accept?code=${this.inviteCode}`
+			console.log('分享邀请码，路径:', sharePath)
+			
+			return {
+				title: `邀请您加入城市森林氧舱会员，邀请码：${this.inviteCode}`,
+				path: sharePath,
+				imageUrl: '' // 可以设置分享图片，留空则使用小程序默认图片
+				// 注意：imageUrl 必须是网络图片，不能是本地路径
+				// 如果需要自定义分享图片，可以上传到服务器或使用 CDN
+			}
+		}
+		
+		// 默认分享
+		console.log('默认分享')
+		return {
+			title: '城市森林氧舱',
+			path: '/pages/index/index',
+			imageUrl: ''
+		}
 	},
 	methods: {
 		// 加载用户信息
@@ -330,40 +427,8 @@ export default {
 				this.user.phoneMasked = this.maskPhone(userInfo.phoneNumber)
 			}
 			
-			// 只有在有生效中的卡时才更新会员卡信息
-			// 如果没有生效中的卡，保持普通用户状态（由 loadPurchaseRecords 设置）
-			if (!this.isNormalUser) {
-				// 更新会员卡信息
-				if (userInfo.packageName) {
-					this.vip.title = userInfo.packageName
-				}
-				
-				// 更新剩余次数
-				if (userInfo.remainingVisits !== undefined && userInfo.remainingVisits !== null) {
-					this.vip.stats.left = userInfo.remainingVisits
-				}
-				
-				// 更新积分余额
-				if (userInfo.points !== undefined && userInfo.points !== null) {
-					this.vip.stats.points = userInfo.points
-				}
-				
-				// 更新会员到期时间
-				if (userInfo.memberExpireTime) {
-					// 格式化日期：2028-01-10
-					const expireDate = new Date(userInfo.memberExpireTime)
-					const year = expireDate.getFullYear()
-					const month = String(expireDate.getMonth() + 1).padStart(2, '0')
-					const day = String(expireDate.getDate()).padStart(2, '0')
-					this.vip.expireAt = `${year}-${month}-${day}`
-				}
-				
-				// 更新已绑定数量（如果有的话，暂时保持默认值0）
-				// 如果后端有返回绑定数量，可以在这里更新
-				if (userInfo.boundCount !== undefined && userInfo.boundCount !== null) {
-					this.vip.stats.bound = userInfo.boundCount
-				}
-			}
+			// 注意：会员卡信息（VIP信息）不再从 userInfo 中获取
+			// 而是从购卡记录中找出生效中的卡来显示（在 loadPurchaseRecords 中处理）
 		},
 		// 手机号掩码处理
 		maskPhone(phone) {
@@ -393,10 +458,8 @@ export default {
 							return new Date(b.buyAt) - new Date(a.buyAt)
 						})
 					
-					// 检查是否有生效中的卡，如果没有，设置为普通用户状态
-					if (this.isNormalUser) {
-						this.setNormalUserState()
-					}
+					// 找出生效中的卡，并更新VIP信息
+					this.updateVipFromActiveCard()
 				} else {
 					this.purchaseRecords = []
 					this.setNormalUserState()
@@ -407,6 +470,144 @@ export default {
 				this.setNormalUserState()
 			}
 		},
+		// 从生效中的卡更新VIP信息
+		updateVipFromActiveCard() {
+			// 找出生效中的卡
+			const now = new Date()
+			now.setHours(0, 0, 0, 0)
+			
+			const activeCards = this.purchaseRecords.filter(record => {
+				if (record.status !== '生效中') {
+					return false
+				}
+				
+				// 再次验证日期是否在有效期内
+				if (record.cardStartDate && record.cardEndDate) {
+					const startDate = new Date(record.cardStartDate)
+					startDate.setHours(0, 0, 0, 0)
+					const endDate = new Date(record.cardEndDate)
+					endDate.setHours(0, 0, 0, 0)
+					return now >= startDate && now <= endDate
+				} else if (record.cardEndDate) {
+					const endDate = new Date(record.cardEndDate)
+					endDate.setHours(0, 0, 0, 0)
+					return now <= endDate
+				} else if (record.cardStartDate) {
+					const startDate = new Date(record.cardStartDate)
+					startDate.setHours(0, 0, 0, 0)
+					return now >= startDate
+				}
+				// 没有日期限制，且状态为"生效中"，认为是生效的卡
+				return true
+			})
+			
+			// 如果没有生效中的卡，设置为普通用户状态
+			if (activeCards.length === 0) {
+				this.setNormalUserState()
+				return
+			}
+			
+			// 如果有多个生效中的卡，选择到期时间最晚的那个
+			// 如果到期时间相同，选择购买时间最新的那个
+			const activeCard = activeCards.sort((a, b) => {
+				// 首先按到期时间倒序排列（到期时间最晚的在前）
+				if (a.cardEndDate && b.cardEndDate) {
+					const dateA = new Date(a.cardEndDate)
+					const dateB = new Date(b.cardEndDate)
+					if (dateA.getTime() !== dateB.getTime()) {
+						return dateB.getTime() - dateA.getTime()
+					}
+				} else if (a.cardEndDate) {
+					return -1 // a有到期时间，b没有，a优先
+				} else if (b.cardEndDate) {
+					return 1 // b有到期时间，a没有，b优先
+				}
+				// 如果到期时间相同或都没有，按购买时间倒序排列（最新的在前）
+				return new Date(b.buyAt) - new Date(a.buyAt)
+			})[0]
+			
+			// 使用生效中的卡更新VIP信息
+			this.vip.title = activeCard.name
+			this.vip.expireAt = activeCard.cardEndDate || ''
+			this.vip.packageCategory = activeCard.packageCategory || '' // 保存当前生效卡的分类
+			
+			// 如果是家庭次卡，从购卡记录中获取剩余次数
+			if (activeCard.packageCategory === '家庭/次卡') {
+				// 如果后端返回了剩余次数，使用后端计算的值
+				// 如果后端没有返回（可能是null或undefined），尝试从totalTimes和consumedTimes计算
+				if (activeCard.remainingTimes !== undefined && activeCard.remainingTimes !== null) {
+					this.vip.stats.left = activeCard.remainingTimes
+				} else if (activeCard.totalTimes !== undefined && activeCard.totalTimes !== null) {
+					// 如果后端没有返回remainingTimes，但返回了totalTimes，使用totalTimes作为初始值
+					// 已消费次数可能是0（如果还没有核销记录）
+					const consumed = activeCard.consumedTimes || 0
+					this.vip.stats.left = Math.max(0, activeCard.totalTimes - consumed)
+				} else {
+					// 如果都没有，设置为0（不应该发生，但作为兜底）
+					console.warn('家庭次卡没有剩余次数信息，activeCard:', activeCard)
+					this.vip.stats.left = 0
+				}
+				// 只更新积分和已绑定，不更新剩余次数
+				this.loadUserStatsForPointsAndBound()
+			} else {
+				// 其他卡种，从用户信息中获取
+				this.loadUserStats()
+			}
+		},
+		// 加载用户统计数据（剩余次数、积分等）
+		async loadUserStats() {
+			const token = uni.getStorageSync('token')
+			if (!token) {
+				return
+			}
+			
+			try {
+				const response = await api.user.getInfo()
+				if (response.code === 200 && response.data) {
+					const userInfo = response.data
+					// 更新剩余次数（如果不是家庭次卡）
+					if (this.vip.packageCategory !== '家庭/次卡') {
+						if (userInfo.remainingVisits !== undefined && userInfo.remainingVisits !== null) {
+							this.vip.stats.left = userInfo.remainingVisits
+						}
+					}
+					// 更新积分余额
+					if (userInfo.points !== undefined && userInfo.points !== null) {
+						this.vip.stats.points = userInfo.points
+					}
+					// 更新已绑定数量
+					if (userInfo.boundCount !== undefined && userInfo.boundCount !== null) {
+						this.vip.stats.bound = userInfo.boundCount
+					}
+				}
+			} catch (error) {
+				console.error('获取用户统计数据失败:', error)
+			}
+		},
+		// 只加载积分和已绑定数量（不更新剩余次数）
+		async loadUserStatsForPointsAndBound() {
+			const token = uni.getStorageSync('token')
+			if (!token) {
+				return
+			}
+			
+			try {
+				const response = await api.user.getInfo()
+				if (response.code === 200 && response.data) {
+					const userInfo = response.data
+					// 更新积分余额
+					if (userInfo.points !== undefined && userInfo.points !== null) {
+						this.vip.stats.points = userInfo.points
+					}
+					// 更新已绑定数量
+					if (userInfo.boundCount !== undefined && userInfo.boundCount !== null) {
+						this.vip.stats.bound = userInfo.boundCount
+					}
+				}
+			} catch (error) {
+				console.error('获取用户统计数据失败:', error)
+			}
+		},
 		// 设置为普通用户状态
 		setNormalUserState() {
 			this.vip.title = '普通用户'
@@ -414,6 +615,7 @@ export default {
 			this.vip.stats.left = 0
 			this.vip.stats.bound = 0
 			this.vip.stats.points = 0
+			this.vip.packageCategory = '' // 清空分类
 		},
 		// 格式化购卡记录
 		formatPurchaseRecord(order) {
@@ -454,71 +656,137 @@ export default {
 				formattedEndDate = `${year}-${month}-${day}`
 			}
 			
-			// 判断状态：未生效/生效中/已过期
-			// 1. 如果当前时间 < 卡开始日期 → 未生效
-			// 2. 如果当前时间 >= 卡开始日期 且 当前时间 <= 卡到期日期 → 生效中
-			// 3. 如果当前时间 > 卡到期日期 → 已过期
-			let status = '已过期'
+			// 使用数据库返回的卡状态（cardStatus），如果数据库没有返回，则使用默认逻辑计算
+			let status = order.cardStatus || '已完成'
 			let statusPillClass = 'pill-gray'
 			let statusTextClass = 'pill-text-gray'
 			
-			if (order.status === 'paid') {
-				const now = new Date()
-				now.setHours(0, 0, 0, 0)
-				
-				// 检查卡开始日期
-				if (order.cardStartDate) {
-					const startDate = new Date(order.cardStartDate)
-					startDate.setHours(0, 0, 0, 0)
+			// 根据状态设置样式
+			if (status === '未生效') {
+				statusPillClass = 'pill-warm'
+				statusTextClass = 'pill-text-warm'
+			} else if (status === '生效中') {
+				statusPillClass = 'pill-green'
+				statusTextClass = 'pill-text-green'
+			} else if (status === '已完成') {
+				statusPillClass = 'pill-gray'
+				statusTextClass = 'pill-text-gray'
+			} else {
+				// 如果数据库返回的状态不在预期范围内，使用默认逻辑计算（兜底）
+				if (order.status === 'paid') {
+					const now = new Date()
+					now.setHours(0, 0, 0, 0)
 					
-					// 如果当前时间 < 卡开始日期，则为未生效
-					if (now < startDate) {
-						status = '未生效'
-						statusPillClass = 'pill-warm'
-						statusTextClass = 'pill-text-warm'
+					// 检查是否是次卡
+					const isTimesCard = order.packageCategory === '家庭/次卡'
+					
+					// 对于次卡，先检查剩余次数
+					if (isTimesCard && order.remainingTimes !== undefined && order.remainingTimes !== null) {
+						if (order.remainingTimes <= 0) {
+							status = '已完成'
+							statusPillClass = 'pill-gray'
+							statusTextClass = 'pill-text-gray'
+						} else {
+							// 次卡有剩余次数，继续检查日期
+							if (order.cardStartDate) {
+								const startDate = new Date(order.cardStartDate)
+								startDate.setHours(0, 0, 0, 0)
+								
+								if (now < startDate) {
+									status = '未生效'
+									statusPillClass = 'pill-warm'
+									statusTextClass = 'pill-text-warm'
+								} else {
+									if (order.cardEndDate) {
+										const endDate = new Date(order.cardEndDate)
+										endDate.setHours(0, 0, 0, 0)
+										
+										if (now <= endDate) {
+											status = '生效中'
+											statusPillClass = 'pill-green'
+											statusTextClass = 'pill-text-green'
+										} else {
+											status = '已完成'
+											statusPillClass = 'pill-gray'
+											statusTextClass = 'pill-text-gray'
+										}
+									} else {
+										status = '生效中'
+										statusPillClass = 'pill-green'
+										statusTextClass = 'pill-text-green'
+									}
+								}
+							} else {
+								if (order.cardEndDate) {
+									const endDate = new Date(order.cardEndDate)
+									endDate.setHours(0, 0, 0, 0)
+									
+									if (now <= endDate) {
+										status = '生效中'
+										statusPillClass = 'pill-green'
+										statusTextClass = 'pill-text-green'
+									} else {
+										status = '已完成'
+										statusPillClass = 'pill-gray'
+										statusTextClass = 'pill-text-gray'
+									}
+								} else {
+									status = '生效中'
+									statusPillClass = 'pill-green'
+									statusTextClass = 'pill-text-green'
+								}
+							}
+						}
 					} else {
-						// 当前时间 >= 卡开始日期，检查是否过期
-						if (order.cardEndDate) {
-							const endDate = new Date(order.cardEndDate)
-							endDate.setHours(0, 0, 0, 0)
+						// 非次卡，按日期判断
+						if (order.cardStartDate) {
+							const startDate = new Date(order.cardStartDate)
+							startDate.setHours(0, 0, 0, 0)
 							
-							// 如果当前时间 <= 到期日期，则为生效中；否则为已过期
-							if (now <= endDate) {
+							if (now < startDate) {
+								status = '未生效'
+								statusPillClass = 'pill-warm'
+								statusTextClass = 'pill-text-warm'
+							} else {
+								if (order.cardEndDate) {
+									const endDate = new Date(order.cardEndDate)
+									endDate.setHours(0, 0, 0, 0)
+									
+									if (now <= endDate) {
+										status = '生效中'
+										statusPillClass = 'pill-green'
+										statusTextClass = 'pill-text-green'
+									} else {
+										status = '已完成'
+										statusPillClass = 'pill-gray'
+										statusTextClass = 'pill-text-gray'
+									}
+								} else {
+									status = '生效中'
+									statusPillClass = 'pill-green'
+									statusTextClass = 'pill-text-green'
+								}
+							}
+						} else {
+							if (order.cardEndDate) {
+								const endDate = new Date(order.cardEndDate)
+								endDate.setHours(0, 0, 0, 0)
+								
+								if (now <= endDate) {
+									status = '生效中'
+									statusPillClass = 'pill-green'
+									statusTextClass = 'pill-text-green'
+								} else {
+									status = '已完成'
+									statusPillClass = 'pill-gray'
+									statusTextClass = 'pill-text-gray'
+								}
+							} else {
 								status = '生效中'
 								statusPillClass = 'pill-green'
 								statusTextClass = 'pill-text-green'
-							} else {
-								status = '已过期'
-								statusPillClass = 'pill-gray'
-								statusTextClass = 'pill-text-gray'
 							}
-						} else {
-							// 没有卡到期日期（可能是无限期），默认为生效中
-							status = '生效中'
-							statusPillClass = 'pill-green'
-							statusTextClass = 'pill-text-green'
 						}
-					}
-				} else {
-					// 没有卡开始日期，检查到期日期
-					if (order.cardEndDate) {
-						const endDate = new Date(order.cardEndDate)
-						endDate.setHours(0, 0, 0, 0)
-						
-						if (now <= endDate) {
-							status = '生效中'
-							statusPillClass = 'pill-green'
-							statusTextClass = 'pill-text-green'
-						} else {
-							status = '已过期'
-							statusPillClass = 'pill-gray'
-							statusTextClass = 'pill-text-gray'
-						}
-					} else {
-						// 既没有开始日期也没有到期日期，默认为生效中
-						status = '生效中'
-						statusPillClass = 'pill-green'
-						statusTextClass = 'pill-text-green'
 					}
 				}
 			}
@@ -546,7 +814,12 @@ export default {
 				statusPillClass: statusPillClass,
 				statusTextClass: statusTextClass,
 				packageCategory: order.packageCategory || '', // 保存套餐分类
-				packageId: order.packageId // 保存套餐ID
+				packageId: order.packageId, // 保存套餐ID
+				paymentOrderId: order.id, // 保存支付订单ID，用于生成邀请码
+				id: order.id, // 同时保存 id，作为备用
+				remainingTimes: order.remainingTimes, // 剩余次数（家庭次卡）
+				totalTimes: order.totalTimes, // 总次数（家庭次卡）
+				consumedTimes: order.consumedTimes // 已消费次数（家庭次卡）
 			}
 		},
 		// 加载预约订单
@@ -592,12 +865,13 @@ export default {
 			// 座位名称：A座
 			const site = order.seatName || ''
 			
-			// 判断状态：pending -> 待核销, completed -> 已完成
+			// 判断状态：pending -> 待核销, completed -> 已完成, cancelled -> 已取消
 			let status = 'pending'
 			let statusText = '待核销'
 			let statusBadgeClass = 'badge-warm'
 			let statusTextClass = 'badge-warm-text'
 			let showVerify = false
+			let showCancel = false
 			
 			if (order.status === 'completed') {
 				status = 'done'
@@ -605,12 +879,28 @@ export default {
 				statusBadgeClass = 'badge-gray'
 				statusTextClass = 'badge-gray-text'
 				showVerify = false
+				showCancel = false
+			} else if (order.status === 'cancelled') {
+				status = 'cancelled'
+				statusText = '已取消'
+				statusBadgeClass = 'badge-gray'
+				statusTextClass = 'badge-gray-text'
+				showVerify = false
+				showCancel = false
+			} else if (order.status === 'no_show') {
+				status = 'no_show'
+				statusText = '未到店'
+				statusBadgeClass = 'badge-gray'
+				statusTextClass = 'badge-gray-text'
+				showVerify = false
+				showCancel = false
 			} else if (order.status === 'pending') {
 				status = 'pending'
 				statusText = '待核销'
 				statusBadgeClass = 'badge-warm'
 				statusTextClass = 'badge-warm-text'
 				showVerify = true
+				showCancel = true // 待核销的订单可以取消
 			}
 			
 			return {
@@ -623,6 +913,7 @@ export default {
 				statusBadgeClass: statusBadgeClass,
 				statusTextClass: statusTextClass,
 				showVerify: showVerify,
+				showCancel: showCancel, // 是否显示取消按钮
 				orderId: order.id, // 保存订单ID，用于核销码展示
 				orderNo: order.orderNo || order.id // 保存订单号，用于核销码展示
 			}
@@ -639,6 +930,8 @@ export default {
 			// 检查当前是否有生效中的"多人尊享"卡
 			const now = new Date()
 			now.setHours(0, 0, 0, 0)
+			
+			console.log('点击邀请，购卡记录:', this.purchaseRecords)
 			
 			// 从购卡记录中找到生效中的卡（状态为"生效中"）
 			const activeCard = this.purchaseRecords.find(record => {
@@ -669,18 +962,156 @@ export default {
 			
 			// 如果没有生效中的卡
 			if (!activeCard) {
+				console.log('未找到生效中的卡')
 				uni.showToast({ title: '该卡无法邀请亲友', icon: 'none' })
 				return
 			}
+			
+			console.log('找到生效中的卡:', activeCard)
 			
 			// 检查是否是"多人尊享"类型
 			if (activeCard.packageCategory !== '多人尊享') {
+				console.log('不是多人尊享卡，分类:', activeCard.packageCategory)
 				uni.showToast({ title: '该卡无法邀请亲友', icon: 'none' })
 				return
 			}
 			
-			// 如果是"多人尊享"卡，执行邀请功能
-			uni.showToast({ title: '邀请功能待接入', icon: 'none' })
+			// 如果是"多人尊享"卡，生成邀请码并显示
+			console.log('准备生成邀请码，activeCard:', activeCard)
+			this.generateInviteCode(activeCard)
+		},
+		// 生成邀请码
+		async generateInviteCode(activeCard) {
+			try {
+				uni.showLoading({ title: '生成邀请码中...', mask: true })
+				
+				// 需要从原始订单数据中获取 paymentOrderId
+				const token = uni.getStorageSync('token')
+				if (!token) {
+					uni.hideLoading()
+					uni.showToast({ title: '请先登录', icon: 'none' })
+					return
+				}
+				
+				// 从购卡记录中找到对应的订单ID
+				// 优先使用 paymentOrderId，如果没有则使用 id
+				const paymentOrderId = activeCard.paymentOrderId || activeCard.id
+				
+				console.log('生成邀请码 - activeCard:', activeCard)
+				console.log('生成邀请码 - paymentOrderId:', paymentOrderId)
+				console.log('生成邀请码 - activeCard.paymentOrderId:', activeCard.paymentOrderId)
+				console.log('生成邀请码 - activeCard.id:', activeCard.id)
+				
+				if (!paymentOrderId) {
+					uni.hideLoading()
+					console.error('无法获取订单ID，activeCard:', JSON.stringify(activeCard, null, 2))
+					uni.showToast({ title: '无法获取订单信息', icon: 'none' })
+					return
+				}
+				
+				// 调用后端API生成邀请码
+				const response = await api.invitation.generate(paymentOrderId)
+				
+				uni.hideLoading()
+				
+				if (response.code === 200 && response.data) {
+					this.inviteCode = response.data.inviteCode
+					this.currentInvitePaymentOrderId = paymentOrderId
+					this.showInviteModal = true
+					
+					// 生成二维码
+					this.$nextTick(() => {
+						setTimeout(() => {
+							this.generateInviteQRCode(this.inviteCode)
+						}, 300)
+					})
+				} else {
+					uni.showToast({
+						title: response.message || '生成邀请码失败',
+						icon: 'none'
+					})
+				}
+			} catch (error) {
+				uni.hideLoading()
+				console.error('生成邀请码失败:', error)
+				uni.showToast({
+					title: '生成邀请码失败，请重试',
+					icon: 'none'
+				})
+			}
+		},
+		// 生成邀请二维码
+		generateInviteQRCode(code) {
+			this.$nextTick(() => {
+				setTimeout(() => {
+					try {
+						// 创建 canvas 上下文
+						const ctx = uni.createCanvasContext('invite-qrcode-canvas', this)
+						
+						// 二维码内容：直接使用邀请码
+						// 用户扫描后可以手动输入邀请码，或者通过分享链接自动跳转
+						// 注意：小程序路径格式的二维码无法被微信直接识别，所以使用邀请码本身
+						const qrContent = code
+						
+						// 创建 UQRCode 实例
+						const qr = new UQRCode({
+							canvasContext: ctx,
+							text: qrContent, // 使用邀请码作为二维码内容
+							size: 300,
+							margin: 10,
+							backgroundColor: '#ffffff',
+							foregroundColor: '#000000',
+							errorCorrectLevel: UQRCode.errorCorrectLevel.M
+						})
+						
+						// 生成二维码
+						qr.make()
+						
+						// 绘制到 canvas
+						qr.drawCanvas().then(() => {
+							setTimeout(() => {
+								uni.canvasToTempFilePath({
+									canvasId: 'invite-qrcode-canvas',
+									success: (canvasRes) => {
+										this.inviteQrCodeImage = canvasRes.tempFilePath
+									},
+									fail: (err) => {
+										console.error('导出邀请二维码失败:', err)
+									}
+								}, this)
+							}, 50)
+						}).catch((err) => {
+							console.error('绘制邀请二维码失败:', err)
+						})
+					} catch (error) {
+						console.error('生成邀请二维码异常:', error)
+					}
+				}, 200)
+			})
+		},
+		// 复制邀请码
+		copyInviteCode() {
+			uni.setClipboardData({
+				data: this.inviteCode,
+				success: () => {
+					uni.showToast({
+						title: '邀请码已复制',
+						icon: 'success'
+					})
+				}
+			})
+		},
+		// 分享邀请码给微信好友（已废弃，改用 button 的 open-type="share"）
+		// 当用户点击分享按钮时，会自动触发 onShareAppMessage 生命周期函数
+		// shareInviteCode() {
+		// 	// 不再需要此方法
+		// },
+		// 关闭邀请码弹窗
+		closeInviteModal() {
+			this.showInviteModal = false
+			this.inviteCode = ''
+			this.currentInvitePaymentOrderId = null
+			this.inviteQrCodeImage = ''
 		},
 		onShowVerifyCode(order) {
 			// 显示核销码弹窗
@@ -761,6 +1192,52 @@ export default {
 			this.showVerifyModal = false
 			this.currentVerifyOrder = null
 			this.qrCodeImage = ''
+		},
+		// 取消预约
+		async onCancelBooking(order) {
+			if (!order || !order.orderId) {
+				uni.showToast({ title: '订单信息错误', icon: 'none' })
+				return
+			}
+			
+			// 确认取消
+			uni.showModal({
+				title: '确认取消',
+				content: '确定要取消该预约吗？',
+				success: async (res) => {
+					if (res.confirm) {
+						try {
+							uni.showLoading({ title: '取消中...', mask: true })
+							
+							const response = await api.booking.cancel(order.orderId)
+							
+							uni.hideLoading()
+							
+							if (response.code === 200) {
+								uni.showToast({
+									title: '取消预约成功',
+									icon: 'success'
+								})
+								
+								// 重新加载预约订单列表
+								await this.loadBookingOrders()
+							} else {
+								uni.showToast({
+									title: response.message || '取消预约失败',
+									icon: 'none'
+								})
+							}
+						} catch (error) {
+							uni.hideLoading()
+							console.error('取消预约失败:', error)
+							uni.showToast({
+								title: '网络错误，请稍后重试',
+								icon: 'none'
+							})
+						}
+					}
+				}
+			})
 		}
 	}
 }
@@ -1258,7 +1735,9 @@ export default {
 	padding-top: 32rpx; /* 17px */
 	border-top: 2rpx solid #f9fafb;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
+	align-items: center;
+	gap: 30rpx; /* 按钮之间的间距 */
 }
 .verify-btn {
 	display: flex;
@@ -1276,6 +1755,21 @@ export default {
 	font-weight: 400;
 	color: #4a5d50;
 	letter-spacing: 0.38rpx;
+}
+.cancel-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 60rpx;
+	padding: 0 30rpx;
+	background: #f3f4f6;
+	border-radius: 12rpx;
+}
+.cancel-text {
+	font-size: 28rpx;
+	line-height: 40rpx;
+	font-weight: 400;
+	color: #6a7282;
 }
 
 /* 核销码弹窗样式 */
@@ -1399,6 +1893,145 @@ export default {
 	line-height: 36rpx;
 	font-weight: 300;
 	color: #99a1af;
+}
+
+/* 邀请码弹窗样式 */
+.invite-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
+}
+.invite-modal-content {
+	width: 600rpx;
+	background: #ffffff;
+	border-radius: 24rpx;
+	overflow: hidden;
+}
+.invite-modal-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 40rpx 40rpx 30rpx;
+	border-bottom: 1rpx solid #f3f4f6;
+}
+.invite-modal-title {
+	font-size: 36rpx;
+	line-height: 50rpx;
+	font-weight: 500;
+	color: #1e2939;
+}
+.invite-modal-close {
+	font-size: 48rpx;
+	line-height: 48rpx;
+	color: #99a1af;
+	width: 48rpx;
+	height: 48rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.invite-modal-body {
+	padding: 40rpx;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 30rpx;
+}
+.invite-code-container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20rpx;
+}
+.invite-code-label {
+	font-size: 28rpx;
+	color: #6a7282;
+}
+.invite-code-value {
+	font-size: 48rpx;
+	font-weight: bold;
+	color: #4a5d50;
+	letter-spacing: 4rpx;
+}
+.invite-copy-btn {
+	width: 200rpx;
+	height: 60rpx;
+	background: #f3f4f6;
+	border: none;
+	border-radius: 12rpx;
+	font-size: 28rpx;
+	color: #4a5d50;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.invite-qr-container {
+	width: 300rpx;
+	height: 300rpx;
+	background: #f9fafb;
+	border-radius: 16rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	overflow: hidden;
+}
+.invite-qr-canvas {
+	position: fixed;
+	top: -9999px;
+	left: -9999px;
+	width: 300px;
+	height: 300px;
+	opacity: 0;
+	pointer-events: none;
+	z-index: -1;
+}
+.invite-qr-image {
+	width: 100%;
+	height: 100%;
+	border-radius: 16rpx;
+	position: relative;
+	z-index: 1;
+}
+.invite-tips {
+	margin-top: 10rpx;
+}
+.invite-tips-text {
+	font-size: 24rpx;
+	color: #99a1af;
+	text-align: center;
+	line-height: 36rpx;
+	margin-bottom: 8rpx;
+	display: block;
+}
+.invite-tips-subtext {
+	font-size: 22rpx;
+	color: #99a1af;
+	text-align: center;
+	line-height: 32rpx;
+	opacity: 0.8;
+	display: block;
+}
+.invite-share-btn {
+	width: 100%;
+	height: 80rpx;
+	background: #4a5d50;
+	border: none;
+	border-radius: 12rpx;
+	font-size: 32rpx;
+	color: #ffffff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 20rpx;
 }
 
 .bottom-safe {
