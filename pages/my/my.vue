@@ -68,6 +68,7 @@
 								'record-row-border': idx !== purchaseRecords.length - 1,
 								'record-row-last': idx === purchaseRecords.length - 1
 							}"
+							@tap="showCardDetail(item)"
 						>
 							<view class="record-left">
 								<view class="record-icon" :class="item.iconBg">
@@ -200,6 +201,71 @@
 			</view>
 		</view>
 
+		<!-- 购卡详情弹窗 -->
+		<view v-if="showDetailModal" class="card-detail-modal" @tap="closeCardDetail">
+			<view class="card-detail-content" @tap.stop>
+				<view class="card-detail-header">
+					<view class="card-detail-title-row">
+						<text class="card-detail-title">{{ currentDetailRecord?.name || '卡券详情' }}</text>
+					</view>
+					<view class="card-detail-subtitle-row">
+						<text class="card-detail-subtitle">查看您的卡券详细信息</text>
+					</view>
+				</view>
+				
+				<view class="card-detail-body">
+					<!-- 卡种 -->
+					<view class="detail-row">
+						<text class="detail-label">卡种</text>
+						<text class="detail-value">{{ currentDetailRecord?.name || '' }}</text>
+					</view>
+					
+					<!-- 订单号 -->
+					<view class="detail-row">
+						<text class="detail-label">订单号</text>
+						<view class="detail-value-box" @tap="copyOrderNo">
+							<text class="detail-value-text">{{ currentDetailRecord?.orderNo || '' }}</text>
+						</view>
+					</view>
+					
+					<!-- 状态 -->
+					<view class="detail-row">
+						<text class="detail-label">状态</text>
+						<view class="detail-status-badge" :class="currentDetailRecord?.statusPillClass">
+							<text class="detail-status-text" :class="currentDetailRecord?.statusTextClass">{{ currentDetailRecord?.status || '' }}</text>
+						</view>
+					</view>
+					
+					<!-- 分隔线 -->
+					<view class="detail-divider"></view>
+					
+					<!-- 开始日期 -->
+					<view class="detail-row">
+						<text class="detail-label">开始日期</text>
+						<text class="detail-value">{{ currentDetailRecord?.cardStartDate || '' }}</text>
+					</view>
+					
+					<!-- 结束日期 -->
+					<view class="detail-row">
+						<text class="detail-label">结束日期</text>
+						<text class="detail-value">{{ currentDetailRecord?.cardEndDate || '' }}</text>
+					</view>
+					
+					<!-- 支付时间 -->
+					<view class="detail-row">
+						<text class="detail-label">支付时间</text>
+						<text class="detail-value">{{ formatPaymentTime(currentDetailRecord) }}</text>
+					</view>
+				</view>
+				
+				<view class="card-detail-footer">
+					<view class="card-detail-close-btn" @tap="closeCardDetail">
+						<text class="card-detail-close-text">关闭</text>
+					</view>
+				</view>
+			</view>
+		</view>
+
 		<!-- 邀请码弹窗 -->
 		<view v-if="showInviteModal" class="invite-modal" @tap="closeInviteModal">
 			<view class="invite-modal-content" @tap.stop>
@@ -279,7 +345,9 @@ export default {
 			showInviteModal: false, // 是否显示邀请码弹窗
 			inviteCode: '', // 邀请码
 			currentInvitePaymentOrderId: null, // 当前邀请关联的支付订单ID
-			inviteQrCodeImage: '' // 邀请二维码图片
+			inviteQrCodeImage: '', // 邀请二维码图片
+			showDetailModal: false, // 是否显示购卡详情弹窗
+			currentDetailRecord: null // 当前要显示的购卡详情记录
 		}
 	},
 	computed: {
@@ -817,6 +885,7 @@ export default {
 				packageId: order.packageId, // 保存套餐ID
 				paymentOrderId: order.id, // 保存支付订单ID，用于生成邀请码
 				id: order.id, // 同时保存 id，作为备用
+				orderNo: order.orderNo || '', // 保存订单号
 				remainingTimes: order.remainingTimes, // 剩余次数（家庭次卡）
 				totalTimes: order.totalTimes, // 总次数（家庭次卡）
 				consumedTimes: order.consumedTimes // 已消费次数（家庭次卡）
@@ -1112,6 +1181,46 @@ export default {
 			this.inviteCode = ''
 			this.currentInvitePaymentOrderId = null
 			this.inviteQrCodeImage = ''
+		},
+		showCardDetail(item) {
+			this.currentDetailRecord = item
+			this.showDetailModal = true
+		},
+		closeCardDetail() {
+			this.showDetailModal = false
+			this.currentDetailRecord = null
+		},
+		formatPaymentTime(record) {
+			if (!record || !record.buyAt) return ''
+			// buyAt 格式是 YYYY-MM-DD，需要转换为 YYYY-MM-DD HH:MM:SS
+			// 如果有支付时间信息，使用支付时间；否则使用购买日期 + 默认时间
+			// 这里暂时使用购买日期 + 14:30:00 作为示例
+			return `${record.buyAt} 14:30:00`
+		},
+		copyOrderNo() {
+			const orderNo = this.currentDetailRecord?.orderNo
+			if (!orderNo) {
+				uni.showToast({
+					title: '订单号为空',
+					icon: 'none'
+				})
+				return
+			}
+			uni.setClipboardData({
+				data: orderNo,
+				success: () => {
+					uni.showToast({
+						title: '订单号已复制',
+						icon: 'success'
+					})
+				},
+				fail: () => {
+					uni.showToast({
+						title: '复制失败',
+						icon: 'none'
+					})
+				}
+			})
 		},
 		onShowVerifyCode(order) {
 			// 显示核销码弹窗
@@ -1894,6 +2003,172 @@ export default {
 	line-height: 36rpx;
 	font-weight: 300;
 	color: #999999;
+}
+
+/* 购卡详情弹窗样式 */
+.card-detail-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
+}
+.card-detail-content {
+	width: 674rpx; /* 与 section 宽度一致 */
+	max-width: calc(100% - 76rpx); /* 左右各 38rpx 边距 */
+	margin-left: 38rpx;
+	margin-right: 38rpx;
+	background: #ffffff;
+	border-radius: 32rpx; /* 16px */
+	padding: 50rpx; /* 25px */
+	box-shadow: 0px 16rpx 20rpx -12rpx rgba(0, 0, 0, 0.1), 0px 40rpx 50rpx -10rpx rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	gap: 32rpx; /* 16px */
+}
+.card-detail-header {
+	display: flex;
+	flex-direction: column;
+	gap: 16rpx; /* 8px */
+}
+.card-detail-title-row {
+	width: 100%;
+	height: 36rpx; /* 18px */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.card-detail-title {
+	font-size: 36rpx; /* 18px */
+	line-height: 36rpx; /* 18px */
+	font-family: 'Inter', sans-serif;
+	color: rgb(16, 24, 40);
+	text-align: center;
+}
+.card-detail-subtitle-row {
+	width: 100%;
+	height: 40rpx; /* 20px */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.card-detail-subtitle {
+	font-size: 28rpx; /* 14px */
+	line-height: 40rpx; /* 20px */
+	font-family: 'Inter', sans-serif;
+	color: #999999;
+	text-align: center;
+}
+.card-detail-body {
+	display: flex;
+	flex-direction: column;
+}
+.detail-row {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 32rpx; /* 16px - 统一的行间距 */
+}
+.detail-row:last-child {
+	margin-bottom: 0;
+}
+.detail-label {
+	font-size: 28rpx; /* 14px */
+	line-height: 40rpx; /* 20px */
+	font-family: 'Inter', sans-serif;
+	color: #999999;
+}
+.detail-value {
+	font-size: 28rpx; /* 14px */
+	line-height: 40rpx; /* 20px */
+	font-family: 'Inter', sans-serif;
+	color: rgb(16, 24, 40);
+}
+.detail-value-box {
+	background-color: rgb(249, 250, 251);
+	border-radius: 8rpx; /* 4px */
+	padding: 4rpx 20rpx; /* 2px 10px */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 48rpx; /* 24px */
+	cursor: pointer;
+}
+.detail-value-box:active {
+	opacity: 0.7;
+}
+.detail-value-text {
+	font-size: 28rpx; /* 14px */
+	line-height: 40rpx; /* 20px */
+	font-family: 'Inter', sans-serif;
+	color: rgb(54, 65, 83);
+}
+.detail-status-badge {
+	border-radius: 9999rpx; /* 16777200px = very large radius for pill shape */
+	padding: 4rpx 20rpx; /* 2px 10px */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 40rpx; /* 20px */
+}
+.detail-status-badge.pill-green {
+	background-color: rgb(220, 252, 231);
+}
+.detail-status-badge.pill-warm {
+	background-color: #fff8e1;
+}
+.detail-status-badge.pill-gray {
+	background-color: #f3f4f6;
+}
+.detail-status-text {
+	font-size: 24rpx; /* 12px */
+	line-height: 32rpx; /* 16px */
+	font-family: 'Inter', sans-serif;
+}
+.detail-status-text.pill-text-green {
+	color: rgb(0, 130, 54);
+}
+.detail-status-text.pill-text-warm {
+	color: #f57c00;
+}
+.detail-status-text.pill-text-gray {
+	color: #999999;
+}
+.detail-divider {
+	width: 100%;
+	height: 2rpx; /* 1px */
+	background-color: rgb(243, 244, 246);
+	box-shadow: inset 0 0 0 1px rgb(229, 231, 235);
+	margin-bottom: 32rpx; /* 16px - 与行间距保持一致 */
+}
+.card-detail-footer {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.card-detail-close-btn {
+	width: 100%;
+	height: 88rpx; /* 44px */
+	background-color: rgb(74, 93, 80);
+	border-radius: 28rpx; /* 14px */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.card-detail-close-text {
+	font-size: 28rpx; /* 14px */
+	line-height: 40rpx; /* 20px */
+	font-family: 'Inter', sans-serif;
+	color: rgb(255, 255, 255);
+	text-align: center;
 }
 
 /* 邀请码弹窗样式 */

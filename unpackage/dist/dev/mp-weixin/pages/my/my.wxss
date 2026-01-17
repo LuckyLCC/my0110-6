@@ -633,6 +633,172 @@
 	color: #999999;
 }
 
+/* 购卡详情弹窗样式 */
+.card-detail-modal.data-v-2f1ef635 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
+}
+.card-detail-content.data-v-2f1ef635 {
+	width: 674rpx; /* 与 section 宽度一致 */
+	max-width: calc(100% - 76rpx); /* 左右各 38rpx 边距 */
+	margin-left: 38rpx;
+	margin-right: 38rpx;
+	background: #ffffff;
+	border-radius: 32rpx; /* 16px */
+	padding: 50rpx; /* 25px */
+	box-shadow: 0px 16rpx 20rpx -12rpx rgba(0, 0, 0, 0.1), 0px 40rpx 50rpx -10rpx rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	gap: 32rpx; /* 16px */
+}
+.card-detail-header.data-v-2f1ef635 {
+	display: flex;
+	flex-direction: column;
+	gap: 16rpx; /* 8px */
+}
+.card-detail-title-row.data-v-2f1ef635 {
+	width: 100%;
+	height: 36rpx; /* 18px */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.card-detail-title.data-v-2f1ef635 {
+	font-size: 36rpx; /* 18px */
+	line-height: 36rpx; /* 18px */
+	font-family: 'Inter', sans-serif;
+	color: rgb(16, 24, 40);
+	text-align: center;
+}
+.card-detail-subtitle-row.data-v-2f1ef635 {
+	width: 100%;
+	height: 40rpx; /* 20px */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.card-detail-subtitle.data-v-2f1ef635 {
+	font-size: 28rpx; /* 14px */
+	line-height: 40rpx; /* 20px */
+	font-family: 'Inter', sans-serif;
+	color: #999999;
+	text-align: center;
+}
+.card-detail-body.data-v-2f1ef635 {
+	display: flex;
+	flex-direction: column;
+}
+.detail-row.data-v-2f1ef635 {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 32rpx; /* 16px - 统一的行间距 */
+}
+.detail-row.data-v-2f1ef635:last-child {
+	margin-bottom: 0;
+}
+.detail-label.data-v-2f1ef635 {
+	font-size: 28rpx; /* 14px */
+	line-height: 40rpx; /* 20px */
+	font-family: 'Inter', sans-serif;
+	color: #999999;
+}
+.detail-value.data-v-2f1ef635 {
+	font-size: 28rpx; /* 14px */
+	line-height: 40rpx; /* 20px */
+	font-family: 'Inter', sans-serif;
+	color: rgb(16, 24, 40);
+}
+.detail-value-box.data-v-2f1ef635 {
+	background-color: rgb(249, 250, 251);
+	border-radius: 8rpx; /* 4px */
+	padding: 4rpx 20rpx; /* 2px 10px */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 48rpx; /* 24px */
+	cursor: pointer;
+}
+.detail-value-box.data-v-2f1ef635:active {
+	opacity: 0.7;
+}
+.detail-value-text.data-v-2f1ef635 {
+	font-size: 28rpx; /* 14px */
+	line-height: 40rpx; /* 20px */
+	font-family: 'Inter', sans-serif;
+	color: rgb(54, 65, 83);
+}
+.detail-status-badge.data-v-2f1ef635 {
+	border-radius: 9999rpx; /* 16777200px = very large radius for pill shape */
+	padding: 4rpx 20rpx; /* 2px 10px */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 40rpx; /* 20px */
+}
+.detail-status-badge.pill-green.data-v-2f1ef635 {
+	background-color: rgb(220, 252, 231);
+}
+.detail-status-badge.pill-warm.data-v-2f1ef635 {
+	background-color: #fff8e1;
+}
+.detail-status-badge.pill-gray.data-v-2f1ef635 {
+	background-color: #f3f4f6;
+}
+.detail-status-text.data-v-2f1ef635 {
+	font-size: 24rpx; /* 12px */
+	line-height: 32rpx; /* 16px */
+	font-family: 'Inter', sans-serif;
+}
+.detail-status-text.pill-text-green.data-v-2f1ef635 {
+	color: rgb(0, 130, 54);
+}
+.detail-status-text.pill-text-warm.data-v-2f1ef635 {
+	color: #f57c00;
+}
+.detail-status-text.pill-text-gray.data-v-2f1ef635 {
+	color: #999999;
+}
+.detail-divider.data-v-2f1ef635 {
+	width: 100%;
+	height: 2rpx; /* 1px */
+	background-color: rgb(243, 244, 246);
+	box-shadow: inset 0 0 0 1px rgb(229, 231, 235);
+	margin-bottom: 32rpx; /* 16px - 与行间距保持一致 */
+}
+.card-detail-footer.data-v-2f1ef635 {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.card-detail-close-btn.data-v-2f1ef635 {
+	width: 100%;
+	height: 88rpx; /* 44px */
+	background-color: rgb(74, 93, 80);
+	border-radius: 28rpx; /* 14px */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.card-detail-close-text.data-v-2f1ef635 {
+	font-size: 28rpx; /* 14px */
+	line-height: 40rpx; /* 20px */
+	font-family: 'Inter', sans-serif;
+	color: rgb(255, 255, 255);
+	text-align: center;
+}
+
 /* 邀请码弹窗样式 */
 .invite-modal.data-v-2f1ef635 {
 	position: fixed;

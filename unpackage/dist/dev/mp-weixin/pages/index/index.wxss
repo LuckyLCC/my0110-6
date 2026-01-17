@@ -132,6 +132,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 16rpx;
+	margin-top: -28rpx; /* 向上移动，可根据需要调整像素值（负值向上，正值向下） */
 }
 .vip-header.data-v-1cf27b2a {
 	display: flex;
@@ -188,6 +189,7 @@
 	align-items: center;
 	justify-content: center;
 	padding: 4rpx;
+	margin-top: -20rpx; /* 向上移动，可根据需要调整像素值（负值向上，正值向下） */
 }
 .arrow-icon.data-v-1cf27b2a {
 	width: 32rpx;
@@ -279,6 +281,10 @@
 	font-weight: 300;
 	line-height: 32rpx;
 	letter-spacing: 0.6rpx;
+}
+.feature-item-private.data-v-1cf27b2a {
+	margin-left: -20rpx; /* 向左移动20rpx，可根据需要调整像素值 */
+	gap: 6rpx; /* 图标和文字之间的间距，约5像素 */
 }
 .experience-btn.data-v-1cf27b2a {
 	background-color: #4a5d50;

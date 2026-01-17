@@ -64,7 +64,7 @@
 							<image class="feature-icon" :src="images.icon1" mode="aspectFit"></image>
 							<text class="feature-text">60min</text>
 						</view>
-						<view class="feature-item">
+						<view class="feature-item feature-item-private">
 							<image class="feature-icon" :src="images.icon2" mode="aspectFit"></image>
 							<text class="feature-text">私密空间</text>
 						</view>
@@ -338,6 +338,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	gap: 16rpx;
+	margin-top: -28rpx; /* 向上移动，可根据需要调整像素值（负值向上，正值向下） */
 }
 
 .vip-header {
@@ -402,6 +403,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 	padding: 4rpx;
+	margin-top: -20rpx; /* 向上移动，可根据需要调整像素值（负值向上，正值向下） */
 }
 
 .arrow-icon {
@@ -507,6 +509,11 @@ export default {
 	font-weight: 300;
 	line-height: 32rpx;
 	letter-spacing: 0.6rpx;
+}
+
+.feature-item-private {
+	margin-left: -20rpx; /* 向左移动20rpx，可根据需要调整像素值 */
+	gap: 6rpx; /* 图标和文字之间的间距，约5像素 */
 }
 
 .experience-btn {
