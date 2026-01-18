@@ -7,18 +7,24 @@ const _sfc_main = {
   data() {
     return {
       assets: {
-        avatar: "https://www.figma.com/api/mcp/asset/48dced70-d93c-4c7e-ace6-c3b399ca5a05",
-        iconSettings: "https://www.figma.com/api/mcp/asset/51c7f686-bd66-4431-934b-4740a9719f6a",
-        iconVip: "https://www.figma.com/api/mcp/asset/e74344f2-0649-44d7-bb9f-08f2c853e984",
-        iconInvite: "https://www.figma.com/api/mcp/asset/97d47ae7-b35c-4d00-a688-1d5a2a7b8905",
-        iconClock: "https://www.figma.com/api/mcp/asset/ebdc0f3f-8fb4-4dcb-b0db-1a693cb69da8",
-        iconLocation: "https://www.figma.com/api/mcp/asset/7cd435a5-6518-4258-bb95-7d274e49bf10",
-        iconQr: "https://www.figma.com/api/mcp/asset/3629e2b7-0fbd-4283-a904-2a39665d503c"
+        avatar: "/static/my/avatar.png",
+        iconSettings: "/static/my/Icon3.svg",
+        // 设置图标（网格图标）
+        iconVip: "/static/my/Icon1.svg",
+        // VIP图标（星星图标）
+        iconInvite: "/static/my/Icon2.svg",
+        // 邀请图标（连接图标）
+        iconClock: "/static/my/Icon4.svg",
+        // 时钟图标（预约订单时间）
+        iconLocation: "/static/my/Icon5.svg",
+        // 位置图标（预约订单位置）
+        iconQr: "/static/my/Icon3.svg"
+        // 二维码图标（分享图标）
       },
       user: {
         name: "微信用户",
         phoneMasked: "138****8888",
-        avatar: "https://www.figma.com/api/mcp/asset/48dced70-d93c-4c7e-ace6-c3b399ca5a05"
+        avatar: "/static/my/avatar.png"
       },
       vip: {
         title: "普通用户",
@@ -468,11 +474,11 @@ const _sfc_main = {
           }
         }
       }
-      let icon = "https://www.figma.com/api/mcp/asset/53c6b923-1424-4cc2-9923-6bda581a5924";
-      let iconBg = "bg-warm";
+      let icon = "/static/my/Container2.svg";
+      let iconBg = "";
       if (order.packageName && (order.packageName.includes("家庭") || order.packageName.includes("100次"))) {
-        icon = "https://www.figma.com/api/mcp/asset/bd32f170-e8c9-4a38-8b65-ac6e5513a467";
-        iconBg = "bg-gray";
+        icon = "/static/my/Container1.svg";
+        iconBg = "";
       }
       return {
         name: order.packageName || "未知套餐",
@@ -589,13 +595,25 @@ const _sfc_main = {
         url: "/pages/login/login"
       });
     },
+    navigateToProfile() {
+      const token = common_vendor.index.getStorageSync("token");
+      if (token) {
+        common_vendor.index.navigateTo({
+          url: "/pages/my/profile"
+        });
+      } else {
+        common_vendor.index.navigateTo({
+          url: "/pages/login/login"
+        });
+      }
+    },
     setTab(v) {
       this.tab = v;
     },
     onInvite() {
       const now = /* @__PURE__ */ new Date();
       now.setHours(0, 0, 0, 0);
-      common_vendor.index.__f__("log", "at pages/my/my.vue:1003", "点击邀请，购卡记录:", this.purchaseRecords);
+      common_vendor.index.__f__("log", "at pages/my/my.vue:1018", "点击邀请，购卡记录:", this.purchaseRecords);
       const activeCard = this.purchaseRecords.find((record) => {
         if (record.status !== "生效中") {
           return false;
@@ -618,17 +636,17 @@ const _sfc_main = {
         return true;
       });
       if (!activeCard) {
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1034", "未找到生效中的卡");
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1049", "未找到生效中的卡");
         common_vendor.index.showToast({ title: "该卡无法邀请亲友", icon: "none" });
         return;
       }
-      common_vendor.index.__f__("log", "at pages/my/my.vue:1039", "找到生效中的卡:", activeCard);
+      common_vendor.index.__f__("log", "at pages/my/my.vue:1054", "找到生效中的卡:", activeCard);
       if (activeCard.packageCategory !== "多人尊享") {
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1043", "不是多人尊享卡，分类:", activeCard.packageCategory);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1058", "不是多人尊享卡，分类:", activeCard.packageCategory);
         common_vendor.index.showToast({ title: "该卡无法邀请亲友", icon: "none" });
         return;
       }
-      common_vendor.index.__f__("log", "at pages/my/my.vue:1049", "准备生成邀请码，activeCard:", activeCard);
+      common_vendor.index.__f__("log", "at pages/my/my.vue:1064", "准备生成邀请码，activeCard:", activeCard);
       this.generateInviteCode(activeCard);
     },
     // 生成邀请码
@@ -642,13 +660,13 @@ const _sfc_main = {
           return;
         }
         const paymentOrderId = activeCard.paymentOrderId || activeCard.id;
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1069", "生成邀请码 - activeCard:", activeCard);
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1070", "生成邀请码 - paymentOrderId:", paymentOrderId);
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1071", "生成邀请码 - activeCard.paymentOrderId:", activeCard.paymentOrderId);
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1072", "生成邀请码 - activeCard.id:", activeCard.id);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1084", "生成邀请码 - activeCard:", activeCard);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1085", "生成邀请码 - paymentOrderId:", paymentOrderId);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1086", "生成邀请码 - activeCard.paymentOrderId:", activeCard.paymentOrderId);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1087", "生成邀请码 - activeCard.id:", activeCard.id);
         if (!paymentOrderId) {
           common_vendor.index.hideLoading();
-          common_vendor.index.__f__("error", "at pages/my/my.vue:1076", "无法获取订单ID，activeCard:", JSON.stringify(activeCard, null, 2));
+          common_vendor.index.__f__("error", "at pages/my/my.vue:1091", "无法获取订单ID，activeCard:", JSON.stringify(activeCard, null, 2));
           common_vendor.index.showToast({ title: "无法获取订单信息", icon: "none" });
           return;
         }
@@ -671,7 +689,7 @@ const _sfc_main = {
         }
       } catch (error) {
         common_vendor.index.hideLoading();
-        common_vendor.index.__f__("error", "at pages/my/my.vue:1105", "生成邀请码失败:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:1120", "生成邀请码失败:", error);
         common_vendor.index.showToast({
           title: "生成邀请码失败，请重试",
           icon: "none"
@@ -704,15 +722,15 @@ const _sfc_main = {
                     this.inviteQrCodeImage = canvasRes.tempFilePath;
                   },
                   fail: (err) => {
-                    common_vendor.index.__f__("error", "at pages/my/my.vue:1148", "导出邀请二维码失败:", err);
+                    common_vendor.index.__f__("error", "at pages/my/my.vue:1163", "导出邀请二维码失败:", err);
                   }
                 }, this);
               }, 50);
             }).catch((err) => {
-              common_vendor.index.__f__("error", "at pages/my/my.vue:1153", "绘制邀请二维码失败:", err);
+              common_vendor.index.__f__("error", "at pages/my/my.vue:1168", "绘制邀请二维码失败:", err);
             });
           } catch (error) {
-            common_vendor.index.__f__("error", "at pages/my/my.vue:1156", "生成邀请二维码异常:", error);
+            common_vendor.index.__f__("error", "at pages/my/my.vue:1171", "生成邀请二维码异常:", error);
           }
         }, 200);
       });
@@ -815,13 +833,13 @@ const _sfc_main = {
                     this.qrCodeImage = canvasRes.tempFilePath;
                   },
                   fail: (err) => {
-                    common_vendor.index.__f__("error", "at pages/my/my.vue:1272", "导出 canvas 失败:", err);
+                    common_vendor.index.__f__("error", "at pages/my/my.vue:1287", "导出 canvas 失败:", err);
                     this.qrCodeImage = "";
                   }
                 }, this);
               }, 50);
             }).catch((err) => {
-              common_vendor.index.__f__("error", "at pages/my/my.vue:1278", "绘制二维码失败:", err);
+              common_vendor.index.__f__("error", "at pages/my/my.vue:1293", "绘制二维码失败:", err);
               setTimeout(() => {
                 common_vendor.index.canvasToTempFilePath({
                   canvasId: "qrcode-canvas",
@@ -829,14 +847,14 @@ const _sfc_main = {
                     this.qrCodeImage = canvasRes.tempFilePath;
                   },
                   fail: (canvasErr) => {
-                    common_vendor.index.__f__("error", "at pages/my/my.vue:1287", "导出 canvas 失败:", canvasErr);
+                    common_vendor.index.__f__("error", "at pages/my/my.vue:1302", "导出 canvas 失败:", canvasErr);
                     this.qrCodeImage = "";
                   }
                 }, this);
               }, 50);
             });
           } catch (error) {
-            common_vendor.index.__f__("error", "at pages/my/my.vue:1294", "生成二维码异常:", error);
+            common_vendor.index.__f__("error", "at pages/my/my.vue:1309", "生成二维码异常:", error);
             this.qrCodeImage = "";
           }
         }, 100);
@@ -876,7 +894,7 @@ const _sfc_main = {
               }
             } catch (error) {
               common_vendor.index.hideLoading();
-              common_vendor.index.__f__("error", "at pages/my/my.vue:1341", "取消预约失败:", error);
+              common_vendor.index.__f__("error", "at pages/my/my.vue:1356", "取消预约失败:", error);
               common_vendor.index.showToast({
                 title: "网络错误，请稍后重试",
                 icon: "none"
@@ -899,7 +917,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     b: $data.user.avatar || $data.assets.avatar,
     c: common_vendor.t($data.user.name),
     d: common_vendor.t($data.user.phoneMasked),
-    e: common_vendor.o((...args) => $options.navigateToLogin && $options.navigateToLogin(...args)),
+    e: common_vendor.o((...args) => $options.navigateToProfile && $options.navigateToProfile(...args)),
     f: $data.assets.iconVip,
     g: common_vendor.t($data.vip.title),
     h: $data.assets.iconInvite,

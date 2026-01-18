@@ -4,13 +4,15 @@
 	min-height: 100vh;
 	background-color: #f9f9f9;
 	padding-bottom: 184rpx;
+	padding-top: 0; /* 不设置容器顶部内边距，改为在 header 上控制 */
 }
 .header.data-v-c1a2745a {
 	width: 100%;
-	padding: 48rpx 40rpx 32rpx;
+	padding: 0 40rpx 32rpx;
+	padding-top: env(safe-area-inset-top, 50rpx); /* 直接在这里调整，与小程序关闭按钮顶部对齐 */
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-start;
 	gap: 8rpx;
 	background-color: #f9f9f9;
 }
@@ -30,7 +32,7 @@
 }
 .tabs-container.data-v-c1a2745a {
 	background-color: #f0f0f0;
-	margin: 0 64rpx;
+	margin: 0 32rpx;
 	padding: 8rpx;
 	border-radius: 9999rpx;
 	display: flex;

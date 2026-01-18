@@ -9,7 +9,7 @@
 		<scroll-view class="scroll" scroll-y="true" :show-scrollbar="false">
 			<view class="content">
 				<!-- 头像与用户信息 -->
-				<view class="user-row" @tap="navigateToLogin">
+				<view class="user-row" @tap="navigateToProfile">
 					<view class="avatar-wrap">
 						<image class="avatar" :src="user.avatar || assets.avatar" mode="aspectFill" />
 					</view>
@@ -317,18 +317,18 @@ export default {
 	data() {
 		return {
 			assets: {
-				avatar: 'https://www.figma.com/api/mcp/asset/48dced70-d93c-4c7e-ace6-c3b399ca5a05',
-				iconSettings: 'https://www.figma.com/api/mcp/asset/51c7f686-bd66-4431-934b-4740a9719f6a',
-				iconVip: 'https://www.figma.com/api/mcp/asset/e74344f2-0649-44d7-bb9f-08f2c853e984',
-				iconInvite: 'https://www.figma.com/api/mcp/asset/97d47ae7-b35c-4d00-a688-1d5a2a7b8905',
-				iconClock: 'https://www.figma.com/api/mcp/asset/ebdc0f3f-8fb4-4dcb-b0db-1a693cb69da8',
-				iconLocation: 'https://www.figma.com/api/mcp/asset/7cd435a5-6518-4258-bb95-7d274e49bf10',
-				iconQr: 'https://www.figma.com/api/mcp/asset/3629e2b7-0fbd-4283-a904-2a39665d503c'
+				avatar: '/static/my/avatar.png',
+				iconSettings: '/static/my/Icon3.svg', // 设置图标（网格图标）
+				iconVip: '/static/my/Icon1.svg', // VIP图标（星星图标）
+				iconInvite: '/static/my/Icon2.svg', // 邀请图标（连接图标）
+				iconClock: '/static/my/Icon4.svg', // 时钟图标（预约订单时间）
+				iconLocation: '/static/my/Icon5.svg', // 位置图标（预约订单位置）
+				iconQr: '/static/my/Icon3.svg' // 二维码图标（分享图标）
 			},
 			user: {
 				name: '微信用户',
 				phoneMasked: '138****8888',
-				avatar: 'https://www.figma.com/api/mcp/asset/48dced70-d93c-4c7e-ace6-c3b399ca5a05'
+				avatar: '/static/my/avatar.png'
 			},
 			vip: {
 				title: '普通用户',
@@ -859,15 +859,15 @@ export default {
 				}
 			}
 			
-			// 根据套餐名称选择图标和背景色
-			// 默认使用暖色图标和背景
-			let icon = 'https://www.figma.com/api/mcp/asset/53c6b923-1424-4cc2-9923-6bda581a5924'
-			let iconBg = 'bg-warm'
+			// 根据套餐名称选择图标（SVG已包含背景圆圈）
+			// 默认使用暖色图标
+			let icon = '/static/my/Container2.svg' // 黄色背景时钟图标
+			let iconBg = '' // SVG已包含背景，不需要额外背景色
 			
 			// 如果套餐名称包含"家庭"或"100次"，使用灰色图标
 			if (order.packageName && (order.packageName.includes('家庭') || order.packageName.includes('100次'))) {
-				icon = 'https://www.figma.com/api/mcp/asset/bd32f170-e8c9-4a38-8b65-ac6e5513a467'
-				iconBg = 'bg-gray'
+				icon = '/static/my/Container1.svg' // 灰色背景时钟图标
+				iconBg = '' // SVG已包含背景，不需要额外背景色
 			}
 			
 			return {
@@ -991,6 +991,21 @@ export default {
 			uni.navigateTo({
 				url: '/pages/login/login'
 			})
+		},
+		navigateToProfile() {
+			// 检查用户登录状态
+			const token = uni.getStorageSync('token')
+			if (token) {
+				// 已登录：跳转到个人信息详情页
+				uni.navigateTo({
+					url: '/pages/my/profile'
+				})
+			} else {
+				// 未登录：跳转到登录页
+				uni.navigateTo({
+					url: '/pages/login/login'
+				})
+			}
 		},
 		setTab(v) {
 			this.tab = v
@@ -1358,19 +1373,21 @@ export default {
 	position: relative;
 	min-height: 100vh;
 	background: #ffffff;
+	padding-top: 0; /* 不设置容器顶部内边距，改为在 topbar 上控制 */
 }
 
 .topbar {
 	position: fixed;
 	left: 0;
-	top: 0;
+	top: env(safe-area-inset-top, 0rpx); /* 与小程序关闭按钮顶部对齐 */
 	width: 750rpx;
-	height: 116rpx; /* 61px */
-	padding: 0 38rpx; /* 20px */
+	padding-top: 0;
+	padding-right: 38rpx;
+	padding-bottom: 32rpx; /* 与预约页面保持一致 */
+	padding-left: 38rpx;
 	display: flex;
-	align-items: flex-end;
+	align-items: flex-start;
 	justify-content: space-between;
-	padding-bottom: 2rpx;
 	background: rgba(249, 249, 249, 0.9);
 	border-bottom: 2rpx solid #f3f4f6;
 	z-index: 10;
@@ -1396,7 +1413,7 @@ export default {
 }
 
 .content {
-	padding-top: 136rpx; /* topbar + 约(72px)视觉留白 */
+	padding-top: 186rpx; /* topbar高度(116rpx) + topbar的padding-top默认值(50rpx) + 视觉留白(20rpx) */
 	padding-left: 38rpx;
 	padding-right: 38rpx;
 	padding-bottom: 184rpx; /* BottomNav 已固定 */
@@ -1491,8 +1508,9 @@ export default {
 	gap: 16rpx; /* 8px */
 }
 .vip-title-icon {
-	width: 38rpx; /* 20px */
-	height: 38rpx;
+	width: 45rpx; /* 20px */
+	height: 45rpx;
+	margin-top: -5rpx; /* 向上移动，可根据需要调整数值（负值向上，正值向下） */
 }
 .vip-title {
 	font-size: 40rpx; /* 调大约18% */
@@ -1512,8 +1530,8 @@ export default {
 	gap: 12rpx;
 }
 .vip-invite-icon {
-	width: 23rpx; /* 12px */
-	height: 23rpx;
+	width: 25rpx; /* 12px */
+	height: 25rpx;
 }
 .vip-invite-text {
 	font-size: 23rpx; /* 调大约21% */
@@ -1523,7 +1541,8 @@ export default {
 	letter-spacing: 0.22rpx;
 }
 .vip-subtitle {
-	margin-top: 10rpx;
+	margin-top: 10rpx; /* 保持原有的margin-top */
+	transform: translateY(-16rpx); /* 向上移动，可根据需要调整数值（负值向上，正值向下） */
 	font-size: 28rpx; /* 调大约22% */
 	line-height: 36rpx;
 	font-weight: 300;
@@ -1613,15 +1632,14 @@ export default {
 .record-icon {
 	width: 76rpx; /* 40px */
 	height: 76rpx;
-	border-radius: 9999rpx;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0; /* 防止图标被压缩 */
 }
 .record-icon-img {
-	width: 34rpx; /* 18px */
-	height: 34rpx;
+	width: 76rpx; /* 与容器大小一致，SVG已包含背景圆圈 */
+	height: 76rpx;
 }
 .bg-warm {
 	background: #fff8e1;

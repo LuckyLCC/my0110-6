@@ -91,8 +91,8 @@ export default {
 			selectedNickname: '', // 用户输入的昵称
 			pendingLoginCode: null, // 待处理的登录 code
 			icons: {
-				wechat: 'https://www.figma.com/api/mcp/asset/6f1ecd7b-5f40-48fb-9ad6-f69a05013455',
-				phone: 'https://www.figma.com/api/mcp/asset/d0de85e0-b7cc-49dc-995b-8410f60b8977'
+				wechat: '/static/login/wechat.png',
+				phone: '/static/login/phone.png'
 			}
 		}
 	},

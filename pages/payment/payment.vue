@@ -151,11 +151,11 @@ export default {
 			orderId: null,
 			icons: {
 				back: '/static/Button.png',
-				star: 'https://www.figma.com/api/mcp/asset/d8a75e34-91f3-4668-9f68-1aa515439cc8',
-				crown: 'https://www.figma.com/api/mcp/asset/686b2997-9764-4723-80b4-7f7a49675a6d',
-				wechat: 'https://www.figma.com/api/mcp/asset/bcdd9994-4ce4-418e-b4e5-497ae718d29f',
-				check: 'https://www.figma.com/api/mcp/asset/f7c2725a-2c81-453a-aa24-4a8d4b469eb9',
-				lock: 'https://www.figma.com/api/mcp/asset/59233441-a25d-483d-9319-e6e37b0927dd'
+				star: '/static/payment/Container.svg', // 星星图标
+				crown: '/static/payment/Container2.svg', // VIP/会员图标（金色圆圈带星星）
+				wechat: '/static/payment/Container1.svg', // 微信支付图标（绿色圆圈带勾）
+				check: '/static/payment/check.png',
+				lock: '/static/payment/lock.png'
 			}
 		}
 	},
@@ -695,16 +695,14 @@ export default {
 .crown-icon-wrapper {
 	width: 80rpx;
 	height: 80rpx;
-	border: 2rpx solid rgba(196, 163, 115, 0.3);
-	border-radius: 9999rpx;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
 .crown-icon {
-	width: 40rpx;
-	height: 40rpx;
+	width: 80rpx;
+	height: 80rpx;
 }
 
 .card-content {

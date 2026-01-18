@@ -117,28 +117,28 @@ export default {
 				original: 598
 			},
 			images: {
-				luxuryCabin: 'https://www.figma.com/api/mcp/asset/60bff265-fe2f-4c41-ba59-ee52e68d299e',
-				icon: 'https://www.figma.com/api/mcp/asset/9be8f457-e93d-4188-bac0-bbed59aab937',
-				icon1: 'https://www.figma.com/api/mcp/asset/6fe18f3a-6d6d-4c4a-9901-bc3dfa8aeca1',
-				icon2: 'https://www.figma.com/api/mcp/asset/5d72241c-8308-4dfa-a543-84108286f447',
-				gallery1: 'https://www.figma.com/api/mcp/asset/a745e6a5-7152-4910-aa07-f87902dd9833',
-				gallery2: 'https://www.figma.com/api/mcp/asset/eb88c44a-062f-4171-9fa9-06e21ab08d7c'
+				luxuryCabin: '/static/index/luxuryCabin.png',
+				icon: '/static/index/Container.svg', // VIP卡片箭头图标（包含圆圈和箭头）
+				icon1: '/static/index/Icon2.svg', // 60min 时钟图标
+				icon2: '/static/index/Icon3.svg', // 私密空间图标
+				gallery1: '/static/index/gallery1.png',
+				gallery2: '/static/index/gallery2.png'
 			},
 			galleryItems: [
 				{
 					name: '独立座舱',
 					nameEn: 'Private Cabin',
-					image: 'https://www.figma.com/api/mcp/asset/a745e6a5-7152-4910-aa07-f87902dd9833'
+					image: '/static/index/gallery1.png'
 				},
 				{
 					name: '茶歇服务',
 					nameEn: 'Tea Service',
-					image: 'https://www.figma.com/api/mcp/asset/eb88c44a-062f-4171-9fa9-06e21ab08d7c'
+					image: '/static/index/gallery2.png'
 				},
 				{
 					name: '纯净负离子',
 					nameEn: 'Fresh Air',
-					image: 'https://www.figma.com/api/mcp/asset/a745e6a5-7152-4910-aa07-f87902dd9833'
+					image: '/static/index/gallery1.png'
 				}
 			]
 		}
@@ -396,19 +396,15 @@ export default {
 .vip-card-right {
 	width: 80rpx;
 	height: 80rpx;
-	background-color: rgba(255, 255, 255, 0.05);
-	border: 2rpx solid rgba(255, 235, 200, 0.2);
-	border-radius: 9999rpx;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 4rpx;
 	margin-top: -20rpx; /* 向上移动，可根据需要调整像素值（负值向上，正值向下） */
 }
 
 .arrow-icon {
-	width: 32rpx;
-	height: 32rpx;
+	width: 80rpx;
+	height: 80rpx;
 }
 
 /* Experience Card */

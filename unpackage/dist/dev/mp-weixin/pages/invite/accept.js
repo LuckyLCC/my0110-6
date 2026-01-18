@@ -8,7 +8,7 @@ const _sfc_main = {
       loading: false,
       errorMessage: "",
       icons: {
-        wechat: "https://www.figma.com/api/mcp/asset/6f1ecd7b-5f40-48fb-9ad6-f69a05013455"
+        wechat: "/static/invite/wechat.png"
       }
     };
   },

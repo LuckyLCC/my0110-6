@@ -92,15 +92,13 @@
 .crown-icon-wrapper.data-v-eade9ab2 {
 	width: 80rpx;
 	height: 80rpx;
-	border: 2rpx solid rgba(196, 163, 115, 0.3);
-	border-radius: 9999rpx;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 .crown-icon.data-v-eade9ab2 {
-	width: 40rpx;
-	height: 40rpx;
+	width: 80rpx;
+	height: 80rpx;
 }
 .card-content.data-v-eade9ab2 {
 	display: flex;

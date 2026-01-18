@@ -4,6 +4,7 @@
     "pages/store/store",
     "pages/booking/booking",
     "pages/my/my",
+    "pages/my/profile",
     "pages/login/login",
     "pages/payment/payment",
     "pages/staff/verify",

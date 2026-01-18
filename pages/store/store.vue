@@ -74,7 +74,6 @@
 						</view>
 						<view class="card-btn" @tap="navigateToPayment(item)">
 							<text class="card-btn-text">立即开通</text>
-							<image class="card-btn-icon" :src="icons.arrow" mode="aspectFit"></image>
 						</view>
 					</view>
 				</view>
@@ -99,8 +98,7 @@ export default {
 			activeTab: 0,
 			tabCategories: ['个人畅享', '多人尊享', '家庭/次卡'],
 			icons: {
-				check: 'https://www.figma.com/api/mcp/asset/9af7aa2c-4d02-4734-a623-ed57909f758f',
-				arrow: 'https://www.figma.com/api/mcp/asset/f401a2a2-7c95-4d13-b643-051c1f788de1'
+				check: '/static/payment/Icon1.png' // 使用本地勾选图标
 			},
 			membershipCards: [], // 从数据库获取的数据
 			errorMessage: '', // 错误提示信息
@@ -234,14 +232,16 @@ export default {
 	min-height: 100vh;
 	background-color: #f9f9f9;
 	padding-bottom: 184rpx;
+	padding-top: 0; /* 不设置容器顶部内边距，改为在 header 上控制 */
 }
 
 .header {
 	width: 100%;
-	padding: 48rpx 40rpx 32rpx;
+	padding: 0 40rpx 32rpx;
+	padding-top: env(safe-area-inset-top, 50rpx); /* 直接在这里调整，与小程序关闭按钮顶部对齐 */
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-start;
 	gap: 8rpx;
 	background-color: #f9f9f9;
 }
@@ -264,7 +264,7 @@ export default {
 
 .tabs-container {
 	background-color: #f0f0f0;
-	margin: 0 64rpx;
+	margin: 0 32rpx;
 	padding: 8rpx;
 	border-radius: 9999rpx;
 	display: flex;

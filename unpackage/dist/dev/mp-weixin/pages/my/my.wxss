@@ -4,18 +4,20 @@
 	position: relative;
 	min-height: 100vh;
 	background: #ffffff;
+	padding-top: 0; /* 不设置容器顶部内边距，改为在 topbar 上控制 */
 }
 .topbar.data-v-2f1ef635 {
 	position: fixed;
 	left: 0;
-	top: 0;
+	top: env(safe-area-inset-top, 0rpx); /* 与小程序关闭按钮顶部对齐 */
 	width: 750rpx;
-	height: 116rpx; /* 61px */
-	padding: 0 38rpx; /* 20px */
+	padding-top: 0;
+	padding-right: 38rpx;
+	padding-bottom: 32rpx; /* 与预约页面保持一致 */
+	padding-left: 38rpx;
 	display: flex;
-	align-items: flex-end;
+	align-items: flex-start;
 	justify-content: space-between;
-	padding-bottom: 2rpx;
 	background: rgba(249, 249, 249, 0.9);
 	border-bottom: 2rpx solid #f3f4f6;
 	z-index: 10;
@@ -37,7 +39,7 @@
 	background: #ffffff;
 }
 .content.data-v-2f1ef635 {
-	padding-top: 136rpx; /* topbar + 约(72px)视觉留白 */
+	padding-top: 186rpx; /* topbar高度(116rpx) + topbar的padding-top默认值(50rpx) + 视觉留白(20rpx) */
 	padding-left: 38rpx;
 	padding-right: 38rpx;
 	padding-bottom: 184rpx; /* BottomNav 已固定 */
@@ -128,8 +130,9 @@
 	gap: 16rpx; /* 8px */
 }
 .vip-title-icon.data-v-2f1ef635 {
-	width: 38rpx; /* 20px */
-	height: 38rpx;
+	width: 45rpx; /* 20px */
+	height: 45rpx;
+	margin-top: -5rpx; /* 向上移动，可根据需要调整数值（负值向上，正值向下） */
 }
 .vip-title.data-v-2f1ef635 {
 	font-size: 40rpx; /* 调大约18% */
@@ -149,8 +152,8 @@
 	gap: 12rpx;
 }
 .vip-invite-icon.data-v-2f1ef635 {
-	width: 23rpx; /* 12px */
-	height: 23rpx;
+	width: 25rpx; /* 12px */
+	height: 25rpx;
 }
 .vip-invite-text.data-v-2f1ef635 {
 	font-size: 23rpx; /* 调大约21% */
@@ -160,7 +163,8 @@
 	letter-spacing: 0.22rpx;
 }
 .vip-subtitle.data-v-2f1ef635 {
-	margin-top: 10rpx;
+	margin-top: 10rpx; /* 保持原有的margin-top */
+	transform: translateY(-16rpx); /* 向上移动，可根据需要调整数值（负值向上，正值向下） */
 	font-size: 28rpx; /* 调大约22% */
 	line-height: 36rpx;
 	font-weight: 300;
@@ -245,15 +249,14 @@
 .record-icon.data-v-2f1ef635 {
 	width: 76rpx; /* 40px */
 	height: 76rpx;
-	border-radius: 9999rpx;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0; /* 防止图标被压缩 */
 }
 .record-icon-img.data-v-2f1ef635 {
-	width: 34rpx; /* 18px */
-	height: 34rpx;
+	width: 76rpx; /* 与容器大小一致，SVG已包含背景圆圈 */
+	height: 76rpx;
 }
 .bg-warm.data-v-2f1ef635 {
 	background: #fff8e1;

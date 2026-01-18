@@ -11,8 +11,8 @@ const _sfc_main = {
       activeTab: 0,
       tabCategories: ["个人畅享", "多人尊享", "家庭/次卡"],
       icons: {
-        check: "https://www.figma.com/api/mcp/asset/9af7aa2c-4d02-4734-a623-ed57909f758f",
-        arrow: "https://www.figma.com/api/mcp/asset/f401a2a2-7c95-4d13-b643-051c1f788de1"
+        check: "/static/payment/Icon1.png"
+        // 使用本地勾选图标
       },
       membershipCards: [],
       // 从数据库获取的数据
@@ -40,18 +40,18 @@ const _sfc_main = {
       this.membershipCards = [];
       try {
         const category = this.tabCategories[this.activeTab];
-        common_vendor.index.__f__("log", "at pages/store/store.vue:129", "正在请求分类:", category);
-        common_vendor.index.__f__("log", "at pages/store/store.vue:130", "请求的分类参数:", category);
+        common_vendor.index.__f__("log", "at pages/store/store.vue:127", "正在请求分类:", category);
+        common_vendor.index.__f__("log", "at pages/store/store.vue:128", "请求的分类参数:", category);
         const response = await api_request.api.packages.getByCategory(category);
-        common_vendor.index.__f__("log", "at pages/store/store.vue:133", "API响应:", response);
+        common_vendor.index.__f__("log", "at pages/store/store.vue:131", "API响应:", response);
         if (response.code === 200) {
           if (response.data && response.data.length > 0) {
             this.membershipCards = response.data;
             this.errorMessage = "";
-            common_vendor.index.__f__("log", "at pages/store/store.vue:139", "成功加载", response.data.length, "个套餐");
+            common_vendor.index.__f__("log", "at pages/store/store.vue:137", "成功加载", response.data.length, "个套餐");
           } else {
             this.membershipCards = [];
-            common_vendor.index.__f__("log", "at pages/store/store.vue:142", "该分类没有套餐数据");
+            common_vendor.index.__f__("log", "at pages/store/store.vue:140", "该分类没有套餐数据");
           }
         } else {
           const errorMsg = response.message || "获取会员套餐数据失败";
@@ -64,7 +64,7 @@ const _sfc_main = {
           });
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/store/store.vue:157", "API请求错误:", error);
+        common_vendor.index.__f__("error", "at pages/store/store.vue:155", "API请求错误:", error);
         let errorMsg = "网络连接失败";
         if (error.errMsg) {
           if (error.errMsg.includes("fail")) {
@@ -77,7 +77,7 @@ const _sfc_main = {
         }
         this.errorMessage = errorMsg;
         this.membershipCards = [];
-        common_vendor.index.__f__("error", "at pages/store/store.vue:172", "获取会员套餐数据异常:", error);
+        common_vendor.index.__f__("error", "at pages/store/store.vue:170", "获取会员套餐数据异常:", error);
         common_vendor.index.showToast({
           title: errorMsg,
           icon: "none",
@@ -88,7 +88,7 @@ const _sfc_main = {
       }
     },
     switchTab(index) {
-      common_vendor.index.__f__("log", "at pages/store/store.vue:183", "切换到标签:", index);
+      common_vendor.index.__f__("log", "at pages/store/store.vue:181", "切换到标签:", index);
       this.activeTab = index;
     },
     navigateToPayment(item) {
@@ -173,12 +173,11 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         j: item.id || index
       });
     }),
-    o: $data.icons.check,
-    p: $data.icons.arrow
+    o: $data.icons.check
   }, {
     k: $data.errorMessage,
     m: $data.membershipCards.length === 0 && !$data.loading,
-    q: common_vendor.p({
+    p: common_vendor.p({
       current: 1
     })
   });

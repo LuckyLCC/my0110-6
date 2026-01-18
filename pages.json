@@ -29,6 +29,13 @@
 			}
 		},
 		{
+			"path": "pages/my/profile",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "登录",

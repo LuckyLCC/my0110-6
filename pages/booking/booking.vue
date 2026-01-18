@@ -728,16 +728,22 @@ export default {
 	min-height: 100vh;
 	background-color: #f9f9f9;
 	padding-bottom: 184rpx;
+	padding-top: 0; /* 不设置容器顶部内边距，改为在 header 上控制 */
 }
 
 .header {
+	position: sticky;
+	top: 0;
 	width: 100%;
-	height: 112rpx;
 	background-color: rgba(249, 249, 249, 0.9);
 	border-bottom: 2rpx solid #f3f4f6;
 	display: flex;
-	align-items: center;
-	padding: 0 40rpx 34rpx;
+	align-items: flex-start;
+	padding-top: env(safe-area-inset-top, 0rpx); /* 与小程序关闭按钮顶部对齐，与会员商城保持一致 */
+	padding-right: 40rpx;
+	padding-bottom: 32rpx;
+	padding-left: 40rpx;
+	z-index: 10;
 }
 
 .header-title {

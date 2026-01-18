@@ -182,18 +182,14 @@
 .vip-card-right.data-v-1cf27b2a {
 	width: 80rpx;
 	height: 80rpx;
-	background-color: rgba(255, 255, 255, 0.05);
-	border: 2rpx solid rgba(255, 235, 200, 0.2);
-	border-radius: 9999rpx;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 4rpx;
 	margin-top: -20rpx; /* 向上移动，可根据需要调整像素值（负值向上，正值向下） */
 }
 .arrow-icon.data-v-1cf27b2a {
-	width: 32rpx;
-	height: 32rpx;
+	width: 80rpx;
+	height: 80rpx;
 }
 
 /* Experience Card */
