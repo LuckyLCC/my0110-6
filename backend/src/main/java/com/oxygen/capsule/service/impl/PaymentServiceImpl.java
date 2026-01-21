@@ -3,6 +3,9 @@ package com.oxygen.capsule.service.impl;
 import com.oxygen.capsule.entity.MemberPackage;
 import com.oxygen.capsule.entity.PaymentOrder;
 import com.oxygen.capsule.entity.User;
+import com.oxygen.capsule.entity.enums.PaymentOrdersCardStatusEnum;
+import com.oxygen.capsule.entity.enums.PaymentOrdersStatusEnum;
+import com.oxygen.capsule.entity.enums.PaymentOrdersTransactionTypeEnum;
 import com.oxygen.capsule.repository.PaymentOrderRepository;
 import com.oxygen.capsule.service.MemberPackageService;
 import com.oxygen.capsule.service.PaymentService;
@@ -14,10 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -56,18 +57,12 @@ public class PaymentServiceImpl implements PaymentService {
             order.setPackageId(packageId);
             order.setPackageName(pkg.getName());
             order.setPrice(price);
-            order.setStatus("unpaid");
+            order.setStatus(PaymentOrdersStatusEnum.UNPAID);
             
             // 先检查用户是否有已支付的购卡记录（排除当前正在创建的订单）
             // 注意：这里查询的是已支付的订单，不包括当前未支付的订单
             // 简化逻辑：有已支付的购卡记录就是续费，没有就是新开卡
-            List<PaymentOrder> paidOrders = paymentOrderRepository.findByUserIdAndStatus(userId, "paid");
-            // 再次确认：只统计状态为 "paid" 的订单（双重检查，确保数据正确）
-            if (paidOrders != null) {
-                paidOrders = paidOrders.stream()
-                    .filter(po -> "paid".equals(po.getStatus()))
-                    .collect(java.util.stream.Collectors.toList());
-            }
+            List<PaymentOrder> paidOrders = paymentOrderRepository.findByUserIdAndStatus(userId, PaymentOrdersStatusEnum.PAID);
             boolean hasPaidOrders = paidOrders != null && !paidOrders.isEmpty();
             
             // 调试日志：输出查询结果
@@ -85,12 +80,12 @@ public class PaymentServiceImpl implements PaymentService {
             // 使用用户选择的卡开始日期，如果没有提供则使用默认逻辑
             LocalDateTime currentTime = LocalDateTime.now();
             LocalDateTime finalCardStartDate;
-            String transactionType;
+            PaymentOrdersTransactionTypeEnum transactionType;
             
             // 简化逻辑：有已支付的购卡记录就是续费，没有就是新开卡
             if (hasPaidOrders) {
                 // 有已支付的购卡记录，判断为续费
-                transactionType = "RENEW";
+                transactionType = PaymentOrdersTransactionTypeEnum.RENEW;
                 System.out.println("判断为续费：用户有已支付的购卡记录");
                 
                 // 如果没有提供卡开始日期，且用户有未过期的会员，从会员到期时间开始
@@ -108,7 +103,7 @@ public class PaymentServiceImpl implements PaymentService {
                 }
             } else {
                 // 没有已支付的购卡记录，判断为新开卡（第一次购买）
-                transactionType = "NEW";
+                transactionType = PaymentOrdersTransactionTypeEnum.NEW;
                 System.out.println("判断为新开卡：用户没有已支付的购卡记录");
                 
                 if (cardStartDate != null) {
@@ -151,7 +146,7 @@ public class PaymentServiceImpl implements PaymentService {
             }
             
             // 计算并设置初始卡状态
-            String initialCardStatus = calculateCardStatus(order, pkg);
+            PaymentOrdersCardStatusEnum initialCardStatus = calculateCardStatus(order, pkg);
             order.setCardStatus(initialCardStatus);
     
             return paymentOrderRepository.save(order);
@@ -207,8 +202,9 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentOrder updateOrderStatus(Long orderId, String status) {
         PaymentOrder order = findById(orderId);
         if (order != null) {
-            order.setStatus(status);
-            if ("paid".equals(status)) {
+            PaymentOrdersStatusEnum next = PaymentOrdersStatusEnum.fromDb(status);
+            order.setStatus(next);
+            if (next == PaymentOrdersStatusEnum.PAID) {
                 order.setPaymentTime(LocalDateTime.now());
                 
                 // 获取套餐信息
@@ -220,13 +216,13 @@ public class PaymentServiceImpl implements PaymentService {
                     }
                     
                     // 重新计算并更新卡状态
-                    String cardStatus = calculateCardStatus(order, pkg);
+                    PaymentOrdersCardStatusEnum cardStatus = calculateCardStatus(order, pkg);
                     order.setCardStatus(cardStatus);
                 } else {
                     // 如果套餐不存在，设置默认状态
                     System.err.println("警告：订单 " + order.getId() + " 的套餐不存在，设置默认卡状态");
                     if (order.getCardStatus() == null) {
-                        order.setCardStatus("未生效");
+                        order.setCardStatus(PaymentOrdersCardStatusEnum.INACTIVE);
                     }
                 }
                 
@@ -244,10 +240,10 @@ public class PaymentServiceImpl implements PaymentService {
      * - 次卡：检查 remaining_times <= 0 或过期 → "已完成"
      * - 其他卡种：检查过期 → "已完成"
      */
-    private String calculateCardStatus(PaymentOrder order, MemberPackage pkg) {
+    private PaymentOrdersCardStatusEnum calculateCardStatus(PaymentOrder order, MemberPackage pkg) {
         // 如果订单未支付，状态为未生效
-        if (!"paid".equals(order.getStatus())) {
-            return "未生效";
+        if (order.getStatus() != PaymentOrdersStatusEnum.PAID) {
+            return PaymentOrdersCardStatusEnum.INACTIVE;
         }
         
         LocalDate now = LocalDate.now();
@@ -259,7 +255,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (isTimesCard) {
             // 如果剩余次数 <= 0，状态为已完成
             if (order.getRemainingTimes() != null && order.getRemainingTimes() <= 0) {
-                return "已完成";
+                return PaymentOrdersCardStatusEnum.COMPLETED;
             }
         }
         
@@ -276,22 +272,22 @@ public class PaymentServiceImpl implements PaymentService {
         
         // 如果当前时间 < 卡开始日期，则为未生效
         if (startDate != null && now.isBefore(startDate)) {
-            return "未生效";
+            return PaymentOrdersCardStatusEnum.INACTIVE;
         }
         
         // 如果当前时间 > 卡到期日期，则为已完成
         if (endDate != null && now.isAfter(endDate)) {
-            return "已完成";
+            return PaymentOrdersCardStatusEnum.COMPLETED;
         }
         
         // 如果当前时间在有效期内，则为生效中
         if ((startDate == null || !now.isBefore(startDate)) && 
             (endDate == null || !now.isAfter(endDate))) {
-            return "生效中";
+            return PaymentOrdersCardStatusEnum.ACTIVE;
         }
         
         // 默认返回已完成
-        return "已完成";
+        return PaymentOrdersCardStatusEnum.COMPLETED;
     }
     
     /**
@@ -301,7 +297,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void updateCardStatus(Long paymentOrderId) {
         PaymentOrder order = findById(paymentOrderId);
-        if (order != null && "paid".equals(order.getStatus())) {
+        if (order != null && order.getStatus() == PaymentOrdersStatusEnum.PAID) {
             MemberPackage pkg = memberPackageService.findById(order.getPackageId());
             if (pkg != null) {
                 // 如果是次卡，减少剩余次数
@@ -310,7 +306,7 @@ public class PaymentServiceImpl implements PaymentService {
                 }
                 
                 // 重新计算并更新卡状态
-                String cardStatus = calculateCardStatus(order, pkg);
+                PaymentOrdersCardStatusEnum cardStatus = calculateCardStatus(order, pkg);
                 order.setCardStatus(cardStatus);
                 paymentOrderRepository.save(order);
             }
@@ -320,7 +316,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public void refundTimesCard(Long paymentOrderId) {
         PaymentOrder order = findById(paymentOrderId);
-        if (order != null && "paid".equals(order.getStatus())) {
+        if (order != null && order.getStatus() == PaymentOrdersStatusEnum.PAID) {
             MemberPackage pkg = memberPackageService.findById(order.getPackageId());
             if (pkg != null && "家庭/次卡".equals(pkg.getCategory())) {
                 // 如果是次卡，返还一次次数
@@ -332,7 +328,7 @@ public class PaymentServiceImpl implements PaymentService {
                 }
                 
                 // 重新计算并更新卡状态
-                String cardStatus = calculateCardStatus(order, pkg);
+                PaymentOrdersCardStatusEnum cardStatus = calculateCardStatus(order, pkg);
                 order.setCardStatus(cardStatus);
                 paymentOrderRepository.save(order);
                 log.info("次卡返还次数成功，订单ID: {}, 剩余次数: {}", paymentOrderId, order.getRemainingTimes());
@@ -349,26 +345,6 @@ public class PaymentServiceImpl implements PaymentService {
     public List<PaymentOrder> findByUserId(Long userId) {
         return paymentOrderRepository.findByUserId(userId);
     }
-
-    private String generateNonceStr() {
-        String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 32; i++) {
-            sb.append(chars.charAt(random.nextInt(chars.length())));
-        }
-        return sb.toString();
-    }
-
-    private String generateRandomString(int length) {
-        String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < length; i++) {
-            sb.append(chars.charAt(random.nextInt(chars.length())));
-        }
-        return sb.toString();
-    }
     
     @Override
     public void handlePaymentNotify(String notifyData) {
@@ -382,16 +358,16 @@ public class PaymentServiceImpl implements PaymentService {
         
         try {
             // 使用微信支付工具类处理回调
-            String result = wxPayUtil.handlePayNotify(notifyData);
+            wxPayUtil.handlePayNotify(notifyData);
             
             // 解析回调数据并提取订单号
             String outTradeNo = extractOrderNo(notifyData);
             
             if (outTradeNo != null && !outTradeNo.isEmpty()) {
                 PaymentOrder order = findByOrderNo(outTradeNo);
-                if (order != null && !"paid".equals(order.getStatus())) {
+                if (order != null && order.getStatus() != PaymentOrdersStatusEnum.PAID) {
                     // 更新订单状态为已支付
-                    updateOrderStatus(order.getId(), "paid");
+                    updateOrderStatus(order.getId(), PaymentOrdersStatusEnum.PAID.name());
                     
                     // 可选：根据套餐类型更新用户会员级别或权益
                     updateUserInfoForPaidOrder(order);

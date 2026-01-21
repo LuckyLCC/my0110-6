@@ -1,6 +1,7 @@
 package com.oxygen.capsule.repository;
 
 import com.oxygen.capsule.entity.Invitation;
+import com.oxygen.capsule.entity.enums.InvitationsStatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +23,7 @@ public interface InvitationRepository extends JpaRepository<Invitation, Long> {
     List<Invitation> findByPaymentOrderId(Long paymentOrderId);
     
     // 根据支付订单ID和状态查找
-    List<Invitation> findByPaymentOrderIdAndStatus(Long paymentOrderId, String status);
+    List<Invitation> findByPaymentOrderIdAndStatus(Long paymentOrderId, InvitationsStatusEnum status);
     
     // 根据被邀请人ID和支付订单ID查找
     List<Invitation> findByInviteeIdAndPaymentOrderId(Long inviteeId, Long paymentOrderId);

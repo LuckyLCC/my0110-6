@@ -310,6 +310,7 @@
 <script>
 import BottomNav from '@/components/BottomNav.vue'
 import { api } from '@/api/request'
+import { BookingStatusLabelZh, CardStatusLabelZh } from '@/api/enums'
 import UQRCode from 'uqrcodejs'
 
 export default {
@@ -519,7 +520,7 @@ export default {
 				if (response.code === 200 && response.data) {
 					// 转换数据格式
 					this.purchaseRecords = response.data
-						.filter(order => order.status === 'paid') // 只显示已支付的订单
+						.filter(order => String(order.status || '').toLowerCase() === 'paid') // 只显示已支付的订单（兼容大小写）
 						.map(order => this.formatPurchaseRecord(order))
 						.sort((a, b) => {
 							// 按购买时间倒序排列（最新的在前）
@@ -724,8 +725,8 @@ export default {
 				formattedEndDate = `${year}-${month}-${day}`
 			}
 			
-			// 使用数据库返回的卡状态（cardStatus），如果数据库没有返回，则使用默认逻辑计算
-			let status = order.cardStatus || '已完成'
+			// cardStatus 为英文枚举（INACTIVE/ACTIVE/COMPLETED），显示时映射成中文
+			let status = CardStatusLabelZh[String(order.cardStatus || '').trim().toUpperCase()] || '已完成'
 			let statusPillClass = 'pill-gray'
 			let statusTextClass = 'pill-text-gray'
 			
@@ -741,7 +742,7 @@ export default {
 				statusTextClass = 'pill-text-gray'
 			} else {
 				// 如果数据库返回的状态不在预期范围内，使用默认逻辑计算（兜底）
-				if (order.status === 'paid') {
+				if (String(order.status || '').toLowerCase() === 'paid') {
 					const now = new Date()
 					now.setHours(0, 0, 0, 0)
 					
@@ -920,6 +921,9 @@ export default {
 		},
 		// 格式化预约订单
 		formatBookingOrder(order) {
+			// 后端现在返回枚举（PENDING/COMPLETED/...），这里统一规范化
+			const rawStatus = String(order.status || '').trim().toUpperCase()
+
 			// 格式化日期：2026-01-14
 			let formattedDate = order.date || ''
 			
@@ -934,38 +938,38 @@ export default {
 			// 座位名称：A座
 			const site = order.seatName || ''
 			
-			// 判断状态：pending -> 待核销, completed -> 已完成, cancelled -> 已取消
+			// 判断状态：PENDING -> 待核销, COMPLETED -> 已完成, CANCELLED -> 已取消, NO_SHOW -> 未到店
 			let status = 'pending'
 			let statusText = '待核销'
 			let statusBadgeClass = 'badge-warm'
 			let statusTextClass = 'badge-warm-text'
 			let showVerify = false
 			let showCancel = false
+
+			// 展示文案统一走映射表（内部 tab/status 仍用 pending/done/cancelled/no_show）
+			// eslint-disable-next-line no-undef
+			statusText = BookingStatusLabelZh[rawStatus] || statusText
 			
-			if (order.status === 'completed') {
+			if (rawStatus === 'COMPLETED') {
 				status = 'done'
-				statusText = '已完成'
 				statusBadgeClass = 'badge-gray'
 				statusTextClass = 'badge-gray-text'
 				showVerify = false
 				showCancel = false
-			} else if (order.status === 'cancelled') {
+			} else if (rawStatus === 'CANCELLED') {
 				status = 'cancelled'
-				statusText = '已取消'
 				statusBadgeClass = 'badge-gray'
 				statusTextClass = 'badge-gray-text'
 				showVerify = false
 				showCancel = false
-			} else if (order.status === 'no_show') {
+			} else if (rawStatus === 'NO_SHOW') {
 				status = 'no_show'
-				statusText = '未到店'
 				statusBadgeClass = 'badge-gray'
 				statusTextClass = 'badge-gray-text'
 				showVerify = false
 				showCancel = false
-			} else if (order.status === 'pending') {
+			} else if (rawStatus === 'PENDING') {
 				status = 'pending'
-				statusText = '待核销'
 				statusBadgeClass = 'badge-warm'
 				statusTextClass = 'badge-warm-text'
 				showVerify = true

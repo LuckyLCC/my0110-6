@@ -135,6 +135,7 @@
 
 <script>
 import { api } from '@/api/request'
+import { TransactionTypeLabelZh } from '@/api/enums'
 
 export default {
 	data() {
@@ -198,7 +199,8 @@ export default {
 			return (this.price % 1).toFixed(2).substring(1)
 		},
 		transactionTypeText() {
-			return this.transactionType === 'RENEW' ? '续费' : '新开卡'
+			const key = String(this.transactionType || '').trim().toUpperCase()
+			return TransactionTypeLabelZh[key] || '新开卡'
 		},
 		// 最小日期（今天）
 		minDate() {
@@ -244,7 +246,7 @@ export default {
 				const ordersResponse = await api.payment.getOrders()
 				const hasPaidOrders = ordersResponse.code === 200 && 
 					ordersResponse.data && 
-					ordersResponse.data.some(order => order.status === 'paid')
+					ordersResponse.data.some(order => String(order.status || '').toLowerCase() === 'paid')
 				
 				// 简化逻辑：有已支付的购卡记录就是续费，没有就是新开卡
 				if (hasPaidOrders) {
@@ -286,7 +288,7 @@ export default {
 				const ordersResponse = await api.payment.getOrders()
 				const hasPaidOrders = ordersResponse.code === 200 && 
 					ordersResponse.data && 
-					ordersResponse.data.some(order => order.status === 'paid')
+					ordersResponse.data.some(order => String(order.status || '').toLowerCase() === 'paid')
 				
 				// 简化逻辑：有已支付的购卡记录就是续费，没有就是新开卡
 				if (hasPaidOrders) {

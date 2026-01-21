@@ -1,6 +1,56 @@
 // api/request.js - API请求封装
 const BASE_URL = 'http://192.168.3.51:8080/api';
 
+import {
+  BookingStatus,
+  CardStatus,
+  PaymentOrderStatus,
+  PaymentStatus,
+  TransactionType,
+  normalizeEnum,
+  normalizeRoleToLower
+} from './enums'
+
+function normalizeResponse(url, payload) {
+  // 只做最关键几类接口的枚举规范化/约束（避免到处散落字符串判断）
+  try {
+    // 登录：统一 role 小写，兼容旧逻辑
+    if (url === '/user/login' && payload?.data?.userInfo) {
+      payload.data.userInfo.role = normalizeRoleToLower(payload.data.userInfo.role)
+    }
+
+    // 用户信息：如果未来返回 role，也统一小写
+    if (url === '/user/info' && payload?.data) {
+      if (payload.data.role) {
+        payload.data.role = normalizeRoleToLower(payload.data.role)
+      }
+    }
+
+    // 购卡记录
+    if (url === '/payment/orders' && Array.isArray(payload?.data)) {
+      payload.data.forEach((o) => {
+        o.status = normalizeEnum(o.status, Object.values(PaymentOrderStatus), { field: 'paymentOrder.status', defaultValue: PaymentOrderStatus.UNPAID })
+        o.transactionType = normalizeEnum(o.transactionType, Object.values(TransactionType), { field: 'paymentOrder.transactionType', defaultValue: TransactionType.NEW })
+        // cardStatus 是英文枚举，做严格校验
+        if (o.cardStatus !== undefined) {
+          o.cardStatus = normalizeEnum(o.cardStatus, Object.values(CardStatus), { field: 'paymentOrder.cardStatus', defaultValue: CardStatus.INACTIVE })
+        }
+      })
+    }
+
+    // 预约订单
+    if (url === '/booking/orders' && Array.isArray(payload?.data)) {
+      payload.data.forEach((o) => {
+        o.status = normalizeEnum(o.status, Object.values(BookingStatus), { field: 'bookingOrder.status', defaultValue: BookingStatus.PENDING })
+        o.paymentStatus = normalizeEnum(o.paymentStatus, Object.values(PaymentStatus), { field: 'bookingOrder.paymentStatus', defaultValue: PaymentStatus.UNPAID })
+      })
+    }
+  } catch (e) {
+    console.warn('[enum] 规范化响应失败:', url, e)
+  }
+  return payload
+}
+
 // 请求拦截器
 const request = (options) => {
   console.log('发起请求:', BASE_URL + options.url, options); // 添加调试日志
@@ -17,7 +67,7 @@ const request = (options) => {
       success: (res) => {
         console.log('请求成功:', res); // 添加成功调试日志
         if (res.statusCode === 200) {
-          resolve(res.data);
+          resolve(normalizeResponse(options.url, res.data));
         } else {
           // 处理错误情况
           console.error('请求失败:', res);

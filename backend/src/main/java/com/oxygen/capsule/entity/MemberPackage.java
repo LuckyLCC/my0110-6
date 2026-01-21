@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 @Data
 @Entity
 @Table(name = "member_packages")
+@EntityListeners(EnglishUppercaseEntityListener.class)
 public class MemberPackage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

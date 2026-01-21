@@ -1,5 +1,7 @@
 package com.oxygen.capsule.entity;
 
+import com.oxygen.capsule.entity.converter.StaffStatusConverter;
+import com.oxygen.capsule.entity.enums.StaffsStatusEnum;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -7,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "staffs")
+@EntityListeners(EnglishUppercaseEntityListener.class)
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +28,8 @@ public class Staff {
     private String phone; // 联系电话
 
     @Column(name = "status")
-    private String status = "active"; // active-激活, inactive-停用
+    @Convert(converter = StaffStatusConverter.class)
+    private StaffsStatusEnum status = StaffsStatusEnum.ACTIVE;
 
     @Column(name = "last_login_time")
     private LocalDateTime lastLoginTime;

@@ -383,7 +383,7 @@ export default {
 						const userInfo = response.data?.userInfo || uni.getStorageSync('userInfo')
 						const userRole = userInfo?.role || 'user'
 						
-						if (userRole === 'staff') {
+						if (String(userRole).toLowerCase() === 'staff') {
 							// 商家用户跳转到扫码核销页面
 							uni.reLaunch({
 								url: '/pages/staff/verify'

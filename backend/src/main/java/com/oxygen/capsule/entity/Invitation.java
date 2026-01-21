@@ -1,5 +1,7 @@
 package com.oxygen.capsule.entity;
 
+import com.oxygen.capsule.entity.converter.InvitationStatusConverter;
+import com.oxygen.capsule.entity.enums.InvitationsStatusEnum;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -7,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "invitations")
+@EntityListeners(EnglishUppercaseEntityListener.class)
 public class Invitation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +28,8 @@ public class Invitation {
     private String inviteCode; // 邀请码
 
     @Column(name = "status", nullable = false, length = 20)
-    private String status = "pending"; // pending-待接受, accepted-已接受, expired-已过期
+    @Convert(converter = InvitationStatusConverter.class)
+    private InvitationsStatusEnum status = InvitationsStatusEnum.PENDING;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

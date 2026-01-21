@@ -90,11 +90,11 @@ const _sfc_main = {
         const ordersResponse = await api_request.api.payment.getOrders();
         common_vendor.index.__f__("log", "at pages/booking/booking.vue:186", "购卡记录响应:", ordersResponse);
         if (ordersResponse.code === 200 && ordersResponse.data) {
-          const paidOrders = ordersResponse.data.filter((order) => order.status === "paid");
+          const paidOrders = ordersResponse.data.filter((order) => String(order.status || "").toLowerCase() === "paid");
           common_vendor.index.__f__("log", "at pages/booking/booking.vue:191", "已支付的订单:", paidOrders);
           const hasActiveCard = paidOrders.some((order) => {
             if (order.cardStatus) {
-              const isActive = order.cardStatus === "生效中";
+              const isActive = String(order.cardStatus).toUpperCase() === "ACTIVE";
               common_vendor.index.__f__("log", "at pages/booking/booking.vue:198", `订单 ${order.id} (${order.packageName}): cardStatus = ${order.cardStatus}, 是否生效中: ${isActive}`);
               return isActive;
             }

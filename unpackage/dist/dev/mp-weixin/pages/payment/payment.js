@@ -1,6 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const api_request = require("../../api/request.js");
+const api_enums = require("../../api/enums.js");
 const _sfc_main = {
   data() {
     return {
@@ -59,7 +60,8 @@ const _sfc_main = {
       return (this.price % 1).toFixed(2).substring(1);
     },
     transactionTypeText() {
-      return this.transactionType === "RENEW" ? "续费" : "新开卡";
+      const key = String(this.transactionType || "").trim().toUpperCase();
+      return api_enums.TransactionTypeLabelZh[key] || "新开卡";
     },
     // 最小日期（今天）
     minDate() {
@@ -99,16 +101,16 @@ const _sfc_main = {
       }
       try {
         const ordersResponse = await api_request.api.payment.getOrders();
-        const hasPaidOrders = ordersResponse.code === 200 && ordersResponse.data && ordersResponse.data.some((order) => order.status === "paid");
+        const hasPaidOrders = ordersResponse.code === 200 && ordersResponse.data && ordersResponse.data.some((order) => String(order.status || "").toLowerCase() === "paid");
         if (hasPaidOrders) {
           this.transactionType = "RENEW";
-          common_vendor.index.__f__("log", "at pages/payment/payment.vue:252", "判断为续费：用户有已支付的购卡记录");
+          common_vendor.index.__f__("log", "at pages/payment/payment.vue:254", "判断为续费：用户有已支付的购卡记录");
         } else {
           this.transactionType = "NEW";
-          common_vendor.index.__f__("log", "at pages/payment/payment.vue:255", "判断为新开卡：用户没有已支付的购卡记录");
+          common_vendor.index.__f__("log", "at pages/payment/payment.vue:257", "判断为新开卡：用户没有已支付的购卡记录");
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/payment/payment.vue:258", "获取购卡记录失败:", error);
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:260", "获取购卡记录失败:", error);
         this.transactionType = "NEW";
       }
     },
@@ -134,7 +136,7 @@ const _sfc_main = {
       }
       try {
         const ordersResponse = await api_request.api.payment.getOrders();
-        const hasPaidOrders = ordersResponse.code === 200 && ordersResponse.data && ordersResponse.data.some((order) => order.status === "paid");
+        const hasPaidOrders = ordersResponse.code === 200 && ordersResponse.data && ordersResponse.data.some((order) => String(order.status || "").toLowerCase() === "paid");
         if (hasPaidOrders) {
           this.transactionType = "RENEW";
           try {
@@ -163,7 +165,7 @@ const _sfc_main = {
           this.transactionType = "NEW";
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/payment/payment.vue:327", "获取购卡记录失败:", error);
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:329", "获取购卡记录失败:", error);
         const now = /* @__PURE__ */ new Date();
         this.cardStartDate = this.formatDateForPicker(now);
         this.calculateEndDate(this.cardStartDate);
@@ -224,7 +226,7 @@ const _sfc_main = {
           title: "模拟支付失败",
           icon: "none"
         });
-        common_vendor.index.__f__("error", "at pages/payment/payment.vue:398", "模拟支付失败:", error);
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:400", "模拟支付失败:", error);
       }
     },
     async handlePay() {
@@ -336,7 +338,7 @@ const _sfc_main = {
           signType: payParams.signType || "RSA",
           paySign: payParams.paySign,
           success: (res) => {
-            common_vendor.index.__f__("log", "at pages/payment/payment.vue:534", "支付成功:", res);
+            common_vendor.index.__f__("log", "at pages/payment/payment.vue:536", "支付成功:", res);
             common_vendor.index.hideLoading();
             common_vendor.index.showToast({
               title: "支付成功",
@@ -350,7 +352,7 @@ const _sfc_main = {
             }, 2e3);
           },
           fail: (err) => {
-            common_vendor.index.__f__("error", "at pages/payment/payment.vue:550", "支付失败:", err);
+            common_vendor.index.__f__("error", "at pages/payment/payment.vue:552", "支付失败:", err);
             common_vendor.index.hideLoading();
             let errorMsg = "支付失败";
             if (err.errMsg) {
@@ -370,7 +372,7 @@ const _sfc_main = {
           }
         });
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/payment/payment.vue:572", "支付流程错误:", error);
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:574", "支付流程错误:", error);
         common_vendor.index.hideLoading();
         let errorMsg = "支付失败，请重试";
         if (error.message) {

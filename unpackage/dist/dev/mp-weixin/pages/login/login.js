@@ -258,7 +258,7 @@ const _sfc_main = {
             var _a;
             const userInfo = ((_a = response.data) == null ? void 0 : _a.userInfo) || common_vendor.index.getStorageSync("userInfo");
             const userRole = (userInfo == null ? void 0 : userInfo.role) || "user";
-            if (userRole === "staff") {
+            if (String(userRole).toLowerCase() === "staff") {
               common_vendor.index.reLaunch({
                 url: "/pages/staff/verify"
               });

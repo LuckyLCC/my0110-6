@@ -2,6 +2,8 @@ package com.oxygen.capsule.task;
 
 import com.oxygen.capsule.entity.MemberPackage;
 import com.oxygen.capsule.entity.PaymentOrder;
+import com.oxygen.capsule.entity.enums.PaymentOrdersCardStatusEnum;
+import com.oxygen.capsule.entity.enums.PaymentOrdersStatusEnum;
 import com.oxygen.capsule.repository.PaymentOrderRepository;
 import com.oxygen.capsule.service.MemberPackageService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +49,7 @@ public class CardStatusUpdateTask {
         
         try {
             // 获取所有已支付的订单
-            List<PaymentOrder> paidOrders = paymentOrderRepository.findByStatus("paid");
+            List<PaymentOrder> paidOrders = paymentOrderRepository.findByStatus(PaymentOrdersStatusEnum.PAID);
             log.info("找到 {} 条已支付的订单", paidOrders.size());
             
             int updatedCount = 0;
@@ -65,13 +67,13 @@ public class CardStatusUpdateTask {
                     }
                     
                     // 计算新的状态
-                    String newStatus = calculateCardStatus(order, pkg);
-                    String oldStatus = order.getCardStatus();
+                    PaymentOrdersCardStatusEnum newStatus = calculateCardStatus(order, pkg);
+                    PaymentOrdersCardStatusEnum oldStatus = order.getCardStatus();
                     
                     // 只有状态发生变化时才更新
-                    if (!newStatus.equals(oldStatus)) {
+                    if (newStatus != null && newStatus != oldStatus) {
                         // 保存更新前的数据（在更新前保存）
-                        String oldStatusBefore = order.getCardStatus();
+                        PaymentOrdersCardStatusEnum oldStatusBefore = order.getCardStatus();
                         Integer oldRemainingTimesBefore = order.getRemainingTimes();
                         String oldCardStartDateBefore = order.getCardStartDate() != null ? 
                             order.getCardStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : null;
@@ -83,7 +85,7 @@ public class CardStatusUpdateTask {
                         PaymentOrder savedOrder = paymentOrderRepository.save(order);
                         
                         // 保存更新后的数据
-                        String newStatusAfter = savedOrder.getCardStatus();
+                        PaymentOrdersCardStatusEnum newStatusAfter = savedOrder.getCardStatus();
                         Integer newRemainingTimesAfter = savedOrder.getRemainingTimes();
                         String newCardStartDateAfter = savedOrder.getCardStartDate() != null ? 
                             savedOrder.getCardStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : null;
@@ -133,10 +135,10 @@ public class CardStatusUpdateTask {
      * - 次卡：检查 remaining_times <= 0 或过期 → "已完成"
      * - 其他卡种：检查过期 → "已完成"
      */
-    private String calculateCardStatus(PaymentOrder order, MemberPackage pkg) {
+    private PaymentOrdersCardStatusEnum calculateCardStatus(PaymentOrder order, MemberPackage pkg) {
         // 如果订单未支付，状态为未生效
-        if (!"paid".equals(order.getStatus())) {
-            return "未生效";
+        if (order.getStatus() != PaymentOrdersStatusEnum.PAID) {
+            return PaymentOrdersCardStatusEnum.INACTIVE;
         }
         
         LocalDate now = LocalDate.now();
@@ -148,7 +150,7 @@ public class CardStatusUpdateTask {
         if (isTimesCard) {
             // 如果剩余次数 <= 0，状态为已完成
             if (order.getRemainingTimes() != null && order.getRemainingTimes() <= 0) {
-                return "已完成";
+                return PaymentOrdersCardStatusEnum.COMPLETED;
             }
         }
         
@@ -165,41 +167,41 @@ public class CardStatusUpdateTask {
         
         // 如果当前时间 < 卡开始日期，则为未生效
         if (startDate != null && now.isBefore(startDate)) {
-            return "未生效";
+            return PaymentOrdersCardStatusEnum.INACTIVE;
         }
         
         // 如果当前时间 > 卡到期日期，则为已完成
         if (endDate != null && now.isAfter(endDate)) {
-            return "已完成";
+            return PaymentOrdersCardStatusEnum.COMPLETED;
         }
         
         // 如果当前时间在有效期内，则为生效中
         if ((startDate == null || !now.isBefore(startDate)) && 
             (endDate == null || !now.isAfter(endDate))) {
-            return "生效中";
+            return PaymentOrdersCardStatusEnum.ACTIVE;
         }
         
         // 默认返回已完成
-        return "已完成";
+        return PaymentOrdersCardStatusEnum.COMPLETED;
     }
     
     /**
      * 生成更新原因说明
      */
-    private String generateUpdateReason(String oldStatus, String newStatus, 
+    private String generateUpdateReason(PaymentOrdersCardStatusEnum oldStatus, PaymentOrdersCardStatusEnum newStatus,
                                         PaymentOrder order, MemberPackage pkg) {
         StringBuilder reason = new StringBuilder();
         
-        if ("未生效".equals(oldStatus) && "生效中".equals(newStatus)) {
+        if (oldStatus == PaymentOrdersCardStatusEnum.INACTIVE && newStatus == PaymentOrdersCardStatusEnum.ACTIVE) {
             reason.append("卡已到开始日期，状态从未生效变为生效中");
-        } else if ("生效中".equals(oldStatus) && "已完成".equals(newStatus)) {
+        } else if (oldStatus == PaymentOrdersCardStatusEnum.ACTIVE && newStatus == PaymentOrdersCardStatusEnum.COMPLETED) {
             boolean isTimesCard = "家庭/次卡".equals(pkg.getCategory());
             if (isTimesCard && order.getRemainingTimes() != null && order.getRemainingTimes() <= 0) {
                 reason.append("次卡剩余次数已用完");
             } else {
                 reason.append("卡已过期");
             }
-        } else if ("未生效".equals(oldStatus) && "已完成".equals(newStatus)) {
+        } else if (oldStatus == PaymentOrdersCardStatusEnum.INACTIVE && newStatus == PaymentOrdersCardStatusEnum.COMPLETED) {
             reason.append("卡已过期（未到开始日期但已过到期日期）");
         } else {
             reason.append("定时任务自动更新：").append(oldStatus).append(" -> ").append(newStatus);

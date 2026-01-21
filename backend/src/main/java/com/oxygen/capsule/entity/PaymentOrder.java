@@ -1,5 +1,11 @@
 package com.oxygen.capsule.entity;
 
+import com.oxygen.capsule.entity.converter.CardStatusConverter;
+import com.oxygen.capsule.entity.converter.PaymentOrderStatusConverter;
+import com.oxygen.capsule.entity.converter.TransactionTypeConverter;
+import com.oxygen.capsule.entity.enums.PaymentOrdersCardStatusEnum;
+import com.oxygen.capsule.entity.enums.PaymentOrdersStatusEnum;
+import com.oxygen.capsule.entity.enums.PaymentOrdersTransactionTypeEnum;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -7,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "payment_orders")
+@EntityListeners(EnglishUppercaseEntityListener.class)
 public class PaymentOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +35,8 @@ public class PaymentOrder {
     private Double price;
 
     @Column(name = "status", nullable = false)
-    private String status = "unpaid"; // unpaid, paid, cancelled
+    @Convert(converter = PaymentOrderStatusConverter.class)
+    private PaymentOrdersStatusEnum status = PaymentOrdersStatusEnum.UNPAID;
 
     @Column(name = "payment_method")
     private String paymentMethod; // wechat_pay, alipay, etc.
@@ -49,10 +57,12 @@ public class PaymentOrder {
     private LocalDateTime cardEndDate; // 卡到期日期
 
     @Column(name = "transaction_type")
-    private String transactionType = "NEW"; // 交易类型: NEW-新开卡, RENEW-续费
+    @Convert(converter = TransactionTypeConverter.class)
+    private PaymentOrdersTransactionTypeEnum transactionType = PaymentOrdersTransactionTypeEnum.NEW; // 交易类型: NEW-新开卡, RENEW-续费
 
     @Column(name = "card_status")
-    private String cardStatus = "未生效"; // 卡状态: 未生效, 生效中, 已完成
+    @Convert(converter = CardStatusConverter.class)
+    private PaymentOrdersCardStatusEnum cardStatus = PaymentOrdersCardStatusEnum.INACTIVE; // 卡状态: INACTIVE, ACTIVE, COMPLETED
 
     @Column(name = "remaining_times")
     private Integer remainingTimes; // 剩余次数（仅次卡有效，其他卡种为NULL）

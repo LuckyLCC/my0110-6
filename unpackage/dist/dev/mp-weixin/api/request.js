@@ -1,8 +1,40 @@
 "use strict";
 const common_vendor = require("../common/vendor.js");
+const api_enums = require("./enums.js");
 const BASE_URL = "http://192.168.3.51:8080/api";
+function normalizeResponse(url, payload) {
+  var _a;
+  try {
+    if (url === "/user/login" && ((_a = payload == null ? void 0 : payload.data) == null ? void 0 : _a.userInfo)) {
+      payload.data.userInfo.role = api_enums.normalizeRoleToLower(payload.data.userInfo.role);
+    }
+    if (url === "/user/info" && (payload == null ? void 0 : payload.data)) {
+      if (payload.data.role) {
+        payload.data.role = api_enums.normalizeRoleToLower(payload.data.role);
+      }
+    }
+    if (url === "/payment/orders" && Array.isArray(payload == null ? void 0 : payload.data)) {
+      payload.data.forEach((o) => {
+        o.status = api_enums.normalizeEnum(o.status, Object.values(api_enums.PaymentOrderStatus), { field: "paymentOrder.status", defaultValue: api_enums.PaymentOrderStatus.UNPAID });
+        o.transactionType = api_enums.normalizeEnum(o.transactionType, Object.values(api_enums.TransactionType), { field: "paymentOrder.transactionType", defaultValue: api_enums.TransactionType.NEW });
+        if (o.cardStatus !== void 0) {
+          o.cardStatus = api_enums.normalizeEnum(o.cardStatus, Object.values(api_enums.CardStatus), { field: "paymentOrder.cardStatus", defaultValue: api_enums.CardStatus.INACTIVE });
+        }
+      });
+    }
+    if (url === "/booking/orders" && Array.isArray(payload == null ? void 0 : payload.data)) {
+      payload.data.forEach((o) => {
+        o.status = api_enums.normalizeEnum(o.status, Object.values(api_enums.BookingStatus), { field: "bookingOrder.status", defaultValue: api_enums.BookingStatus.PENDING });
+        o.paymentStatus = api_enums.normalizeEnum(o.paymentStatus, Object.values(api_enums.PaymentStatus), { field: "bookingOrder.paymentStatus", defaultValue: api_enums.PaymentStatus.UNPAID });
+      });
+    }
+  } catch (e) {
+    common_vendor.index.__f__("warn", "at api/request.js:49", "[enum] 规范化响应失败:", url, e);
+  }
+  return payload;
+}
 const request = (options) => {
-  common_vendor.index.__f__("log", "at api/request.js:6", "发起请求:", BASE_URL + options.url, options);
+  common_vendor.index.__f__("log", "at api/request.js:56", "发起请求:", BASE_URL + options.url, options);
   return new Promise((resolve, reject) => {
     common_vendor.index.request({
       url: BASE_URL + options.url,
@@ -13,17 +45,17 @@ const request = (options) => {
         "Authorization": "Bearer " + common_vendor.index.getStorageSync("token") || ""
       },
       success: (res) => {
-        common_vendor.index.__f__("log", "at api/request.js:18", "请求成功:", res);
+        common_vendor.index.__f__("log", "at api/request.js:68", "请求成功:", res);
         if (res.statusCode === 200) {
-          resolve(res.data);
+          resolve(normalizeResponse(options.url, res.data));
         } else {
-          common_vendor.index.__f__("error", "at api/request.js:23", "请求失败:", res);
+          common_vendor.index.__f__("error", "at api/request.js:73", "请求失败:", res);
           reject(res);
         }
       },
       fail: (err) => {
-        common_vendor.index.__f__("error", "at api/request.js:28", "网络错误详情:", err);
-        common_vendor.index.__f__("error", "at api/request.js:29", "错误对象详细信息:", JSON.stringify(err, null, 2));
+        common_vendor.index.__f__("error", "at api/request.js:78", "网络错误详情:", err);
+        common_vendor.index.__f__("error", "at api/request.js:79", "错误对象详细信息:", JSON.stringify(err, null, 2));
         reject(err);
       }
     });

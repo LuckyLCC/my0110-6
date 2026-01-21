@@ -1,6 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const api_request = require("../../api/request.js");
+const api_enums = require("../../api/enums.js");
 const BottomNav = () => "../../components/BottomNav.js";
 const _sfc_main = {
   components: { BottomNav },
@@ -115,12 +116,12 @@ const _sfc_main = {
   },
   // 微信分享功能
   onShareAppMessage(options) {
-    common_vendor.index.__f__("log", "at pages/my/my.vue:423", "onShareAppMessage 被调用，options:", options);
-    common_vendor.index.__f__("log", "at pages/my/my.vue:424", "showInviteModal:", this.showInviteModal);
-    common_vendor.index.__f__("log", "at pages/my/my.vue:425", "inviteCode:", this.inviteCode);
+    common_vendor.index.__f__("log", "at pages/my/my.vue:424", "onShareAppMessage 被调用，options:", options);
+    common_vendor.index.__f__("log", "at pages/my/my.vue:425", "showInviteModal:", this.showInviteModal);
+    common_vendor.index.__f__("log", "at pages/my/my.vue:426", "inviteCode:", this.inviteCode);
     if (this.showInviteModal && this.inviteCode) {
       const sharePath = `/pages/invite/accept?code=${this.inviteCode}`;
-      common_vendor.index.__f__("log", "at pages/my/my.vue:430", "分享邀请码，路径:", sharePath);
+      common_vendor.index.__f__("log", "at pages/my/my.vue:431", "分享邀请码，路径:", sharePath);
       return {
         title: `邀请您加入城市森林氧舱会员，邀请码：${this.inviteCode}`,
         path: sharePath,
@@ -130,7 +131,7 @@ const _sfc_main = {
         // 如果需要自定义分享图片，可以上传到服务器或使用 CDN
       };
     }
-    common_vendor.index.__f__("log", "at pages/my/my.vue:442", "默认分享");
+    common_vendor.index.__f__("log", "at pages/my/my.vue:443", "默认分享");
     return {
       title: "城市森林氧舱",
       path: "/pages/index/index",
@@ -154,11 +155,11 @@ const _sfc_main = {
               common_vendor.index.setStorageSync("userInfo", response.data);
             }
           } catch (error) {
-            common_vendor.index.__f__("log", "at pages/my/my.vue:470", "获取用户信息失败，使用本地存储:", error);
+            common_vendor.index.__f__("log", "at pages/my/my.vue:471", "获取用户信息失败，使用本地存储:", error);
           }
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:474", "加载用户信息错误:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:475", "加载用户信息错误:", error);
       }
     },
     // 更新用户信息显示
@@ -194,7 +195,7 @@ const _sfc_main = {
       try {
         const response = await api_request.api.payment.getOrders();
         if (response.code === 200 && response.data) {
-          this.purchaseRecords = response.data.filter((order) => order.status === "paid").map((order) => this.formatPurchaseRecord(order)).sort((a, b) => {
+          this.purchaseRecords = response.data.filter((order) => String(order.status || "").toLowerCase() === "paid").map((order) => this.formatPurchaseRecord(order)).sort((a, b) => {
             return new Date(b.buyAt) - new Date(a.buyAt);
           });
           this.updateVipFromActiveCard();
@@ -203,7 +204,7 @@ const _sfc_main = {
           this.setNormalUserState();
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:536", "获取购卡记录失败:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:537", "获取购卡记录失败:", error);
         this.purchaseRecords = [];
         this.setNormalUserState();
       }
@@ -261,7 +262,7 @@ const _sfc_main = {
           const consumed = activeCard.consumedTimes || 0;
           this.vip.stats.left = Math.max(0, activeCard.totalTimes - consumed);
         } else {
-          common_vendor.index.__f__("warn", "at pages/my/my.vue:615", "家庭次卡没有剩余次数信息，activeCard:", activeCard);
+          common_vendor.index.__f__("warn", "at pages/my/my.vue:616", "家庭次卡没有剩余次数信息，activeCard:", activeCard);
           this.vip.stats.left = 0;
         }
         this.loadUserStatsForPointsAndBound();
@@ -292,7 +293,7 @@ const _sfc_main = {
           }
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:652", "获取用户统计数据失败:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:653", "获取用户统计数据失败:", error);
       }
     },
     // 只加载积分和已绑定数量（不更新剩余次数）
@@ -313,7 +314,7 @@ const _sfc_main = {
           }
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:676", "获取用户统计数据失败:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:677", "获取用户统计数据失败:", error);
       }
     },
     // 设置为普通用户状态
@@ -356,7 +357,7 @@ const _sfc_main = {
         const day = String(endDate.getDate()).padStart(2, "0");
         formattedEndDate = `${year}-${month}-${day}`;
       }
-      let status = order.cardStatus || "已完成";
+      let status = api_enums.CardStatusLabelZh[String(order.cardStatus || "").trim().toUpperCase()] || "已完成";
       let statusPillClass = "pill-gray";
       let statusTextClass = "pill-text-gray";
       if (status === "未生效") {
@@ -369,7 +370,7 @@ const _sfc_main = {
         statusPillClass = "pill-gray";
         statusTextClass = "pill-text-gray";
       } else {
-        if (order.status === "paid") {
+        if (String(order.status || "").toLowerCase() === "paid") {
           const now = /* @__PURE__ */ new Date();
           now.setHours(0, 0, 0, 0);
           const isTimesCard = order.packageCategory === "家庭/次卡";
@@ -526,12 +527,13 @@ const _sfc_main = {
           this.orders = [];
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/my/my.vue:917", "获取预约订单失败:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:918", "获取预约订单失败:", error);
         this.orders = [];
       }
     },
     // 格式化预约订单
     formatBookingOrder(order) {
+      const rawStatus = String(order.status || "").trim().toUpperCase();
       let formattedDate = order.date || "";
       let formattedTime = order.timeSlot || "";
       formattedTime = formattedTime.replace(/-/g, "–");
@@ -543,30 +545,27 @@ const _sfc_main = {
       let statusTextClass = "badge-warm-text";
       let showVerify = false;
       let showCancel = false;
-      if (order.status === "completed") {
+      statusText = api_enums.BookingStatusLabelZh[rawStatus] || statusText;
+      if (rawStatus === "COMPLETED") {
         status = "done";
-        statusText = "已完成";
         statusBadgeClass = "badge-gray";
         statusTextClass = "badge-gray-text";
         showVerify = false;
         showCancel = false;
-      } else if (order.status === "cancelled") {
+      } else if (rawStatus === "CANCELLED") {
         status = "cancelled";
-        statusText = "已取消";
         statusBadgeClass = "badge-gray";
         statusTextClass = "badge-gray-text";
         showVerify = false;
         showCancel = false;
-      } else if (order.status === "no_show") {
+      } else if (rawStatus === "NO_SHOW") {
         status = "no_show";
-        statusText = "未到店";
         statusBadgeClass = "badge-gray";
         statusTextClass = "badge-gray-text";
         showVerify = false;
         showCancel = false;
-      } else if (order.status === "pending") {
+      } else if (rawStatus === "PENDING") {
         status = "pending";
-        statusText = "待核销";
         statusBadgeClass = "badge-warm";
         statusTextClass = "badge-warm-text";
         showVerify = true;
@@ -613,7 +612,7 @@ const _sfc_main = {
     onInvite() {
       const now = /* @__PURE__ */ new Date();
       now.setHours(0, 0, 0, 0);
-      common_vendor.index.__f__("log", "at pages/my/my.vue:1018", "点击邀请，购卡记录:", this.purchaseRecords);
+      common_vendor.index.__f__("log", "at pages/my/my.vue:1022", "点击邀请，购卡记录:", this.purchaseRecords);
       const activeCard = this.purchaseRecords.find((record) => {
         if (record.status !== "生效中") {
           return false;
@@ -636,17 +635,17 @@ const _sfc_main = {
         return true;
       });
       if (!activeCard) {
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1049", "未找到生效中的卡");
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1053", "未找到生效中的卡");
         common_vendor.index.showToast({ title: "该卡无法邀请亲友", icon: "none" });
         return;
       }
-      common_vendor.index.__f__("log", "at pages/my/my.vue:1054", "找到生效中的卡:", activeCard);
+      common_vendor.index.__f__("log", "at pages/my/my.vue:1058", "找到生效中的卡:", activeCard);
       if (activeCard.packageCategory !== "多人尊享") {
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1058", "不是多人尊享卡，分类:", activeCard.packageCategory);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1062", "不是多人尊享卡，分类:", activeCard.packageCategory);
         common_vendor.index.showToast({ title: "该卡无法邀请亲友", icon: "none" });
         return;
       }
-      common_vendor.index.__f__("log", "at pages/my/my.vue:1064", "准备生成邀请码，activeCard:", activeCard);
+      common_vendor.index.__f__("log", "at pages/my/my.vue:1068", "准备生成邀请码，activeCard:", activeCard);
       this.generateInviteCode(activeCard);
     },
     // 生成邀请码
@@ -660,13 +659,13 @@ const _sfc_main = {
           return;
         }
         const paymentOrderId = activeCard.paymentOrderId || activeCard.id;
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1084", "生成邀请码 - activeCard:", activeCard);
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1085", "生成邀请码 - paymentOrderId:", paymentOrderId);
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1086", "生成邀请码 - activeCard.paymentOrderId:", activeCard.paymentOrderId);
-        common_vendor.index.__f__("log", "at pages/my/my.vue:1087", "生成邀请码 - activeCard.id:", activeCard.id);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1088", "生成邀请码 - activeCard:", activeCard);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1089", "生成邀请码 - paymentOrderId:", paymentOrderId);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1090", "生成邀请码 - activeCard.paymentOrderId:", activeCard.paymentOrderId);
+        common_vendor.index.__f__("log", "at pages/my/my.vue:1091", "生成邀请码 - activeCard.id:", activeCard.id);
         if (!paymentOrderId) {
           common_vendor.index.hideLoading();
-          common_vendor.index.__f__("error", "at pages/my/my.vue:1091", "无法获取订单ID，activeCard:", JSON.stringify(activeCard, null, 2));
+          common_vendor.index.__f__("error", "at pages/my/my.vue:1095", "无法获取订单ID，activeCard:", JSON.stringify(activeCard, null, 2));
           common_vendor.index.showToast({ title: "无法获取订单信息", icon: "none" });
           return;
         }
@@ -689,7 +688,7 @@ const _sfc_main = {
         }
       } catch (error) {
         common_vendor.index.hideLoading();
-        common_vendor.index.__f__("error", "at pages/my/my.vue:1120", "生成邀请码失败:", error);
+        common_vendor.index.__f__("error", "at pages/my/my.vue:1124", "生成邀请码失败:", error);
         common_vendor.index.showToast({
           title: "生成邀请码失败，请重试",
           icon: "none"
@@ -722,15 +721,15 @@ const _sfc_main = {
                     this.inviteQrCodeImage = canvasRes.tempFilePath;
                   },
                   fail: (err) => {
-                    common_vendor.index.__f__("error", "at pages/my/my.vue:1163", "导出邀请二维码失败:", err);
+                    common_vendor.index.__f__("error", "at pages/my/my.vue:1167", "导出邀请二维码失败:", err);
                   }
                 }, this);
               }, 50);
             }).catch((err) => {
-              common_vendor.index.__f__("error", "at pages/my/my.vue:1168", "绘制邀请二维码失败:", err);
+              common_vendor.index.__f__("error", "at pages/my/my.vue:1172", "绘制邀请二维码失败:", err);
             });
           } catch (error) {
-            common_vendor.index.__f__("error", "at pages/my/my.vue:1171", "生成邀请二维码异常:", error);
+            common_vendor.index.__f__("error", "at pages/my/my.vue:1175", "生成邀请二维码异常:", error);
           }
         }, 200);
       });
@@ -833,13 +832,13 @@ const _sfc_main = {
                     this.qrCodeImage = canvasRes.tempFilePath;
                   },
                   fail: (err) => {
-                    common_vendor.index.__f__("error", "at pages/my/my.vue:1287", "导出 canvas 失败:", err);
+                    common_vendor.index.__f__("error", "at pages/my/my.vue:1291", "导出 canvas 失败:", err);
                     this.qrCodeImage = "";
                   }
                 }, this);
               }, 50);
             }).catch((err) => {
-              common_vendor.index.__f__("error", "at pages/my/my.vue:1293", "绘制二维码失败:", err);
+              common_vendor.index.__f__("error", "at pages/my/my.vue:1297", "绘制二维码失败:", err);
               setTimeout(() => {
                 common_vendor.index.canvasToTempFilePath({
                   canvasId: "qrcode-canvas",
@@ -847,14 +846,14 @@ const _sfc_main = {
                     this.qrCodeImage = canvasRes.tempFilePath;
                   },
                   fail: (canvasErr) => {
-                    common_vendor.index.__f__("error", "at pages/my/my.vue:1302", "导出 canvas 失败:", canvasErr);
+                    common_vendor.index.__f__("error", "at pages/my/my.vue:1306", "导出 canvas 失败:", canvasErr);
                     this.qrCodeImage = "";
                   }
                 }, this);
               }, 50);
             });
           } catch (error) {
-            common_vendor.index.__f__("error", "at pages/my/my.vue:1309", "生成二维码异常:", error);
+            common_vendor.index.__f__("error", "at pages/my/my.vue:1313", "生成二维码异常:", error);
             this.qrCodeImage = "";
           }
         }, 100);
@@ -894,7 +893,7 @@ const _sfc_main = {
               }
             } catch (error) {
               common_vendor.index.hideLoading();
-              common_vendor.index.__f__("error", "at pages/my/my.vue:1356", "取消预约失败:", error);
+              common_vendor.index.__f__("error", "at pages/my/my.vue:1360", "取消预约失败:", error);
               common_vendor.index.showToast({
                 title: "网络错误，请稍后重试",
                 icon: "none"

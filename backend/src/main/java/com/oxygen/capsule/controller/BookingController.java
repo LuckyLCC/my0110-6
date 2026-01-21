@@ -4,6 +4,10 @@ import com.oxygen.capsule.common.Result;
 import com.oxygen.capsule.entity.BookingOrder;
 import com.oxygen.capsule.entity.PaymentOrder;
 import com.oxygen.capsule.entity.User;
+import com.oxygen.capsule.entity.enums.PaymentOrdersCardStatusEnum;
+import com.oxygen.capsule.entity.enums.BookingOrdersStatusEnum;
+import com.oxygen.capsule.entity.enums.PaymentOrdersStatusEnum;
+import com.oxygen.capsule.entity.enums.BookingOrdersPaymentStatusEnum;
 import com.oxygen.capsule.service.BookingOrderService;
 import com.oxygen.capsule.service.MemberPackageService;
 import com.oxygen.capsule.service.PaymentService;
@@ -119,8 +123,8 @@ public class BookingController {
         order.setSeatName(seatName);
         order.setPrice(price);
         order.setOriginalPrice(originalPrice);
-        order.setStatus("pending"); // 默认为待核销
-        order.setPaymentStatus("unpaid"); // 默认为未支付
+        order.setStatus(BookingOrdersStatusEnum.PENDING); // 默认为待核销
+        order.setPaymentStatus(BookingOrdersPaymentStatusEnum.UNPAID); // 默认为未支付
 
         // 如果是会员预约（price为0），需要找到生效中的卡
         // 如果是次卡，必须确保有剩余次数才能预约
@@ -134,14 +138,14 @@ public class BookingController {
                 // 查找用户已支付的购卡记录
                 List<PaymentOrder> allOrders = paymentService.findByUserId(user.getId());
                 List<PaymentOrder> paidOrders = allOrders.stream()
-                    .filter(po -> "paid".equals(po.getStatus()))
+                    .filter(po -> po.getStatus() == PaymentOrdersStatusEnum.PAID)
                     .collect(java.util.stream.Collectors.toList());
                 
                 // 找到生效中的卡（必须使用 cardStatus 判断，确保状态准确）
                 for (PaymentOrder paymentOrder : paidOrders) {
                     // 检查卡是否生效中（必须使用 cardStatus，只有"生效中"才允许预约）
                     // 如果 cardStatus 为 null、"未生效"或"已完成"，都不允许预约
-                    String cardStatus = paymentOrder.getCardStatus();
+                    PaymentOrdersCardStatusEnum cardStatus = paymentOrder.getCardStatus();
                     boolean isActive = false;
                     
                     // 添加调试日志
@@ -150,7 +154,7 @@ public class BookingController {
                     
                     if (cardStatus != null) {
                         // 只有"生效中"状态才允许预约
-                        isActive = "生效中".equals(cardStatus);
+                        isActive = cardStatus == PaymentOrdersCardStatusEnum.ACTIVE;
                         log.debug("订单 {} 状态检查结果: {}", 
                             paymentOrder.getId(), (isActive ? "生效中，允许预约" : cardStatus + "，不允许预约"));
                     } else {
@@ -224,7 +228,7 @@ public class BookingController {
             return Result.error("订单不存在或无权限访问");
         }
 
-        if ("paid".equals(order.getPaymentStatus())) {
+        if (order.getPaymentStatus() == BookingOrdersPaymentStatusEnum.PAID) {
             return Result.error("订单已支付");
         }
 
@@ -278,13 +282,13 @@ public class BookingController {
             return Result.error("订单不存在或无权限访问");
         }
 
-        if ("paid".equals(order.getPaymentStatus())) {
+        if (order.getPaymentStatus() == BookingOrdersPaymentStatusEnum.PAID) {
             return Result.error("订单已支付");
         }
 
         try {
         // 更新订单支付状态
-        order.setPaymentStatus("paid");
+        order.setPaymentStatus(BookingOrdersPaymentStatusEnum.PAID);
         order.setPaymentTime(LocalDateTime.now());
             order.setPaymentMethod("wechat_pay");
         order = bookingOrderService.save(order);
@@ -337,7 +341,13 @@ public class BookingController {
             return Result.error("用户不存在");
         }
 
-        List<BookingOrder> orders = bookingOrderService.findByUserIdAndStatus(user.getId(), status);
+        BookingOrdersStatusEnum bookingStatus;
+        try {
+            bookingStatus = BookingOrdersStatusEnum.fromDb(status);
+        } catch (Exception e) {
+            return Result.error("不支持的订单状态: " + status);
+        }
+        List<BookingOrder> orders = bookingOrderService.findByUserIdAndStatus(user.getId(), bookingStatus);
         return Result.success(orders);
     }
 
@@ -362,10 +372,16 @@ public class BookingController {
             return Result.error("订单不存在或无权限访问");
         }
 
-        order = bookingOrderService.updateStatus(orderId, status);
+        BookingOrdersStatusEnum bookingStatus;
+        try {
+            bookingStatus = BookingOrdersStatusEnum.fromDb(status);
+        } catch (Exception e) {
+            return Result.error("不支持的订单状态: " + status);
+        }
+        order = bookingOrderService.updateStatus(orderId, bookingStatus);
         
         // 如果状态变为已完成，增加用户当日访问次数
-        if ("completed".equals(status)) {
+        if (bookingStatus == BookingOrdersStatusEnum.COMPLETED) {
             dailyVisitRecordService.incrementVisitCount(user.getId(), java.time.LocalDate.parse(order.getDate()));
         }
         
@@ -435,11 +451,11 @@ public class BookingController {
         }
 
         // 检查订单状态，只有待核销的订单才能取消
-        if (!"pending".equals(order.getStatus())) {
-            if ("completed".equals(order.getStatus())) {
+        if (order.getStatus() != BookingOrdersStatusEnum.PENDING) {
+            if (order.getStatus() == BookingOrdersStatusEnum.COMPLETED) {
                 return Result.error("订单已完成，无法取消");
             }
-            if ("cancelled".equals(order.getStatus())) {
+            if (order.getStatus() == BookingOrdersStatusEnum.CANCELLED) {
                 return Result.error("订单已取消");
             }
             return Result.error("订单状态异常，无法取消");
@@ -455,7 +471,7 @@ public class BookingController {
 
         // 更新订单状态为已取消
         // 注意：取消预约不需要返还次数，因为次数只有在核销后才会扣减
-        order = bookingOrderService.updateStatus(orderId, "cancelled");
+        order = bookingOrderService.updateStatus(orderId, BookingOrdersStatusEnum.CANCELLED);
         
         log.info("取消预约成功，预约订单ID: {}, 订单号: {}", orderId, order != null ? order.getOrderNo() : "未知");
         
@@ -484,15 +500,15 @@ public class BookingController {
             }
             
             // 检查订单状态
-            if ("completed".equals(order.getStatus())) {
+            if (order.getStatus() == BookingOrdersStatusEnum.COMPLETED) {
                 return Result.error("订单已核销");
             }
             
-            if ("cancelled".equals(order.getStatus())) {
+            if (order.getStatus() == BookingOrdersStatusEnum.CANCELLED) {
                 return Result.error("订单已取消，无法核销");
             }
             
-            if (!"pending".equals(order.getStatus())) {
+            if (order.getStatus() != BookingOrdersStatusEnum.PENDING) {
                 return Result.error("订单状态异常，无法核销");
             }
             
@@ -505,7 +521,7 @@ public class BookingController {
             }
             
             // 更新订单状态为已完成
-            order = bookingOrderService.updateStatus(order.getId(), "completed");
+            order = bookingOrderService.updateStatus(order.getId(), BookingOrdersStatusEnum.COMPLETED);
             
             // 记录核销时间
             order.setConsumeTime(java.time.LocalDateTime.now());

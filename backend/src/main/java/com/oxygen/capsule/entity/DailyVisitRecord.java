@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "daily_visit_records", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"user_id", "visit_date"})
 })
+@EntityListeners(EnglishUppercaseEntityListener.class)
 public class DailyVisitRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

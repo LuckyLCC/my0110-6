@@ -1,6 +1,7 @@
 package com.oxygen.capsule.task;
 
 import com.oxygen.capsule.entity.BookingOrder;
+import com.oxygen.capsule.entity.enums.BookingOrdersStatusEnum;
 import com.oxygen.capsule.repository.BookingOrderRepository;
 import com.oxygen.capsule.service.BookingOrderService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class NoShowUpdateTask {
         
         try {
             // 获取所有待核销状态的订单
-            List<BookingOrder> pendingOrders = bookingOrderRepository.findByStatus("pending");
+            List<BookingOrder> pendingOrders = bookingOrderRepository.findByStatus(BookingOrdersStatusEnum.PENDING);
             log.info("找到 {} 条待核销的订单", pendingOrders.size());
             
             int updatedCount = 0;

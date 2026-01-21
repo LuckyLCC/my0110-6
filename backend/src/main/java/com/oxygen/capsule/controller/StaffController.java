@@ -2,6 +2,7 @@ package com.oxygen.capsule.controller;
 
 import com.oxygen.capsule.common.Result;
 import com.oxygen.capsule.entity.Staff;
+import com.oxygen.capsule.entity.enums.StaffsStatusEnum;
 import com.oxygen.capsule.service.StaffService;
 import com.oxygen.capsule.util.JwtUtil;
 import com.oxygen.capsule.util.PasswordUtil;
@@ -45,7 +46,7 @@ public class StaffController {
             }
             
             // 检查商家状态
-            if (!"active".equals(staff.getStatus())) {
+            if (staff.getStatus() != StaffsStatusEnum.ACTIVE) {
                 return Result.error("该账号已被停用，请联系管理员");
             }
             

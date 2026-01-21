@@ -1,6 +1,7 @@
 package com.oxygen.capsule.service.impl;
 
 import com.oxygen.capsule.entity.BookingOrder;
+import com.oxygen.capsule.entity.enums.BookingOrdersStatusEnum;
 import com.oxygen.capsule.repository.BookingOrderRepository;
 import com.oxygen.capsule.service.BookingOrderService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class BookingOrderServiceImpl implements BookingOrderService {
     }
 
     @Override
-    public List<BookingOrder> findByUserIdAndStatus(Long userId, String status) {
+    public List<BookingOrder> findByUserIdAndStatus(Long userId, BookingOrdersStatusEnum status) {
         return bookingOrderRepository.findByUserIdAndStatusOrderByCreatedAtDesc(userId, status);
     }
 
@@ -42,7 +43,7 @@ public class BookingOrderServiceImpl implements BookingOrderService {
     }
 
     @Override
-    public BookingOrder updateStatus(Long orderId, String status) {
+    public BookingOrder updateStatus(Long orderId, BookingOrdersStatusEnum status) {
         BookingOrder order = findById(orderId);
         if (order != null) {
             order.setStatus(status);
@@ -67,7 +68,7 @@ public class BookingOrderServiceImpl implements BookingOrderService {
     public boolean hasBookingForDate(Long userId, String date) {
         // 查找用户指定日期且状态不是已取消的预约订单
         // 已取消的订单不影响用户再次预约
-        List<BookingOrder> orders = bookingOrderRepository.findByUserIdAndDateAndStatusNot(userId, date, "cancelled");
+        List<BookingOrder> orders = bookingOrderRepository.findByUserIdAndDateAndStatusNot(userId, date, BookingOrdersStatusEnum.CANCELLED);
         // 如果用户在该日期已经有非取消状态的预约订单，返回true
         return orders != null && !orders.isEmpty();
     }
@@ -80,7 +81,7 @@ public class BookingOrderServiceImpl implements BookingOrderService {
         // 统计已核销（completed）的预约订单数量
         // 注意：这里只统计 paymentOrderId 匹配的订单，确保每张次卡独立计算剩余次数
         // 不会出现第二张卡的次数减去第一张卡订单的情况
-        return bookingOrderRepository.countByPaymentOrderIdAndStatus(paymentOrderId, "completed");
+        return bookingOrderRepository.countByPaymentOrderIdAndStatus(paymentOrderId, BookingOrdersStatusEnum.COMPLETED);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class BookingOrderServiceImpl implements BookingOrderService {
         if (orders != null) {
             // 过滤掉已取消和未到店的订单
             orders = orders.stream()
-                .filter(o -> !"cancelled".equals(o.getStatus()) && !"no_show".equals(o.getStatus()))
+                .filter(o -> o.getStatus() != BookingOrdersStatusEnum.CANCELLED && o.getStatus() != BookingOrdersStatusEnum.NO_SHOW)
                 .collect(java.util.stream.Collectors.toList());
         }
         // 如果找到任何有效状态的订单，说明该舱位已被预约
@@ -105,7 +106,7 @@ public class BookingOrderServiceImpl implements BookingOrderService {
         List<BookingOrder> allOrders = bookingOrderRepository.findByDateAndTimeSlot(date, timeSlot);
         // 过滤掉已取消和未到店的订单
         List<BookingOrder> orders = allOrders != null ? allOrders.stream()
-            .filter(o -> !"cancelled".equals(o.getStatus()) && !"no_show".equals(o.getStatus()))
+            .filter(o -> o.getStatus() != BookingOrdersStatusEnum.CANCELLED && o.getStatus() != BookingOrdersStatusEnum.NO_SHOW)
             .collect(java.util.stream.Collectors.toList()) : null;
         
         // 构建已预约的舱位列表，格式：cabinName-seatName
@@ -124,8 +125,8 @@ public class BookingOrderServiceImpl implements BookingOrderService {
     @Override
     public void markAsNoShow(Long orderId) {
         BookingOrder order = findById(orderId);
-        if (order != null && "pending".equals(order.getStatus())) {
-            order.setStatus("no_show");
+        if (order != null && order.getStatus() == BookingOrdersStatusEnum.PENDING) {
+            order.setStatus(BookingOrdersStatusEnum.NO_SHOW);
             bookingOrderRepository.save(order);
             
             // 注意：未到店不需要返还次数，因为次数只有在核销后才会扣减

@@ -2,7 +2,8 @@ package com.oxygen.capsule.controller;
 
 import com.oxygen.capsule.common.Result;
 import com.oxygen.capsule.entity.PaymentOrder;
-import com.oxygen.capsule.service.BookingOrderService;
+import com.oxygen.capsule.entity.enums.PaymentOrdersCardStatusEnum;
+import com.oxygen.capsule.entity.enums.PaymentOrdersStatusEnum;
 import com.oxygen.capsule.service.MemberPackageService;
 import com.oxygen.capsule.service.PaymentService;
 import com.oxygen.capsule.util.JwtUtil;
@@ -22,9 +23,6 @@ public class PaymentController {
 
     @Autowired
     private MemberPackageService memberPackageService;
-
-    @Autowired
-    private BookingOrderService bookingOrderService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -91,10 +89,10 @@ public class PaymentController {
         orderData.put("packageId", order.getPackageId());
         orderData.put("packageName", order.getPackageName());
         orderData.put("price", order.getPrice());
-        orderData.put("status", order.getStatus());
+        orderData.put("status", order.getStatus() != null ? order.getStatus().getCode() : null);
         orderData.put("cardStartDate", order.getCardStartDate());
         orderData.put("cardEndDate", order.getCardEndDate());
-        orderData.put("transactionType", order.getTransactionType());
+        orderData.put("transactionType", order.getTransactionType() != null ? order.getTransactionType().getCode() : null);
         
         return Result.success("订单创建成功", orderData);
     }
@@ -161,7 +159,7 @@ public class PaymentController {
             }
             
             // 更新订单状态为已支付
-            paymentService.updateOrderStatus(orderId, "paid");
+            paymentService.updateOrderStatus(orderId, PaymentOrdersStatusEnum.PAID.getCode());
             
             return Result.success("Mock支付成功，订单状态已更新", "success");
         } catch (Exception e) {
@@ -193,7 +191,7 @@ public class PaymentController {
                     // 这种情况不应该发生，但为了安全起见，设置默认值
                     if (order.getCardStatus() == null) {
                         System.err.println("警告：订单 " + order.getId() + " 的 cardStatus 为 null，设置默认值");
-                        order.setCardStatus("未生效");
+                        order.setCardStatus(PaymentOrdersCardStatusEnum.INACTIVE);
                     }
                     
                     Map<String, Object> orderData = new java.util.HashMap<>();
@@ -202,14 +200,14 @@ public class PaymentController {
                     orderData.put("packageId", order.getPackageId());
                     orderData.put("packageName", order.getPackageName());
                     orderData.put("price", order.getPrice());
-                    orderData.put("status", order.getStatus());
+                    orderData.put("status", order.getStatus() != null ? order.getStatus().getCode() : null);
                     orderData.put("paymentTime", order.getPaymentTime());
                     orderData.put("createdAt", order.getCreatedAt());
                     orderData.put("cardStartDate", order.getCardStartDate());
                     orderData.put("cardEndDate", order.getCardEndDate());
-                    orderData.put("transactionType", order.getTransactionType());
+                    orderData.put("transactionType", order.getTransactionType() != null ? order.getTransactionType().getCode() : null);
                     // 确保 cardStatus 不为 null（如果还是 null，使用默认值）
-                    orderData.put("cardStatus", order.getCardStatus() != null ? order.getCardStatus() : "未生效");
+                    orderData.put("cardStatus", order.getCardStatus() != null ? order.getCardStatus().getCode() : PaymentOrdersCardStatusEnum.INACTIVE.getCode());
                     orderData.put("remainingTimes", order.getRemainingTimes()); // 剩余次数（仅次卡有效）
                     
                     // 查询套餐分类信息

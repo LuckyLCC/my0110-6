@@ -1,5 +1,9 @@
 package com.oxygen.capsule.entity;
 
+import com.oxygen.capsule.entity.converter.BookingStatusConverter;
+import com.oxygen.capsule.entity.converter.PaymentStatusConverter;
+import com.oxygen.capsule.entity.enums.BookingOrdersStatusEnum;
+import com.oxygen.capsule.entity.enums.BookingOrdersPaymentStatusEnum;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -7,6 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "booking_orders")
+@EntityListeners(EnglishUppercaseEntityListener.class)
 public class BookingOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,10 +45,12 @@ public class BookingOrder {
     private Double originalPrice;
 
     @Column(name = "status", nullable = false) // 待核销、已完成、已取消
-    private String status = "pending"; // pending, completed, cancelled
+    @Convert(converter = BookingStatusConverter.class)
+    private BookingOrdersStatusEnum status = BookingOrdersStatusEnum.PENDING;
 
     @Column(name = "payment_status")
-    private String paymentStatus = "unpaid"; // unpaid, paid
+    @Convert(converter = PaymentStatusConverter.class)
+    private BookingOrdersPaymentStatusEnum paymentStatus = BookingOrdersPaymentStatusEnum.UNPAID;
 
     @Column(name = "payment_method")
     private String paymentMethod; // wechat_pay, member_card, etc.

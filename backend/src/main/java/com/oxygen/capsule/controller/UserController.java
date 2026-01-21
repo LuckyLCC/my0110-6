@@ -3,6 +3,7 @@ package com.oxygen.capsule.controller;
 import com.oxygen.capsule.common.Result;
 import com.oxygen.capsule.entity.User;
 import com.oxygen.capsule.entity.PaymentOrder;
+import com.oxygen.capsule.entity.enums.PaymentOrdersStatusEnum;
 import com.oxygen.capsule.repository.PaymentOrderRepository;
 import com.oxygen.capsule.service.UserService;
 import com.oxygen.capsule.util.JwtUtil;
@@ -104,7 +105,7 @@ public class UserController {
             userInfoMap.put("nickname", user.getNickname());
             userInfoMap.put("avatarUrl", user.getAvatarUrl() != null ? user.getAvatarUrl() : "");
             userInfoMap.put("phone", user.getPhone() != null ? user.getPhone() : "");
-            userInfoMap.put("role", user.getRole() != null ? user.getRole() : "user");
+            userInfoMap.put("role", user.getRole() != null ? user.getRole().getCode().toLowerCase() : "user");
             
             Map<String, Object> responseData = new java.util.HashMap<>();
             responseData.put("token", token);
@@ -152,7 +153,7 @@ public class UserController {
         String packageName = null;
         try {
             List<PaymentOrder> paidOrders = 
-                paymentOrderRepository.findByUserIdAndStatus(userId, "paid");
+                paymentOrderRepository.findByUserIdAndStatus(userId, PaymentOrdersStatusEnum.PAID);
             if (paidOrders != null && !paidOrders.isEmpty()) {
                 // 按支付时间倒序排列，获取最新的订单
                 paidOrders.sort((a, b) -> {

@@ -1,5 +1,7 @@
 package com.oxygen.capsule.entity;
 
+import com.oxygen.capsule.entity.converter.UserRoleConverter;
+import com.oxygen.capsule.entity.enums.UsersRoleEnum;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -7,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "users")
+@EntityListeners(EnglishUppercaseEntityListener.class)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +43,8 @@ public class User {
     private Integer points = 0;
 
     @Column(name = "role")
-    private String role = "user"; // user-普通用户, staff-商家
+    @Convert(converter = UserRoleConverter.class)
+    private UsersRoleEnum role = UsersRoleEnum.USER; // user-普通用户, staff-商家
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

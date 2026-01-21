@@ -187,14 +187,14 @@ export default {
 				
 				if (ordersResponse.code === 200 && ordersResponse.data) {
 					// 获取已支付的订单
-					const paidOrders = ordersResponse.data.filter(order => order.status === 'paid')
+					const paidOrders = ordersResponse.data.filter(order => String(order.status || '').toLowerCase() === 'paid')
 					console.log('已支付的订单:', paidOrders)
 					
 					// 检查是否有生效中的卡（必须使用 cardStatus 字段，不允许使用日期判断）
 					const hasActiveCard = paidOrders.some(order => {
-						// 必须使用后端返回的 cardStatus 字段，只有"生效中"才认为是生效的
+						// 必须使用后端返回的 cardStatus 枚举字段，只有 ACTIVE 才认为是生效的
 						if (order.cardStatus) {
-							const isActive = order.cardStatus === '生效中'
+							const isActive = String(order.cardStatus).toUpperCase() === 'ACTIVE'
 							console.log(`订单 ${order.id} (${order.packageName}): cardStatus = ${order.cardStatus}, 是否生效中: ${isActive}`)
 							return isActive
 						}

@@ -4,6 +4,7 @@ import com.oxygen.capsule.entity.Invitation;
 import com.oxygen.capsule.entity.MemberPackage;
 import com.oxygen.capsule.entity.PaymentOrder;
 import com.oxygen.capsule.entity.User;
+import com.oxygen.capsule.entity.enums.InvitationsStatusEnum;
 import com.oxygen.capsule.repository.InvitationRepository;
 import com.oxygen.capsule.service.InvitationService;
 import com.oxygen.capsule.service.MemberPackageService;
@@ -52,7 +53,7 @@ public class InvitationServiceImpl implements InvitationService {
         invitation.setInviterId(userId);
         invitation.setPaymentOrderId(paymentOrderId);
         invitation.setInviteCode(inviteCode);
-        invitation.setStatus("pending");
+        invitation.setStatus(InvitationsStatusEnum.PENDING);
         invitation.setExpiredAt(LocalDateTime.now().plusDays(30)); // 30天后过期
 
         return invitationRepository.save(invitation);
@@ -65,16 +66,16 @@ public class InvitationServiceImpl implements InvitationService {
             .orElseThrow(() -> new RuntimeException("邀请码不存在"));
 
         // 检查邀请状态
-        if ("accepted".equals(invitation.getStatus())) {
+        if (invitation.getStatus() == InvitationsStatusEnum.ACCEPTED) {
             throw new RuntimeException("该邀请码已被使用");
         }
 
-        if ("expired".equals(invitation.getStatus())) {
+        if (invitation.getStatus() == InvitationsStatusEnum.EXPIRED) {
             throw new RuntimeException("该邀请码已过期");
         }
 
         if (invitation.getExpiredAt() != null && LocalDateTime.now().isAfter(invitation.getExpiredAt())) {
-            invitation.setStatus("expired");
+            invitation.setStatus(InvitationsStatusEnum.EXPIRED);
             invitationRepository.save(invitation);
             throw new RuntimeException("该邀请码已过期");
         }
@@ -93,7 +94,7 @@ public class InvitationServiceImpl implements InvitationService {
 
         // 更新邀请记录
         invitation.setInviteeId(inviteeId);
-        invitation.setStatus("accepted");
+        invitation.setStatus(InvitationsStatusEnum.ACCEPTED);
         invitation.setAcceptedAt(LocalDateTime.now());
         invitationRepository.save(invitation);
 
@@ -176,7 +177,7 @@ public class InvitationServiceImpl implements InvitationService {
 
         // 统计已接受的邀请数量（包括邀请人自己）
         List<Invitation> acceptedInvitations = invitationRepository.findByPaymentOrderIdAndStatus(
-            paymentOrderId, "accepted");
+            paymentOrderId, InvitationsStatusEnum.ACCEPTED);
         int boundCount = acceptedInvitations.size() + 1; // +1 是邀请人自己
 
         // 检查是否达到人数限制

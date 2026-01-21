@@ -1,6 +1,7 @@
 package com.oxygen.capsule;
 
 import com.oxygen.capsule.entity.Staff;
+import com.oxygen.capsule.entity.enums.StaffsStatusEnum;
 import com.oxygen.capsule.service.StaffService;
 import com.oxygen.capsule.util.PasswordUtil;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ public class StaffTest {
         staff.setPassword(encryptedPassword);
         staff.setName("管理员");
         staff.setPhone("13800138000");
-        staff.setStatus("active");
+        staff.setStatus(StaffsStatusEnum.ACTIVE);
         staffService.save(staff);
         
         System.out.println("管理员账号创建成功，用户名：" + staff.getUsername());

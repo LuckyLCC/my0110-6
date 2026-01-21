@@ -1,15 +1,16 @@
 package com.oxygen.capsule.service;
 
 import com.oxygen.capsule.entity.BookingOrder;
+import com.oxygen.capsule.entity.enums.BookingOrdersStatusEnum;
 import java.util.List;
 
 public interface BookingOrderService {
     BookingOrder save(BookingOrder bookingOrder);
     List<BookingOrder> findByUserId(Long userId);
-    List<BookingOrder> findByUserIdAndStatus(Long userId, String status);
+    List<BookingOrder> findByUserIdAndStatus(Long userId, BookingOrdersStatusEnum status);
     BookingOrder findById(Long id);
     BookingOrder findByOrderNo(String orderNo);
-    BookingOrder updateStatus(Long orderId, String status);
+    BookingOrder updateStatus(Long orderId, BookingOrdersStatusEnum status);
     boolean canUserBookToday(Long userId, String date);
     List<BookingOrder> findAll();
     // 检查用户指定日期是否已经有预约订单（不管状态如何）
