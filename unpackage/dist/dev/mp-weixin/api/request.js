@@ -82,7 +82,9 @@ const api = {
     // 商家登录（用户名密码）
     login: (username, password) => request({ url: "/staff/login", method: "POST", data: { username, password } }),
     // 获取商家信息
-    getInfo: () => request({ url: "/staff/info", method: "GET" })
+    getInfo: () => request({ url: "/staff/info", method: "GET" }),
+    // 获取活跃会籍顾问列表（用户端调用，无需认证）
+    getActiveList: () => request({ url: "/staff/active-list", method: "GET" })
   },
   // 会员套餐相关API
   packages: {
@@ -123,10 +125,10 @@ const api = {
   // 支付相关API
   payment: {
     // 创建会员套餐支付订单
-    createPackageOrder: (packageId, price, cardStartDate) => request({
+    createPackageOrder: (packageId, price, cardStartDate, staffId, staffName) => request({
       url: "/payment/create-package-order",
       method: "POST",
-      data: { packageId, price, cardStartDate }
+      data: { packageId, price, cardStartDate, staffId, staffName }
     }),
     // 获取微信支付参数
     getWechatPayParams: (orderId) => request({

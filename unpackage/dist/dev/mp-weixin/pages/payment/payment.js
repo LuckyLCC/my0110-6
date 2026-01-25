@@ -2,6 +2,7 @@
 const common_vendor = require("../../common/vendor.js");
 const api_request = require("../../api/request.js");
 const api_enums = require("../../api/enums.js");
+const common_assets = require("../../common/assets.js");
 const _sfc_main = {
   data() {
     return {
@@ -16,6 +17,10 @@ const _sfc_main = {
       transactionType: "NEW",
       // NEW-新开卡, RENEW-续费
       orderId: null,
+      advisors: [],
+      // 顾问ID/姓名：null 表示无顾问（后端会映射为 ADMIN）
+      selectedAdvisorId: null,
+      selectedAdvisorName: null,
       icons: {
         back: "/static/Button.png",
         star: "/static/payment/Container.svg",
@@ -48,6 +53,7 @@ const _sfc_main = {
       this.validDays = parseInt(options.validDays);
     }
     await this.calculateCardDates();
+    await this.loadAdvisors();
   },
   computed: {
     formattedPrice() {
@@ -77,6 +83,27 @@ const _sfc_main = {
     }
   },
   methods: {
+    // 拉取活跃会籍顾问列表（实时从数据库）
+    async loadAdvisors() {
+      try {
+        const res = await api_request.api.staff.getActiveList();
+        if (res && res.code === 200 && Array.isArray(res.data)) {
+          this.advisors = res.data.map((s) => ({
+            id: s.id,
+            name: s.name
+          }));
+          if (this.selectedAdvisorId === null && this.advisors.length > 0) {
+            this.selectedAdvisorId = this.advisors[0].id;
+            this.selectedAdvisorName = this.advisors[0].name;
+          }
+        } else {
+          this.advisors = [];
+        }
+      } catch (e) {
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:281", "获取会籍顾问列表失败:", e);
+        this.advisors = [];
+      }
+    },
     // 日期选择器变化事件
     onDateChange(e) {
       const selectedDate = e.detail.value;
@@ -104,13 +131,13 @@ const _sfc_main = {
         const hasPaidOrders = ordersResponse.code === 200 && ordersResponse.data && ordersResponse.data.some((order) => String(order.status || "").toLowerCase() === "paid");
         if (hasPaidOrders) {
           this.transactionType = "RENEW";
-          common_vendor.index.__f__("log", "at pages/payment/payment.vue:254", "判断为续费：用户有已支付的购卡记录");
+          common_vendor.index.__f__("log", "at pages/payment/payment.vue:320", "判断为续费：用户有已支付的购卡记录");
         } else {
           this.transactionType = "NEW";
-          common_vendor.index.__f__("log", "at pages/payment/payment.vue:257", "判断为新开卡：用户没有已支付的购卡记录");
+          common_vendor.index.__f__("log", "at pages/payment/payment.vue:323", "判断为新开卡：用户没有已支付的购卡记录");
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/payment/payment.vue:260", "获取购卡记录失败:", error);
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:326", "获取购卡记录失败:", error);
         this.transactionType = "NEW";
       }
     },
@@ -165,7 +192,7 @@ const _sfc_main = {
           this.transactionType = "NEW";
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/payment/payment.vue:329", "获取购卡记录失败:", error);
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:395", "获取购卡记录失败:", error);
         const now = /* @__PURE__ */ new Date();
         this.cardStartDate = this.formatDateForPicker(now);
         this.calculateEndDate(this.cardStartDate);
@@ -184,6 +211,15 @@ const _sfc_main = {
     },
     goBack() {
       common_vendor.index.navigateBack();
+    },
+    selectAdvisor(advisor) {
+      if (!advisor) {
+        this.selectedAdvisorId = null;
+        this.selectedAdvisorName = null;
+        return;
+      }
+      this.selectedAdvisorId = advisor.id;
+      this.selectedAdvisorName = advisor.name;
     },
     async handleMockPaymentSuccess() {
       common_vendor.index.showLoading({
@@ -226,7 +262,7 @@ const _sfc_main = {
           title: "模拟支付失败",
           icon: "none"
         });
-        common_vendor.index.__f__("error", "at pages/payment/payment.vue:400", "模拟支付失败:", error);
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:476", "模拟支付失败:", error);
       }
     },
     async handlePay() {
@@ -285,7 +321,13 @@ const _sfc_main = {
         mask: true
       });
       try {
-        const orderResponse = await api_request.api.payment.createPackageOrder(this.packageId, this.price, this.cardStartDate);
+        const orderResponse = await api_request.api.payment.createPackageOrder(
+          this.packageId,
+          this.price,
+          this.cardStartDate,
+          this.selectedAdvisorId,
+          this.selectedAdvisorName
+        );
         if (orderResponse.code !== 200) {
           throw new Error(orderResponse.message || "创建订单失败");
         }
@@ -338,7 +380,7 @@ const _sfc_main = {
           signType: payParams.signType || "RSA",
           paySign: payParams.paySign,
           success: (res) => {
-            common_vendor.index.__f__("log", "at pages/payment/payment.vue:536", "支付成功:", res);
+            common_vendor.index.__f__("log", "at pages/payment/payment.vue:619", "支付成功:", res);
             common_vendor.index.hideLoading();
             common_vendor.index.showToast({
               title: "支付成功",
@@ -352,7 +394,7 @@ const _sfc_main = {
             }, 2e3);
           },
           fail: (err) => {
-            common_vendor.index.__f__("error", "at pages/payment/payment.vue:552", "支付失败:", err);
+            common_vendor.index.__f__("error", "at pages/payment/payment.vue:635", "支付失败:", err);
             common_vendor.index.hideLoading();
             let errorMsg = "支付失败";
             if (err.errMsg) {
@@ -372,7 +414,7 @@ const _sfc_main = {
           }
         });
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/payment/payment.vue:574", "支付流程错误:", error);
+        common_vendor.index.__f__("error", "at pages/payment/payment.vue:657", "支付流程错误:", error);
         common_vendor.index.hideLoading();
         let errorMsg = "支付失败，请重试";
         if (error.message) {
@@ -409,11 +451,25 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     p: common_vendor.o((...args) => $options.onDateChange && $options.onDateChange(...args)),
     q: common_vendor.t($data.cardEndDate),
     r: common_vendor.t($options.formattedPrice),
-    s: $data.icons.wechat,
-    t: $data.icons.check,
-    v: $data.icons.lock,
-    w: common_vendor.t($options.priceInteger),
-    x: common_vendor.o((...args) => $options.handlePay && $options.handlePay(...args))
+    s: common_assets._imports_0$2,
+    t: $data.selectedAdvisorId === null ? 1 : "",
+    v: common_vendor.o(($event) => $options.selectAdvisor(null)),
+    w: common_vendor.f($data.advisors, (advisor, k0, i0) => {
+      return {
+        a: $data.selectedAdvisorId === advisor.id ? "/static/payment/advisor-selected.svg" : "/static/payment/advisor.svg",
+        b: common_vendor.n($data.selectedAdvisorId === advisor.id ? "advisor-avatar-selected" : "advisor-avatar-unselected"),
+        c: common_vendor.t(advisor.name),
+        d: common_vendor.n($data.selectedAdvisorId === advisor.id ? "advisor-label-selected" : "advisor-label-unselected"),
+        e: $data.selectedAdvisorId === advisor.id ? 1 : "",
+        f: advisor.id,
+        g: common_vendor.o(($event) => $options.selectAdvisor(advisor), advisor.id)
+      };
+    }),
+    x: $data.icons.wechat,
+    y: $data.icons.check,
+    z: $data.icons.lock,
+    A: common_vendor.t($options.priceInteger),
+    B: common_vendor.o((...args) => $options.handlePay && $options.handlePay(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-eade9ab2"]]);

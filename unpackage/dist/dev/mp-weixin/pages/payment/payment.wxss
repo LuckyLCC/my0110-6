@@ -55,7 +55,7 @@
 	padding: 32rpx 48rpx 200rpx;
 	display: flex;
 	flex-direction: column;
-	gap: 48rpx;
+	gap: 65rpx;
 }
 
 /* Product Card */
@@ -286,6 +286,115 @@ picker.data-v-eade9ab2 {
 .detail-divider.data-v-eade9ab2 {
 	height: 2rpx;
 	background-color: #f3f4f6;
+}
+
+/* Membership Advisor Section */
+.advisor-section.data-v-eade9ab2 {
+	display: flex;
+	flex-direction: column;
+	gap: 40rpx;
+	width: 100%;
+}
+.advisor-inner.data-v-eade9ab2 {
+	padding-left: 8rpx; /* 与「购买详情」标题左侧对齐 */
+	padding-right: 0; /* 右侧对齐使用 .content 的 48rpx，不额外内缩 */
+	width: 100%;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	gap: 32rpx; /* 与「购买详情」标题与卡片之间的间距一致 */
+}
+.advisor-header.data-v-eade9ab2 {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 40rpx;
+	width: 100%;
+}
+.advisor-title.data-v-eade9ab2 {
+	color: #1a1c1a;
+	font-size: 28rpx;
+	font-weight: 500;
+	line-height: 40rpx;
+	letter-spacing: -0.3008rpx;
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+}
+.advisor-hint.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	color: #999999;
+	letter-spacing: -0.3rpx;
+}
+.advisor-list.data-v-eade9ab2 {
+	height: 196rpx;
+	width: 100%;
+	white-space: nowrap;
+}
+.advisor-list-content.data-v-eade9ab2 {
+	display: flex;
+	gap: 24rpx;
+	height: 100%;
+	align-items: center;
+}
+.advisor-card.data-v-eade9ab2 {
+	background: #ffffff;
+	border: 2rpx solid transparent;
+	border-radius: 32rpx;
+	flex: 0 0 auto;
+	height: 180rpx;
+	width: 211.672rpx;
+	position: relative;
+	padding: 0;
+}
+.advisor-card-selected.data-v-eade9ab2 {
+	background: rgba(74, 93, 80, 0.05);
+	border: 2rpx solid #4a5d50;
+	box-shadow: 0px 2rpx 6rpx 0px rgba(0, 0, 0, 0.1), 0px 2rpx 4rpx -2rpx rgba(0, 0, 0, 0.1);
+}
+.advisor-avatar-wrap.data-v-eade9ab2 {
+	border-radius: 999999rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 80rpx;
+	width: 80rpx;
+	position: absolute;
+	left: 63.82rpx;
+	top: 24rpx;
+}
+.advisor-avatar-unselected.data-v-eade9ab2 {
+	background: #f9fafb;
+	border: 2rpx solid #e5e7eb;
+}
+.advisor-avatar-selected.data-v-eade9ab2 {
+	background: #4a5d50;
+	border: 2rpx solid #4a5d50;
+}
+.advisor-icon.data-v-eade9ab2 {
+	display: block;
+	height: 40rpx;
+	width: 40rpx;
+}
+.advisor-label.data-v-eade9ab2 {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	letter-spacing: -0.3rpx;
+	text-align: center;
+	position: absolute;
+	left: 50%;
+	top: 120rpx;
+	transform: translateX(-50%);
+	white-space: nowrap;
+}
+.advisor-label-unselected.data-v-eade9ab2 {
+	color: #999999;
+}
+.advisor-label-selected.data-v-eade9ab2 {
+	color: #4a5d50;
 }
 
 /* Payment Section */

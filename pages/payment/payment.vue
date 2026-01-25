@@ -92,6 +92,42 @@
 					</view>
 				</view>
 
+				<!-- Membership Advisor Section -->
+				<view class="advisor-section">
+					<view class="advisor-inner">
+						<view class="advisor-header">
+							<text class="advisor-title">会籍顾问</text>
+							<text class="advisor-hint">滑动选择</text>
+						</view>
+						<scroll-view class="advisor-list" scroll-x="true" show-scrollbar="false">
+							<view class="advisor-list-content">
+								<view class="advisor-card" :class="{ 'advisor-card-selected': selectedAdvisorId === null }" @tap="selectAdvisor(null)">
+									<view class="advisor-avatar-wrap advisor-avatar-unselected">
+										<image class="advisor-icon" src="/static/payment/advisor-none.svg" mode="aspectFit"></image>
+									</view>
+									<text class="advisor-label advisor-label-unselected">无顾问</text>
+								</view>
+							<view 
+								class="advisor-card" 
+								:class="{ 'advisor-card-selected': selectedAdvisorId === advisor.id }" 
+								v-for="advisor in advisors" 
+									:key="advisor.id"
+									@tap="selectAdvisor(advisor)"
+								>
+									<view class="advisor-avatar-wrap" :class="selectedAdvisorId === advisor.id ? 'advisor-avatar-selected' : 'advisor-avatar-unselected'">
+										<image 
+											class="advisor-icon" 
+											:src="selectedAdvisorId === advisor.id ? '/static/payment/advisor-selected.svg' : '/static/payment/advisor.svg'" 
+											mode="aspectFit"
+										></image>
+									</view>
+									<text class="advisor-label" :class="selectedAdvisorId === advisor.id ? 'advisor-label-selected' : 'advisor-label-unselected'">{{ advisor.name }}</text>
+								</view>
+							</view>
+						</scroll-view>
+					</view>
+				</view>
+
 				<!-- Payment Method -->
 				<view class="payment-section">
 					<text class="section-title">支付方式</text>
@@ -150,6 +186,10 @@ export default {
 			cardEndDate: '',
 			transactionType: 'NEW', // NEW-新开卡, RENEW-续费
 			orderId: null,
+			advisors: [],
+			// 顾问ID/姓名：null 表示无顾问（后端会映射为 ADMIN）
+			selectedAdvisorId: null,
+			selectedAdvisorName: null,
 			icons: {
 				back: '/static/Button.png',
 				star: '/static/payment/Container.svg', // 星星图标
@@ -187,6 +227,9 @@ export default {
 		
 		// 预计算卡开始日期、到期日期和交易类型
 		await this.calculateCardDates()
+
+		// 实时拉取会籍顾问（员工）列表
+		await this.loadAdvisors()
 	},
 	computed: {
 		formattedPrice() {
@@ -216,6 +259,29 @@ export default {
 		}
 	},
 		methods: {
+		// 拉取活跃会籍顾问列表（实时从数据库）
+		async loadAdvisors() {
+			try {
+				const res = await api.staff.getActiveList()
+				if (res && res.code === 200 && Array.isArray(res.data)) {
+					// 只保留前端需要字段（后端已过滤掉 ADMIN）
+					this.advisors = res.data.map((s) => ({
+						id: s.id,
+						name: s.name
+					}))
+					// 默认选中第一个顾问（若有）
+					if (this.selectedAdvisorId === null && this.advisors.length > 0) {
+						this.selectedAdvisorId = this.advisors[0].id
+						this.selectedAdvisorName = this.advisors[0].name
+					}
+				} else {
+					this.advisors = []
+				}
+			} catch (e) {
+				console.error('获取会籍顾问列表失败:', e)
+				this.advisors = []
+			}
+		},
 		// 日期选择器变化事件
 		onDateChange(e) {
 			const selectedDate = e.detail.value
@@ -346,6 +412,16 @@ export default {
 		goBack() {
 			uni.navigateBack()
 		},
+		selectAdvisor(advisor) {
+			// null 表示无顾问
+			if (!advisor) {
+				this.selectedAdvisorId = null
+				this.selectedAdvisorName = null
+				return
+			}
+			this.selectedAdvisorId = advisor.id
+			this.selectedAdvisorName = advisor.name
+		},
 		async handleMockPaymentSuccess() {
 			// Mock模式下模拟支付成功
 			uni.showLoading({
@@ -463,7 +539,14 @@ export default {
 			
 			try {
 				// 步骤1: 创建支付订单（传递用户选择的卡开始日期）
-				const orderResponse = await api.payment.createPackageOrder(this.packageId, this.price, this.cardStartDate)
+				// staffId/staffName: 同时传；若选择“无顾问”（null），后端会映射到 ADMIN
+				const orderResponse = await api.payment.createPackageOrder(
+					this.packageId,
+					this.price,
+					this.cardStartDate,
+					this.selectedAdvisorId,
+					this.selectedAdvisorName
+				)
 				
 				if (orderResponse.code !== 200) {
 					throw new Error(orderResponse.message || '创建订单失败')
@@ -655,7 +738,7 @@ export default {
 	padding: 32rpx 48rpx 200rpx;
 	display: flex;
 	flex-direction: column;
-	gap: 48rpx;
+	gap: 65rpx;
 }
 
 /* Product Card */
@@ -916,6 +999,130 @@ picker {
 .detail-divider {
 	height: 2rpx;
 	background-color: #f3f4f6;
+}
+
+/* Membership Advisor Section */
+.advisor-section {
+	display: flex;
+	flex-direction: column;
+	gap: 40rpx;
+	width: 100%;
+}
+
+.advisor-inner {
+	padding-left: 8rpx; /* 与「购买详情」标题左侧对齐 */
+	padding-right: 0; /* 右侧对齐使用 .content 的 48rpx，不额外内缩 */
+	width: 100%;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	gap: 32rpx; /* 与「购买详情」标题与卡片之间的间距一致 */
+}
+
+.advisor-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 40rpx;
+	width: 100%;
+}
+
+.advisor-title {
+	color: #1a1c1a;
+	font-size: 28rpx;
+	font-weight: 500;
+	line-height: 40rpx;
+	letter-spacing: -0.3008rpx;
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+}
+
+.advisor-hint {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	color: #999999;
+	letter-spacing: -0.3rpx;
+}
+
+.advisor-list {
+	height: 196rpx;
+	width: 100%;
+	white-space: nowrap;
+}
+
+.advisor-list-content {
+	display: flex;
+	gap: 24rpx;
+	height: 100%;
+	align-items: center;
+}
+
+.advisor-card {
+	background: #ffffff;
+	border: 2rpx solid transparent;
+	border-radius: 32rpx;
+	flex: 0 0 auto;
+	height: 180rpx;
+	width: 211.672rpx;
+	position: relative;
+	padding: 0;
+}
+
+.advisor-card-selected {
+	background: rgba(74, 93, 80, 0.05);
+	border: 2rpx solid #4a5d50;
+	box-shadow: 0px 2rpx 6rpx 0px rgba(0, 0, 0, 0.1), 0px 2rpx 4rpx -2rpx rgba(0, 0, 0, 0.1);
+}
+
+.advisor-avatar-wrap {
+	border-radius: 999999rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 80rpx;
+	width: 80rpx;
+	position: absolute;
+	left: 63.82rpx;
+	top: 24rpx;
+}
+
+.advisor-avatar-unselected {
+	background: #f9fafb;
+	border: 2rpx solid #e5e7eb;
+}
+
+.advisor-avatar-selected {
+	background: #4a5d50;
+	border: 2rpx solid #4a5d50;
+}
+
+.advisor-icon {
+	display: block;
+	height: 40rpx;
+	width: 40rpx;
+}
+
+.advisor-label {
+	font-family: 'Inter', 'Noto Sans SC', 'Noto Sans JP', sans-serif;
+	font-weight: normal;
+	font-size: 28rpx;
+	line-height: 40rpx;
+	letter-spacing: -0.3rpx;
+	text-align: center;
+	position: absolute;
+	left: 50%;
+	top: 120rpx;
+	transform: translateX(-50%);
+	white-space: nowrap;
+}
+
+.advisor-label-unselected {
+	color: #999999;
+}
+
+.advisor-label-selected {
+	color: #4a5d50;
 }
 
 /* Payment Section */
