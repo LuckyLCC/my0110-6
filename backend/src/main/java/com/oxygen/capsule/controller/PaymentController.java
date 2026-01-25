@@ -43,6 +43,8 @@ public class PaymentController {
         Long packageId;
         Double price;
         LocalDateTime cardStartDate = null;
+        Long staffId = null; // 在try块外声明，以便在外部使用
+        String staffName = null; // 在try块外声明，以便在外部使用
         try {
             Object packageIdObj = params.get("packageId");
             if (packageIdObj instanceof Integer) {
@@ -73,6 +75,36 @@ public class PaymentController {
                     }
                 }
             }
+            
+            // 处理会籍顾问ID（可选参数）
+            Object staffIdObj = params.get("staffId");
+            if (staffIdObj != null) {
+                try {
+                    if (staffIdObj instanceof Integer) {
+                        staffId = ((Integer) staffIdObj).longValue();
+                    } else {
+                        String staffIdStr = staffIdObj.toString();
+                        if (!staffIdStr.isEmpty() && !"null".equalsIgnoreCase(staffIdStr)) {
+                            staffId = Long.valueOf(staffIdStr);
+                        }
+                    }
+                } catch (Exception e) {
+                    System.err.println("解析会籍顾问ID失败: " + staffIdObj);
+                }
+            }
+
+            // 处理会籍顾问姓名（可选参数）
+            Object staffNameObj = params.get("staffName");
+            if (staffNameObj != null) {
+                try {
+                    String staffNameStr = staffNameObj.toString();
+                    if (!staffNameStr.isEmpty() && !"null".equalsIgnoreCase(staffNameStr)) {
+                        staffName = staffNameStr.trim();
+                    }
+                } catch (Exception e) {
+                    System.err.println("解析会籍顾问姓名失败: " + staffNameObj);
+                }
+            }
         } catch (NumberFormatException e) {
             return Result.error("参数格式错误: " + e.getMessage());
         } catch (Exception e) {
@@ -80,7 +112,7 @@ public class PaymentController {
         }
 
         // 创建订单
-        com.oxygen.capsule.entity.PaymentOrder order = paymentService.createPackageOrder(userId, packageId, price, cardStartDate);
+        com.oxygen.capsule.entity.PaymentOrder order = paymentService.createPackageOrder(userId, packageId, price, cardStartDate, staffId, staffName);
         
         // 构建返回数据
         Map<String, Object> orderData = new java.util.HashMap<>();

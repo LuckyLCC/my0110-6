@@ -67,6 +67,12 @@ public class PaymentOrder {
     @Column(name = "remaining_times")
     private Integer remainingTimes; // 剩余次数（仅次卡有效，其他卡种为NULL）
 
+    @Column(name = "staff_id")
+    private Long staffId; // 会籍顾问ID（关联staffs表；选择“无顾问”时映射为ADMIN）
+
+    @Column(name = "staff_name")
+    private String staffName; // 会籍顾问姓名（NULL表示无会籍顾问参与，选择"无顾问"时存"ADMIN"）
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

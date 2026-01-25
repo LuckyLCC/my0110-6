@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -112,6 +113,32 @@ public class StaffController {
         staffData.put("role", "staff");
         
         return Result.success(staffData);
+    }
+
+    // 获取活跃会籍顾问列表（用户端调用，无需认证）
+    @GetMapping("/active-list")
+    public Result<List<Map<String, Object>>> getActiveStaffs() {
+        try {
+            List<Staff> activeStaffs = staffService.findActiveStaffs();
+            
+            // 转换为前端需要的格式，并过滤掉 ADMIN（不显示管理员）
+            List<Map<String, Object>> staffList = activeStaffs.stream()
+                .filter(staff -> !"ADMIN".equalsIgnoreCase(staff.getUsername())) // 过滤掉 ADMIN
+                .map(staff -> {
+                    Map<String, Object> staffData = new HashMap<>();
+                    staffData.put("id", staff.getId());
+                    staffData.put("name", staff.getName() != null ? staff.getName() : staff.getUsername());
+                    staffData.put("phone", staff.getPhone() != null ? staff.getPhone() : "");
+                    return staffData;
+                })
+                .collect(java.util.stream.Collectors.toList());
+            
+            return Result.success(staffList);
+        } catch (Exception e) {
+            System.err.println("获取活跃会籍顾问列表失败: " + e.getMessage());
+            e.printStackTrace();
+            return Result.error("获取活跃会籍顾问列表失败: " + e.getMessage());
+        }
     }
 }
 

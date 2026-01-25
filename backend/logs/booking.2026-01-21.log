@@ -1,0 +1,4 @@
+2026-01-21 17:52:03.679 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-21 17:52:03.685 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-21
+2026-01-21 17:52:03.693 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-21 17:52:11.241 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 1, 订单号: BK17689891237081911

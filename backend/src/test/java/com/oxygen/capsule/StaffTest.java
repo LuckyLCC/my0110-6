@@ -31,4 +31,23 @@ public class StaffTest {
         
         System.out.println("管理员账号创建成功，用户名：" + staff.getUsername());
     }
+
+
+    @Test
+    public void createAdminAccount2() {
+        // 使用 PasswordUtil 加密密码
+        String password = "liuchang";
+        String encryptedPassword = PasswordUtil.encryptPassword(password);
+
+        // 插入商家账号
+        Staff staff = new Staff();
+        staff.setUsername("liuchang");
+        staff.setPassword(encryptedPassword);
+        staff.setName("员工");
+        staff.setPhone("18680815221");
+        staff.setStatus(StaffsStatusEnum.ACTIVE);
+        staffService.save(staff);
+
+        System.out.println("创建成功，用户名：" + staff.getUsername());
+    }
 }

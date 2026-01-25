@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface PaymentService {
-    PaymentOrder createPackageOrder(Long userId, Long packageId, Double price, LocalDateTime cardStartDate);
+    PaymentOrder createPackageOrder(Long userId, Long packageId, Double price, LocalDateTime cardStartDate, Long staffId, String staffName);
     Map<String, String> getWechatPayParams(Long orderId, Long userId);
     PaymentOrder findById(Long id);
     PaymentOrder updateOrderStatus(Long orderId, String status);

@@ -1,4 +1,13 @@
-2026-01-21 17:52:03.679 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
-2026-01-21 17:52:03.685 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-21
-2026-01-21 17:52:03.693 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
-2026-01-21 17:52:11.241 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 1, 订单号: BK17689891237081911
+2026-01-26 00:38:36.793 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 00:39:03.589 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 00:40:08.953 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 00:51:20.295 [http-nio-8080-exec-3] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 00:56:24.821 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 00:56:49.380 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 00:57:29.930 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 01:01:18.853 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 01:04:23.274 [http-nio-8080-exec-2] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 01:04:38.649 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 01:05:12.612 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 01:12:14.153 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-26 01:37:31.370 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态

@@ -2,11 +2,13 @@ package com.oxygen.capsule.service.impl;
 
 import com.oxygen.capsule.entity.MemberPackage;
 import com.oxygen.capsule.entity.PaymentOrder;
+import com.oxygen.capsule.entity.Staff;
 import com.oxygen.capsule.entity.User;
 import com.oxygen.capsule.entity.enums.PaymentOrdersCardStatusEnum;
 import com.oxygen.capsule.entity.enums.PaymentOrdersStatusEnum;
 import com.oxygen.capsule.entity.enums.PaymentOrdersTransactionTypeEnum;
 import com.oxygen.capsule.repository.PaymentOrderRepository;
+import com.oxygen.capsule.repository.StaffRepository;
 import com.oxygen.capsule.service.MemberPackageService;
 import com.oxygen.capsule.service.PaymentService;
 import com.oxygen.capsule.service.UserService;
@@ -36,8 +38,11 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     private WxPayUtil wxPayUtil;
 
+    @Autowired
+    private StaffRepository staffRepository;
+
     @Override
-    public PaymentOrder createPackageOrder(Long userId, Long packageId, Double price, LocalDateTime cardStartDate) {
+    public PaymentOrder createPackageOrder(Long userId, Long packageId, Double price, LocalDateTime cardStartDate, Long staffId, String staffName) {
         try {
             // 验证用户是否存在
             User user = userService.findById(userId).orElse(null);
@@ -145,6 +150,54 @@ public class PaymentServiceImpl implements PaymentService {
                 order.setRemainingTimes(null);
             }
             
+            // 设置会籍顾问：同时存 staff_id + staff_name
+            // 约定：用户端选择“无顾问”时传 staffId=null 且 staffName=null，这里映射为 ADMIN
+            Long finalStaffId = staffId;
+            String finalStaffName = staffName;
+
+            // 1) 无顾问：映射 ADMIN（同时补齐 id/name）
+            if (finalStaffId == null && (finalStaffName == null || finalStaffName.trim().isEmpty())) {
+                try {
+                    Staff admin = staffRepository.findByUsername("ADMIN");
+                    if (admin != null) {
+                        finalStaffId = admin.getId();
+                    }
+                } catch (Exception ignore) {
+                    // 如果没有 ADMIN 账号，保持 id 为 null
+                }
+                finalStaffName = "ADMIN";
+            }
+
+            // 2) 只传了 id：补齐 name（尽量落库完整）
+            if (finalStaffId != null && (finalStaffName == null || finalStaffName.trim().isEmpty())) {
+                try {
+                    Staff staff = staffRepository.findById(finalStaffId).orElse(null);
+                    if (staff != null) {
+                        finalStaffName = (staff.getName() != null && !staff.getName().trim().isEmpty())
+                            ? staff.getName().trim()
+                            : staff.getUsername();
+                    }
+                } catch (Exception ignore) {
+                    // 保持 name 为 null
+                }
+            }
+
+            // 3) 只传了 name=ADMIN：补齐 ADMIN 的 id
+            if (finalStaffId == null && finalStaffName != null && "ADMIN".equalsIgnoreCase(finalStaffName.trim())) {
+                try {
+                    Staff admin = staffRepository.findByUsername("ADMIN");
+                    if (admin != null) {
+                        finalStaffId = admin.getId();
+                    }
+                    finalStaffName = "ADMIN";
+                } catch (Exception ignore) {
+                    finalStaffName = "ADMIN";
+                }
+            }
+
+            order.setStaffId(finalStaffId);
+            order.setStaffName(finalStaffName != null ? finalStaffName.trim() : null);
+            
             // 计算并设置初始卡状态
             PaymentOrdersCardStatusEnum initialCardStatus = calculateCardStatus(order, pkg);
             order.setCardStatus(initialCardStatus);
@@ -218,6 +271,24 @@ public class PaymentServiceImpl implements PaymentService {
                     // 重新计算并更新卡状态
                     PaymentOrdersCardStatusEnum cardStatus = calculateCardStatus(order, pkg);
                     order.setCardStatus(cardStatus);
+                    
+                    // 添加调试日志，帮助排查次卡当天购买当天使用的问题
+                    System.out.println("========== 支付成功后更新卡状态 ==========");
+                    System.out.println("订单ID: " + order.getId());
+                    System.out.println("套餐分类: " + pkg.getCategory());
+                    System.out.println("卡开始日期: " + order.getCardStartDate());
+                    System.out.println("卡到期日期: " + order.getCardEndDate());
+                    System.out.println("剩余次数: " + order.getRemainingTimes());
+                    System.out.println("当前日期: " + java.time.LocalDate.now());
+                    System.out.println("计算出的卡状态: " + cardStatus);
+                    System.out.println("===================================");
+                    
+                    // 保存订单（确保状态被持久化）
+                    order = paymentOrderRepository.save(order);
+                    
+                    // 验证保存后的状态
+                    System.out.println("保存后的卡状态: " + order.getCardStatus());
+                    System.out.println("===================================");
                 } else {
                     // 如果套餐不存在，设置默认状态
                     System.err.println("警告：订单 " + order.getId() + " 的套餐不存在，设置默认卡状态");
@@ -228,17 +299,20 @@ public class PaymentServiceImpl implements PaymentService {
                 
                 // 支付成功后，更新用户会员信息
                 updateUserInfoForPaidOrder(order);
+            } else {
+                // 如果不是支付成功，也需要保存订单
+                order = paymentOrderRepository.save(order);
             }
-            order = paymentOrderRepository.save(order);
         }
         return order;
     }
     
     /**
      * 计算卡的状态：未生效、生效中、已完成
-     * 简化逻辑：
-     * - 次卡：检查 remaining_times <= 0 或过期 → "已完成"
-     * - 其他卡种：检查过期 → "已完成"
+     * 逻辑：
+     * - 次卡：检查 remaining_times <= 0 或过期 → "已完成"；否则如果已支付且在有效期内 → "生效中"
+     * - 其他卡种：检查过期 → "已完成"；否则如果已支付且在有效期内 → "生效中"
+     * - 特别注意：当天购买当天使用，如果 cardStartDate 是今天或之前，且已支付，应该立即生效
      */
     private PaymentOrdersCardStatusEnum calculateCardStatus(PaymentOrder order, MemberPackage pkg) {
         // 如果订单未支付，状态为未生效
@@ -251,7 +325,7 @@ public class PaymentServiceImpl implements PaymentService {
         // 检查是否是次卡
         boolean isTimesCard = "家庭/次卡".equals(pkg.getCategory());
         
-        // 对于次卡，检查剩余次数（使用数据库中的 remaining_times 字段）
+        // 对于次卡，先检查剩余次数（使用数据库中的 remaining_times 字段）
         if (isTimesCard) {
             // 如果剩余次数 <= 0，状态为已完成
             if (order.getRemainingTimes() != null && order.getRemainingTimes() <= 0) {
@@ -280,13 +354,16 @@ public class PaymentServiceImpl implements PaymentService {
             return PaymentOrdersCardStatusEnum.COMPLETED;
         }
         
-        // 如果当前时间在有效期内，则为生效中
+        // 如果当前时间在有效期内（包括当天），则为生效中
+        // 注意：使用 isAfter 和 isBefore 的否定，确保当天（now.equals(startDate) 或 now.isAfter(startDate)）也能生效
+        // 条件：startDate 为 null 或 now >= startDate（即 !now.isBefore(startDate)）
+        //       且 endDate 为 null 或 now <= endDate（即 !now.isAfter(endDate)）
         if ((startDate == null || !now.isBefore(startDate)) && 
             (endDate == null || !now.isAfter(endDate))) {
             return PaymentOrdersCardStatusEnum.ACTIVE;
         }
         
-        // 默认返回已完成
+        // 默认返回已完成（理论上不应该走到这里）
         return PaymentOrdersCardStatusEnum.COMPLETED;
     }
     

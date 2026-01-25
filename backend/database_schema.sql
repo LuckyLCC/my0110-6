@@ -140,3 +140,13 @@ CREATE TABLE IF NOT EXISTS invitations (
     INDEX idx_payment_order_id (payment_order_id),
     INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='邀请关系表';
+
+-- 会籍顾问字段：下单时存 staff_name（直接存姓名，不存ID）
+ALTER TABLE payment_orders
+  ADD COLUMN staff_name VARCHAR(100) NULL COMMENT '会籍顾问姓名（NULL表示无顾问，选择无顾问时存"ADMIN"）' AFTER remaining_times;
+
+-- 追加：同时存 staff_id（关联 staffs.id），与 staff_name 一起落库
+ALTER TABLE payment_orders
+  ADD COLUMN staff_id BIGINT NULL COMMENT '会籍顾问ID（关联staffs表；选择无顾问时后端映射为ADMIN）' AFTER staff_name;
+
+CREATE INDEX idx_payment_orders_staff_id ON payment_orders(staff_id);

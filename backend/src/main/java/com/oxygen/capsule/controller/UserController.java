@@ -151,6 +151,7 @@ public class UserController {
         
         // 获取用户最新的已支付订单，用于显示卡种名称
         String packageName = null;
+        boolean hasMembershipCard = false;
         try {
             List<PaymentOrder> paidOrders = 
                 paymentOrderRepository.findByUserIdAndStatus(userId, PaymentOrdersStatusEnum.PAID);
@@ -163,6 +164,14 @@ public class UserController {
                     return b.getPaymentTime().compareTo(a.getPaymentTime());
                 });
                 packageName = paidOrders.get(0).getPackageName();
+                
+                // 检查用户是否有生效中的会员卡
+                for (PaymentOrder po : paidOrders) {
+                    if (po.getCardStatus() == com.oxygen.capsule.entity.enums.PaymentOrdersCardStatusEnum.ACTIVE) {
+                        hasMembershipCard = true;
+                        break;
+                    }
+                }
             }
         } catch (Exception e) {
             System.err.println("获取用户套餐信息失败: " + e.getMessage());
@@ -181,6 +190,7 @@ public class UserController {
         userData.put("remainingVisits", user.getRemainingVisits());
         userData.put("points", user.getPoints());
         userData.put("packageName", packageName); // 添加套餐名称
+        userData.put("hasMembershipCard", hasMembershipCard); // 是否有卡种会员
         
         return Result.success(userData);
     }

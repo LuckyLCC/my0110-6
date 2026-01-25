@@ -1,0 +1,41 @@
+2026-01-22 11:58:43.290 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 11:58:43.293 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 11:58:43.297 [http-nio-8080-exec-7] WARN  c.o.c.controller.BookingController - ========== 会员预约检查失败：未找到生效中的卡 ==========
+2026-01-22 11:59:05.973 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 11:59:05.973 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 11:59:05.977 [http-nio-8080-exec-10] WARN  c.o.c.controller.BookingController - ========== 会员预约检查失败：未找到生效中的卡 ==========
+2026-01-22 11:59:20.668 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 11:59:20.668 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 11:59:20.671 [http-nio-8080-exec-4] WARN  c.o.c.controller.BookingController - ========== 会员预约检查失败：未找到生效中的卡 ==========
+2026-01-22 12:01:03.308 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 12:01:03.309 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 12:01:03.312 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-22 12:01:08.193 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 2, 订单号: BK17690544633145390
+2026-01-22 12:01:37.264 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 12:01:37.264 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 12:01:37.268 [http-nio-8080-exec-6] WARN  c.o.c.controller.BookingController - ========== 会员预约检查失败：未找到生效中的卡 ==========
+2026-01-22 12:02:06.619 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 12:02:06.619 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 12:02:06.622 [http-nio-8080-exec-8] WARN  c.o.c.controller.BookingController - ========== 会员预约检查失败：未找到生效中的卡 ==========
+2026-01-22 12:06:50.252 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 12:06:50.253 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 12:06:50.255 [http-nio-8080-exec-5] WARN  c.o.c.controller.BookingController - ========== 会员预约检查失败：未找到生效中的卡 ==========
+2026-01-22 12:08:07.866 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 12:08:07.866 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 12:08:07.870 [http-nio-8080-exec-5] WARN  c.o.c.controller.BookingController - ========== 会员预约检查失败：未找到生效中的卡 ==========
+2026-01-22 12:09:49.828 [http-nio-8080-exec-3] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 12:09:49.829 [http-nio-8080-exec-3] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 12:09:49.833 [http-nio-8080-exec-3] WARN  c.o.c.controller.BookingController - ========== 会员预约检查失败：未找到生效中的卡 ==========
+2026-01-22 12:10:31.901 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 12:10:31.902 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 12:10:31.907 [http-nio-8080-exec-8] WARN  c.o.c.controller.BookingController - ========== 会员预约检查失败：未找到生效中的卡 ==========
+2026-01-22 12:13:33.227 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 12:13:33.227 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 12:13:33.232 [http-nio-8080-exec-8] WARN  c.o.c.controller.BookingController - ========== 会员预约检查失败：未找到生效中的卡 ==========
+2026-01-22 12:18:52.129 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 12:18:52.130 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 12:18:52.135 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-22 12:23:21.473 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 3, 订单号: BK17690555321384046
+2026-01-22 12:23:26.245 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-22 12:23:26.245 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-22
+2026-01-22 12:23:26.252 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========

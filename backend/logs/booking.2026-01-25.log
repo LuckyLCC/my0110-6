@@ -1,0 +1,13 @@
+2026-01-25 10:54:00.171 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-25 10:54:00.172 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-25
+2026-01-25 10:54:00.175 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-25 11:02:46.352 [http-nio-8080-exec-3] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-25 11:02:46.352 [http-nio-8080-exec-3] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-25
+2026-01-25 11:02:46.356 [http-nio-8080-exec-3] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-25 11:03:22.713 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 核销成功，预约订单ID: 6, 订单号: BK17693101663577888
+2026-01-25 11:12:15.712 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-25 11:12:15.713 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-25
+2026-01-25 11:12:15.719 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-25 23:41:36.824 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-25 23:41:36.825 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-26
+2026-01-25 23:41:36.828 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
