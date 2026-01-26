@@ -1,13 +1,63 @@
-2026-01-26 00:38:36.793 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 00:39:03.589 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 00:40:08.953 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 00:51:20.295 [http-nio-8080-exec-3] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 00:56:24.821 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 00:56:49.380 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 00:57:29.930 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 01:01:18.853 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 01:04:23.274 [http-nio-8080-exec-2] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 01:04:38.649 [http-nio-8080-exec-6] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 01:05:12.612 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 01:12:14.153 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
-2026-01-26 01:37:31.370 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-27 00:17:05.934 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:17:05.935 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-02-09
+2026-01-27 00:17:05.940 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-27 00:17:05.940 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的order_no PAY17694230639572693 存入预约订单
+2026-01-27 00:21:19.341 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:21:19.341 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-02-10
+2026-01-27 00:21:19.346 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-27 00:21:19.346 [http-nio-8080-exec-7] ERROR c.o.c.controller.BookingController - 购卡订单的order_no PAY17694230639572693 无法转换为Long类型，无法存入payment_order_id
+2026-01-27 00:25:45.803 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:25:45.803 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-02-06
+2026-01-27 00:25:45.811 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-27 00:25:45.811 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 34 存入预约订单的payment_order_id
+2026-01-27 00:26:23.302 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 非会员预约，价格: 398.0，不需要检查会员卡状态
+2026-01-27 00:26:59.454 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:26:59.454 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-28
+2026-01-27 00:26:59.457 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过 ==========
+2026-01-27 00:26:59.457 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 37 存入预约订单的payment_order_id
+2026-01-27 00:35:08.770 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 43, 订单号: BK17694448194576847
+2026-01-27 00:35:10.484 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 42, 订单号: BK17694447833035886
+2026-01-27 00:38:59.892 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:38:59.892 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-27
+2026-01-27 00:38:59.894 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过，强制设置支付状态为PAID ==========
+2026-01-27 00:38:59.894 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 37 存入预约订单的payment_order_id
+2026-01-27 00:44:08.385 [http-nio-8080-exec-3] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 44, 订单号: BK17694455398975484
+2026-01-27 00:44:14.975 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:44:14.975 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-27
+2026-01-27 00:44:14.977 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过，强制设置支付状态为PAID ==========
+2026-01-27 00:44:14.977 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 37 存入预约订单的payment_order_id
+2026-01-27 00:47:26.891 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 45, 订单号: BK17694458549783834
+2026-01-27 00:47:35.892 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:47:35.892 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-29
+2026-01-27 00:47:35.895 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过，强制设置支付状态为PAID ==========
+2026-01-27 00:47:35.895 [http-nio-8080-exec-5] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 37 存入预约订单的payment_order_id
+2026-01-27 00:49:01.882 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 46, 订单号: BK17694460558972306
+2026-01-27 00:49:19.198 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:49:19.198 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-28
+2026-01-27 00:49:19.202 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过，强制设置支付状态为PAID ==========
+2026-01-27 00:49:19.202 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 37 存入预约订单的payment_order_id
+2026-01-27 00:51:20.672 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 47, 订单号: BK17694461592032633
+2026-01-27 00:51:33.048 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:51:33.048 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-30
+2026-01-27 00:51:33.051 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过，强制设置支付状态为PAID ==========
+2026-01-27 00:51:33.051 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 37 存入预约订单的payment_order_id
+2026-01-27 00:52:49.300 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 48, 订单号: BK17694462930535320
+2026-01-27 00:52:58.972 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:52:58.972 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-02-03
+2026-01-27 00:52:58.977 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过，强制设置支付状态为PAID ==========
+2026-01-27 00:52:58.977 [http-nio-8080-exec-4] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 37 存入预约订单的payment_order_id
+2026-01-27 00:53:25.213 [http-nio-8080-exec-1] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 49, 订单号: BK17694463789782329
+2026-01-27 00:54:10.116 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 00:54:10.117 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-02-02
+2026-01-27 00:54:10.142 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过，强制设置支付状态为PAID ==========
+2026-01-27 00:54:10.142 [http-nio-8080-exec-8] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 37 存入预约订单的payment_order_id
+2026-01-27 01:01:04.597 [http-nio-8080-exec-2] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 50, 订单号: BK17694464501517293
+2026-01-27 01:01:28.192 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 01:01:28.193 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-27
+2026-01-27 01:01:28.216 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过，强制设置支付状态为PAID ==========
+2026-01-27 01:01:28.216 [http-nio-8080-exec-10] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 37 存入预约订单的payment_order_id
+2026-01-27 01:09:13.824 [http-nio-8080-exec-9] INFO  c.o.c.controller.BookingController - 取消预约成功，预约订单ID: 51, 订单号: BK17694468882256461
+2026-01-27 01:09:26.392 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 开始检查会员预约资格 ==========
+2026-01-27 01:09:26.392 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 用户ID: 1, 预约日期: 2026-01-28
+2026-01-27 01:09:26.397 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - ========== 会员预约检查通过，强制设置支付状态为PAID ==========
+2026-01-27 01:09:26.397 [http-nio-8080-exec-7] INFO  c.o.c.controller.BookingController - 会员预约：将购卡订单的id 37 存入预约订单的payment_order_id

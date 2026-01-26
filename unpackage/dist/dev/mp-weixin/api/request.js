@@ -98,7 +98,7 @@ const api = {
   // 预约相关API
   booking: {
     // 创建预约订单
-    create: (params) => request({ url: "/booking/create", method: "POST", data: params }),
+    create: (params) => request({ url: "/booking_orders/create", method: "POST", data: params }),
     // 获取预约订单的微信支付参数
     getWechatPayParams: (orderId) => request({ url: `/booking/wechat-pay/${orderId}`, method: "POST" }),
     // Mock支付成功（仅用于开发测试）
